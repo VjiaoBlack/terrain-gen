@@ -14,4 +14,4 @@ right click - set heightmap value at cursor to 255
 
 Example:
 
-![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/terrain.png =12x512)
+<a href="https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/terrain.png"><img src="https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/terrain.png" align="left" height="512" width="512" ></a>
