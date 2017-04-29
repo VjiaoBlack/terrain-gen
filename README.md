@@ -13,5 +13,4 @@ left click - set heightmap value at cursor to 0
 right click - set heightmap value at cursor to 255
 
 Example:
-
-<a href="https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/terrain.png"><img src="https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/terrain.png" align="left" height="512" width="512" style="image-rendering:pixelated;"></a>
+![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/sample-big.png)
