@@ -6,7 +6,7 @@
 
 COMPILE=g++ -std=gnu++11
 
-LINK=-I/usr/local/include -L/usr/local/lib -lSDL2
+LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image
 
 
 all: main
