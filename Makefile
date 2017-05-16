@@ -24,7 +24,8 @@ clean:
 trender: build/trender.o build/TrGraphics.o
 	$(COMPILE) build/*.o $(LINK) -o trender
 
-build/trender.o: src/trender.cpp
+# depends on TrGraphics.hpp for the map size - for blending, etc.
+build/trender.o: src/trender.cpp src/TrGraphics.hpp
 	$(COMPILE) -c src/trender.cpp $(LINK) -o build/trender.o
 
 build/TrGraphics.o: src/TrGraphics.cpp src/TrGraphics.hpp

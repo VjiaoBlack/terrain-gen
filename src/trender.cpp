@@ -18,7 +18,7 @@
 
 
 void set_pixels(uint32_t* read_pixels, uint32_t* out_pixels) {
-    int threshold[9] = {140, 160, 167, 172, 178, 185, 190, 198, 208};
+    int threshold[9] = {70, 90, 97, 102, 108, 115, 120, 128, 138};
 
     uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
                           0xFFEEDDBB,0xFF77BC49,0xFF58A327,
@@ -50,7 +50,7 @@ int main(int argv, char* argc[]) {
     // Create window 
     SDL_Window* window = SDL_CreateWindow("test_driving",
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              sz(1024), sz(512), SDL_WINDOW_SHOWN);
+                              sz(K_DISPLAY_SIZE), sz(K_DISPLAY_SIZE), SDL_WINDOW_SHOWN);
     if (window == NULL) {
         printf("Window could not be created - SDL Error: %s\n", SDL_GetError());
         exit(1);
@@ -89,8 +89,6 @@ int main(int argv, char* argc[]) {
     int max = 0;
     for (int i = 0; i < K_MAP_SIZE; i++) {
         for (int j = 0; j < K_MAP_SIZE; j++) {
-            map_height->m_pixels[i * K_MAP_SIZE + j] -= 80;
-
             if (map_height->m_pixels[i * K_MAP_SIZE + j] < min) {
                 min = map_height->m_pixels[i * K_MAP_SIZE + j];
             } else if (map_height->m_pixels[i * K_MAP_SIZE + j] > max) {
@@ -99,6 +97,24 @@ int main(int argv, char* argc[]) {
            
         }
     }
+
+    for (int i = 0; i < K_MAP_SIZE; i++) {
+        for (int j = 0; j < K_MAP_SIZE; j++) {
+            map_height->m_pixels[i * K_MAP_SIZE + j] -= min - 30;
+            map_height->m_pixels[i * K_MAP_SIZE + j] *= 2;
+            map_height->m_pixels[i * K_MAP_SIZE + j] /= 3;
+        }
+    }
+
+    min -= min - 30;
+    max -= min - 30;
+
+    min *= 2;
+    min /= 3;
+
+    max *= 2;
+    max /= 3;
+
     printf("%d -> %d\n", min, max);
 
     set_pixels(map_height->m_pixels, map->m_pixels);
@@ -106,7 +122,8 @@ int main(int argv, char* argc[]) {
     int x = 0;
     int y = 0;
 
-    int pixelSize = sz(512) / K_MAP_SIZE;
+    int pixelSize = sz(K_DISPLAY_SIZE) / K_MAP_SIZE;
+    // int pixelSize = sz(K_DISPLAY_SIZE) / K_MAP_SIZE;
 
     int speed = 1;
 
@@ -128,7 +145,7 @@ int main(int argv, char* argc[]) {
                 buttonsDown.erase(e.button.button);
             } else if (e.type == SDL_MOUSEMOTION) {
                 if (buttonsDown.count(SDL_BUTTON_LEFT) &&
-                    e.motion.x < sz(512)) {
+                    e.motion.x < sz(K_DISPLAY_SIZE)) {
                     int mouseX = e.motion.x / pixelSize;
                     int mouseY = e.motion.y / pixelSize;
                     map_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 0;
@@ -136,7 +153,7 @@ int main(int argv, char* argc[]) {
                 }
 
                 if (buttonsDown.count(SDL_BUTTON_RIGHT) &&
-                    e.motion.x < sz(512)) {
+                    e.motion.x < sz(K_DISPLAY_SIZE)) {
                     int mouseX = e.motion.x / pixelSize;
                     int mouseY = e.motion.y / pixelSize;
                     map_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 255;
@@ -182,6 +199,58 @@ int main(int argv, char* argc[]) {
             set_pixels(map_height->m_pixels, map->m_pixels);
         }
 
+        // Save the map: color and heightmap
+        if (keysDown.count(SDLK_s)) {
+
+            SDL_Surface *surface, *surface2;
+            Uint32 rmask, gmask, bmask, amask;
+
+            rmask = 0x00ff0000;
+            gmask = 0x0000ff00;
+            bmask = 0x000000ff;
+            amask = 0xff000000;
+
+            surface = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, 32,
+                                   rmask, gmask, bmask, amask);
+
+            SDL_LockSurface(surface);
+
+            memcpy(surface->pixels, map->m_pixels, K_MAP_SIZE * K_MAP_SIZE * 4);
+
+
+            SDL_UnlockSurface(surface);
+
+            IMG_SavePNG(surface, "color.png");
+            SDL_FreeSurface(surface);
+
+            for (int i = 0; i < K_MAP_SIZE; i++) {
+                for (int j = 0; j < K_MAP_SIZE; j++) {
+                    map_height->m_pixels[i * K_MAP_SIZE + j] |= 
+                            map_height->m_pixels[i * K_MAP_SIZE + j] << 8;
+                    map_height->m_pixels[i * K_MAP_SIZE + j] |= 
+                            map_height->m_pixels[i * K_MAP_SIZE + j] << 16;
+                    map_height->m_pixels[i * K_MAP_SIZE + j] |= 
+                            map_height->m_pixels[i * K_MAP_SIZE + j] << 24;
+                    map_height->m_pixels[i * K_MAP_SIZE + j] = 
+                            map_height->m_pixels[i * K_MAP_SIZE + j] | 0xFF000000;
+                }
+            }
+
+
+            surface2 = SDL_CreateRGBSurface(0, K_DISPLAY_SIZE, K_DISPLAY_SIZE, 32,
+                                   rmask, gmask, bmask, amask);
+
+            SDL_LockSurface(surface2);
+
+            memcpy(surface2->pixels, map_height->m_pixels, K_DISPLAY_SIZE * K_DISPLAY_SIZE * 4);
+
+            SDL_UnlockSurface(surface2);
+
+            IMG_SavePNG(surface2, "height.png");
+            SDL_FreeSurface(surface2);
+
+        }   
+
         
 
         if (keysDown.count(SDLK_UP))
@@ -194,13 +263,15 @@ int main(int argv, char* argc[]) {
             x += pixelSize * speed;
 
         if (x < 0)
-            x += sz(512);
-        if (x > sz(512))
-            x -= sz(512);
+            x += sz(K_DISPLAY_SIZE);
+        if (x > sz(K_DISPLAY_SIZE))
+            x -= sz(K_DISPLAY_SIZE);
         if (y < 0)
-            y += sz(512);
-        if (y > sz(512))
-            y -= sz(512);
+            y += sz(K_DISPLAY_SIZE);
+        if (y > sz(K_DISPLAY_SIZE))
+            y -= sz(K_DISPLAY_SIZE);
+
+
 
         // clear screen
     	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);

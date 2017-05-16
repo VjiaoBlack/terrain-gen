@@ -8,9 +8,6 @@
 
 #include "TrGraphics.hpp"
 
-
-
-
 // Diamond Square algorithm.
 void diamondSquare(TrPixels* map, int s, int level) {
 	if (s < 1) {
@@ -91,8 +88,8 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
 
     DestR.x = 0;
     DestR.y = 0;
-    DestR.w = sz(512) - xOff;
-    DestR.h = sz(512) - yOff;
+    DestR.w = sz(K_DISPLAY_SIZE) - xOff;
+    DestR.h = sz(K_DISPLAY_SIZE) - yOff;
 
     SDL_RenderCopy(renderer, texture, &SrcR, &DestR);
 
@@ -102,8 +99,8 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
     SrcR.w = xOff / pixelSize;
     SrcR.h = yOff / pixelSize;
 
-    DestR.x = sz(512) - xOff;
-    DestR.y = sz(512) - yOff;
+    DestR.x = sz(K_DISPLAY_SIZE) - xOff;
+    DestR.y = sz(K_DISPLAY_SIZE) - yOff;
     DestR.w = xOff;
     DestR.h = yOff;
 
@@ -115,10 +112,10 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
     SrcR.w = xOff / pixelSize;
     SrcR.h = K_MAP_SIZE;
 
-    DestR.x = sz(512) - xOff;
+    DestR.x = sz(K_DISPLAY_SIZE) - xOff;
     DestR.y = 0;
     DestR.w = xOff;
-    DestR.h = sz(512) - yOff;
+    DestR.h = sz(K_DISPLAY_SIZE) - yOff;
 
     SDL_RenderCopy(renderer, texture, &SrcR, &DestR);
 
@@ -129,8 +126,8 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
     SrcR.h = yOff / pixelSize;
 
     DestR.x = 0;
-    DestR.y = sz(512) - yOff;
-    DestR.w = sz(512) - xOff;
+    DestR.y = sz(K_DISPLAY_SIZE) - yOff;
+    DestR.w = sz(K_DISPLAY_SIZE) - xOff;
     DestR.h = yOff;
 
     SDL_RenderCopy(renderer, texture, &SrcR, &DestR);

@@ -7,6 +7,7 @@
  */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include <stdlib.h>
 #include <time.h>
@@ -14,9 +15,10 @@
 using namespace std;
 
 // set to 2 (or more) if it's a retina screen, 1 if not.
-#define K_RETINA 2
+#define K_RETINA 1
 #define sz(x) ((x) * K_RETINA)
-#define K_MAP_SIZE 256
+#define K_MAP_SIZE 2048
+#define K_DISPLAY_SIZE 2048
 
 class TrPixels {
 public:
