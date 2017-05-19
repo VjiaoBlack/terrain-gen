@@ -8,74 +8,59 @@
 
 #include "TrGraphics.hpp"
 
-// Diamond Square algorithm.
-void diamondSquare(TrPixels* map, int s, int level) {
-	if (s < 1) {
-		return;
-	}
-	// printf("Stage: %d\n", s);
 
-	// printf("Diamond\n");
-	uint32_t* p = map->m_pixels;
-	for (int i = s; i <= K_MAP_SIZE; i += s) {
-		for (int j = s; j <= K_MAP_SIZE; j += s) {
-			int a = map->get(i-s, j-s);
-			int b = map->get(i  , j-s);
-			int c = map->get(i-s, j  );
-			int d = map->get(i  , j  );
-			int e = (a + b + c + d) / 4 + rand() % level - level / 2;
-			map->set(i-s/2, j-s/2, e);
+void TrMap::updateColors() {
+    int threshold[9] = {70, 100, 117, 132, 148, 165, 180, 198, 218};
 
-		}
-		// printf("--\n");
-	}
+    // uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
+    //                       0xFFEEDDBB,0xFF77BC49,0xFF58A327,
+    //                       0xFF28771F,0xFF210E04,0xFF5B3F31};
 
-	// printf("Square\n");
+    uint32_t colors[9] = {0xFF664433,0xFFBB8866,0xFFEEDDBB,
+                          0xFFEEDDBB,0xFF77BC49,0xFF58A327,
+                          0xFF28771F,0xFF210E04,0xFF5B3F31};
 
-	for (int i = s; i <= K_MAP_SIZE; i += s) {
-		for (int j = s; j <= K_MAP_SIZE; j += s) {
-			int a = map->get(i-s, j-s);
-			int b = map->get(i  , j-s);
-			int c = map->get(i-s, j  );
-			int d = map->get(i  , j  );
-			int e = map->get(i-s/2, j-s/2);
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            // m_diffuse->at(i,j) = floor(m_height->at(i,j) * 255.0);
+            for (int c = 0; c < 9; c++) {
+                if (m_height->get(i,j) * 255 < threshold[c]) {
+                    m_diffuse->set(i,j,colors[c]);
+                    break;
+                }
 
-			int f = (a + c + e + map->get(i-3*s/2, j-s/2)) / 4 + rand() % level - level / 2;
-			int g = (a + b + e + map->get(i-s/2, j-3*s/2)) / 4 + rand() % level - level / 2;
-			
-			map->set(i-s, j-s/2, f);
-			map->set(i-s/2, j-s, g);
-		}
-		// printf("--\n");
-	}
+                if (m_height->get(i,j) * 255 >= threshold[8]) {
+                    m_diffuse->set(i,j,0xFFFFFFFF);
+                    break;
+                }
 
-	diamondSquare(map, s / 2, level);
-}
-
-
-void boxBlur(TrPixels* map) {
-	for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
-            int sum = (map->get(i-1, j-1) +
-                       map->get(i-1, j  ) +
-                       map->get(i-1, j+1) +
-                       map->get(i  , j-1) +
-                       map->get(i  , j  ) +
-                       map->get(i  , j+1) +
-                       map->get(i+1, j-1) +
-                       map->get(i+1, j  ) +
-                       map->get(i+1, j+1));
-
-            map->m_pixels[i * K_MAP_SIZE + j] = sum / 9;
-
-            // without this, all values will decrease
-            if (sum % 9 > 4) {
-                map->m_pixels[i * K_MAP_SIZE + j]++;
+                
             }
-        }
-    }  
-}
 
+            if (m_water->at(i,j) > 0.001) {
+                m_diffuse->at(i,j) = 0xFF3A5BAA;
+            }
+
+            if (m_water->at(i,j) > 0.05) {
+                m_diffuse->at(i,j) = 0xFF253C78;
+            }
+
+            if (m_water->at(i,j) > 0.2) {
+                m_diffuse->at(i,j) = 0xFF1A2B56;
+            }
+
+            
+
+            
+
+            // uint32_t max = 255 - (m_diffuse->get(i,j) & 0xFF);
+            // uint32_t water = ceil(m_water->at(i,j) * 255.0);
+            // uint32_t diff = water > max ? max : water;
+            // m_diffuse->at(i,j) = 0xFFFFFFFF & m_diffuse->at(i,j) + water;
+            // m_diffuse->at(i,j) = 0xFF000000 + water;
+        }
+    }
+}
 
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize) {
 	SDL_Rect SrcR;
@@ -133,3 +118,5 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
     SDL_RenderCopy(renderer, texture, &SrcR, &DestR);
 
 }
+
+
