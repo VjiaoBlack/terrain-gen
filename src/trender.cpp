@@ -53,9 +53,9 @@ int main(int argv, char* argc[]) {
 
     TrMap* ttmap = new TrMap(K_MAP_SIZE, K_MAP_SIZE);
 
-    // ttmap->m_height->at(0,0) = 0.5;
-    // ttmap->m_height->diamondSquare(K_MAP_SIZE, 0.5);
-    ttmap->m_height->perlinNoise(K_MAP_SIZE, 8, 5.0, 0.7);
+    ttmap->m_height->at(0,0) = 0.5;
+    ttmap->m_height->diamondSquare(K_MAP_SIZE, 0.6);
+    // ttmap->m_height->perlinNoise(K_MAP_SIZE, 8, 5.0, 0.7);
 
     double min = 1000.0;
     double max = -1000.0;
@@ -73,11 +73,11 @@ int main(int argv, char* argc[]) {
     printf("min: %f\nmax: %f\n", min, max);
 
 
-    for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
-            ttmap->m_height->at(i,j) = pow(ttmap->m_height->at(i,j),3.0);
-        }
-    }
+    // for (int i = 0; i < K_MAP_SIZE; i++) {
+    //     for (int j = 0; j < K_MAP_SIZE; j++) {
+    //         ttmap->m_height->at(i,j) = pow(ttmap->m_height->at(i,j),3.0);
+    //     }
+    // }
 
     ttmap->updateColors();
 
@@ -173,66 +173,82 @@ int main(int argv, char* argc[]) {
 
         // animate water engine
         if (keysDown.count(SDLK_w)) {
-            for (int i = 0; i < K_MAP_SIZE; i++) {
-                for (int j = 0; j < K_MAP_SIZE; j++) {
-                    ttmap->m_water->at(i,j) -= 0.00001 * speed * speed * speed;
-                    if (ttmap->m_water->at(i,j) < 0.0) {
-                        ttmap->m_water->at(i,j) = 0.0;
+            for (int lol = 0; lol< 10; lol++) {
+
+                for (int i = 0; i < K_MAP_SIZE; i++) {
+                    for (int j = 0; j < K_MAP_SIZE; j++) {
+                        ttmap->m_water->at(i,j) -= 0.00001 * speed * speed * speed;
+                        if (ttmap->m_water->at(i,j) < 0.0) {
+                            ttmap->m_water->at(i,j) = 0.0;
+                        }
                     }
                 }
-            }
 
-            for (int i = 0; i < K_MAP_SIZE; i++) {
-                for (int j = 0; j < K_MAP_SIZE; j++) {
-                    double m = ttmap->m_height->get(i,j) +
-                               ttmap->m_water->get(i,j);
-                    int mi = i;
-                    int mj = j;
-                    double mh = m;
+                for (int i = 0; i < K_MAP_SIZE; i++) {
+                    for (int j = 0; j < K_MAP_SIZE; j++) {
+                        double m = ttmap->m_height->get(i,j) +
+                                   ttmap->m_water->get(i,j);
+                        int mi = i;
+                        int mj = j;
+                        double mh = m;
 
-                    for (int ii = i-1; ii <= i+1; ii++) {
-                        for (int jj = j-1; jj <= j+1; jj++) {
-                            if (ttmap->m_height->get(ii,jj) +
-                                ttmap->m_water->get(ii,jj) < mh) {
-                                mi = ii;
-                                mj = jj;
-                                mh = ttmap->m_height->get(ii,jj) +
-                                     ttmap->m_water->get(ii,jj);
+                        for (int ii = i-1; ii <= i+1; ii++) {
+                            for (int jj = j-1; jj <= j+1; jj++) {
+                                if (ttmap->m_height->get(ii,jj) +
+                                    ttmap->m_water->get(ii,jj) < mh) {
+                                    mi = ii;
+                                    mj = jj;
+                                    mh = ttmap->m_height->get(ii,jj) +
+                                         ttmap->m_water->get(ii,jj);
+                                }
                             }
                         }
-                    }
 
-                    if (mh < m - 0.0001) {
-                        double diff = m-mh;
-                        if (diff > ttmap->m_water->get(i,j)) {
-                            diff = ttmap->m_water->get(i,j);
+                        if (mh < m - 0.0001) {
+                            double diff = m-mh;
+                            diff *= 0.5;
+
+                            diff *= 1.0 - ttmap->m_water->get(i,j);
+                            if (diff > ttmap->m_water->get(i,j)) {
+                                diff = ttmap->m_water->get(i,j);
+                            }
+
+                            ttmap->m_moisture->at(mi,mj) += diff;
+                            ttmap->m_moisture->at(i,j) -= diff;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < K_MAP_SIZE; i++) {
+                    for (int j = 0; j < K_MAP_SIZE; j++) {
+
+                        if (keysDown.count(SDLK_e)) {
+                            double change = ttmap->m_moisture->at(i,j) > 0 ? 
+                                                        0.0 : ttmap->m_moisture->at(i,j);
+                            change *= abs(change * 40.0);
+                            ttmap->m_height->at(i  ,j  ) += change /  8.0f;
+                            ttmap->m_height->at(i+1,j+1) += change / 22.0f;
+                            ttmap->m_height->at(i+1,j  ) += change / 16.0f;
+                            ttmap->m_height->at(i+1,j-1) += change / 22.0f;
+                            ttmap->m_height->at(i  ,j+1) += change / 16.0f;
+                            ttmap->m_height->at(i  ,j-1) += change / 16.0f;
+                            ttmap->m_height->at(i-1,j+1) += change / 22.0f;
+                            ttmap->m_height->at(i-1,j  ) += change / 16.0f;
+                            ttmap->m_height->at(i-1,j-1) += change / 22.0f;
+                        }
+                        ttmap->m_water->at(i,j) += ttmap->m_moisture->at(i,j);
+                        if (ttmap->m_water->at(i,j) < 0.0) {
+                            ttmap->m_water->at(i,j) = 0.0;
+                        } 
+                        if (ttmap->m_water->at(i,j) > 1.0) {
+                            ttmap->m_water->at(i,j) = 1.0;
                         }
 
-                        diff *= 0.5;
-                        ttmap->m_moisture->at(mi,mj) += diff;
-                        ttmap->m_moisture->at(i,j) -= diff;
+                        ttmap->m_moisture->at(i,j) = 0.0;
                     }
                 }
             }
 
-            for (int i = 0; i < K_MAP_SIZE; i++) {
-                for (int j = 0; j < K_MAP_SIZE; j++) {
-
-                    if (keysDown.count(SDLK_e)) {
-                        ttmap->m_height->at(i,j) += ttmap->m_moisture->at(i,j) > 0 ? 
-                                                    0.0 : ttmap->m_moisture->at(i,j);
-                    }
-                    ttmap->m_water->at(i,j) += ttmap->m_moisture->at(i,j);
-                    if (ttmap->m_water->at(i,j) < 0.0) {
-                        ttmap->m_water->at(i,j) = 0.0;
-                    } 
-                    if (ttmap->m_water->at(i,j) > 1.0) {
-                        ttmap->m_water->at(i,j) = 1.0;
-                    }
-
-                    ttmap->m_moisture->at(i,j) = 0.0;
-                }
-            }
             ttmap->updateColors();
         }
 

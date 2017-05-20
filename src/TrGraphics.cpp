@@ -12,13 +12,13 @@
 void TrMap::updateColors() {
     int threshold[9] = {70, 100, 117, 132, 148, 165, 180, 198, 218};
 
-    // uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
-    //                       0xFFEEDDBB,0xFF77BC49,0xFF58A327,
-    //                       0xFF28771F,0xFF210E04,0xFF5B3F31};
-
-    uint32_t colors[9] = {0xFF664433,0xFFBB8866,0xFFEEDDBB,
+    uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
                           0xFFEEDDBB,0xFF77BC49,0xFF58A327,
                           0xFF28771F,0xFF210E04,0xFF5B3F31};
+
+    // uint32_t colors[9] = {0xFF664433,0xFFBB8866,0xFFEEDDBB,
+    //                       0xFFEEDDBB,0xFF77BC49,0xFF58A327,
+    //                       0xFF28771F,0xFF210E04,0xFF5B3F31};
 
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -37,17 +37,27 @@ void TrMap::updateColors() {
                 
             }
 
+            // if (m_water->at(i,j) > 0.001) {
+            //     m_diffuse->at(i,j) = 0xFF3A5BAA;
+            // }
+
+            // if (m_water->at(i,j) > 0.05) {
+            //     m_diffuse->at(i,j) = 0xFF253C78;
+            // }
+
+            // if (m_water->at(i,j) > 0.2) {
+            //     m_diffuse->at(i,j) = 0xFF1A2B56;
+            // }
+            
+
+
+
             if (m_water->at(i,j) > 0.001) {
-                m_diffuse->at(i,j) = 0xFF3A5BAA;
+                float height = m_water->at(i,j) + m_height->at(i,j);
+                m_diffuse->at(i,j) = 0xFF000000 + floor(height * 255.0);
             }
 
-            if (m_water->at(i,j) > 0.05) {
-                m_diffuse->at(i,j) = 0xFF253C78;
-            }
 
-            if (m_water->at(i,j) > 0.2) {
-                m_diffuse->at(i,j) = 0xFF1A2B56;
-            }
 
             
 
