@@ -9,12 +9,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <iostream>
 #include <sys/time.h>
 #include <math.h>
 #include <unordered_set>
 
 
 #include "TrGraphics.hpp"
+
+
+inline double clockToMilliseconds(clock_t ticks){
+    // units/(units/time) => time (seconds) * 1000 = milliseconds
+    return (ticks/(double)CLOCKS_PER_SEC)*1000.0;
+}
+//...
+
 
 
 int main(int argv, char* argc[]) {
@@ -51,51 +60,48 @@ int main(int argv, char* argc[]) {
     SDL_Texture* map_texture = SDL_CreateTexture(renderer,
         SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, K_MAP_SIZE, K_MAP_SIZE);
 
-    TrMap* ttmap = new TrMap(K_MAP_SIZE, K_MAP_SIZE);
+    TrMap* terrain = new TrMap(K_MAP_SIZE, K_MAP_SIZE);
 
-    ttmap->m_height->at(0,0) = 0.5;
-    ttmap->m_height->diamondSquare(K_MAP_SIZE, 0.6);
-    // ttmap->m_height->perlinNoise(K_MAP_SIZE, 8, 5.0, 0.7);
+    terrain->m_height->at(0,0) = 0.5;
+    terrain->m_height->diamondSquare(K_MAP_SIZE, 0.8);
+    // terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 5.0, 0.7);
 
-    double min = 1000.0;
-    double max = -1000.0;
-    for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
-            if (ttmap->m_height->at(i,j) < min) {
-                min = ttmap->m_height->at(i,j);
-            } else if (ttmap->m_height->at(i,j) > max) {
-                max = ttmap->m_height->at(i,j);
-            }
-           
+    pair<double, double> minMax = terrain->m_height->getMinMax();
+    cout << "min: " << minMax.first << endl;
+    cout << "max: " << minMax.second << endl;
+
+    for (int i = 0; i < terrain->m_rows; i++) {
+        for (int j = 0; j < terrain->m_cols; j++) {
+            terrain->m_height->at(i,j) = pow(terrain->m_height->at(i,j), 1.0);
         }
     }
 
-    printf("min: %f\nmax: %f\n", min, max);
 
+    terrain->updateColors();
 
-    // for (int i = 0; i < K_MAP_SIZE; i++) {
-    //     for (int j = 0; j < K_MAP_SIZE; j++) {
-    //         ttmap->m_height->at(i,j) = pow(ttmap->m_height->at(i,j),3.0);
-    //     }
-    // }
-
-    ttmap->updateColors();
-
-    int x = 0;
-    int y = 0;
+    int xOff = 0;
+    int yOff = 0;
 
     int pixelSize = sz(K_DISPLAY_SIZE) / K_MAP_SIZE;
 
     int speed = 1;
 
+    // initialize random number generator for rain
     std::random_device rd;
     std::default_random_engine eg(rd());
     std::uniform_int_distribution<int> dist(0, K_MAP_SIZE);
 
+    // initialize framerate counter
+    clock_t deltaTime = 0;
+    unsigned int frames = 0;
+    double  frameRate = 30;
+    double  averageFrameTimeMilliseconds = 33.333;
 
     while(!quit) {
-        SDL_UpdateTexture(map_texture, NULL, ttmap->m_diffuse->m_pixels, K_MAP_SIZE * sizeof(uint32_t));
-        // SDL_UpdateTexture(map_texture, NULL, map->m_pixels, K_MAP_SIZE * sizeof(uint32_t));
+        clock_t beginFrame = clock();
+
+        SDL_UpdateTexture(map_texture, NULL, terrain->m_diffuse->m_pixels, K_MAP_SIZE * sizeof(uint32_t));
+
         // Update keysDown and buttonsDown
         while (SDL_PollEvent(&e) != 0) {
 
@@ -115,14 +121,14 @@ int main(int argv, char* argc[]) {
                     e.motion.x < sz(K_DISPLAY_SIZE)) {
                     int mouseX = e.motion.x / pixelSize;
                     int mouseY = e.motion.y / pixelSize;
-                    ttmap->m_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 0;
+                    terrain->m_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 0;
                 }
 
                 if (buttonsDown.count(SDL_BUTTON_RIGHT) &&
                     e.motion.x < sz(K_DISPLAY_SIZE)) {
                     int mouseX = e.motion.x / pixelSize;
                     int mouseY = e.motion.y / pixelSize;
-                    ttmap->m_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 255;
+                    terrain->m_height->m_pixels[mouseY * K_MAP_SIZE + mouseX] = 255;
                 }
             }
         }
@@ -141,134 +147,82 @@ int main(int argv, char* argc[]) {
         if (keysDown.count(SDLK_u)) {
              for (int i = 0; i < K_MAP_SIZE; i++) {
                 for (int j = 0; j < K_MAP_SIZE; j++) {
-                    ttmap->m_height->m_pixels[i * K_MAP_SIZE + j] -= (double)speed / 255.0;
+                    terrain->m_height->m_pixels[i * K_MAP_SIZE + j] -= (double)speed / 255.0;
                 }
             }
 
-            ttmap->updateColors();
+            terrain->updateColors();
         }
 
         if (keysDown.count(SDLK_i)) {
              for (int i = 0; i < K_MAP_SIZE; i++) {
                 for (int j = 0; j < K_MAP_SIZE; j++) {
-                    ttmap->m_height->m_pixels[i * K_MAP_SIZE + j] += (double)speed / 255.0;
+                    terrain->m_height->m_pixels[i * K_MAP_SIZE + j] += (double)speed / 255.0;
                 }
             }
 
-            ttmap->updateColors();
+            terrain->updateColors();
         }
 
         if (keysDown.count(SDLK_b)) {
-            ttmap->m_height->boxBlur();
-            ttmap->updateColors();
+            for (int i = 0; i < speed; i++) {
+                terrain->m_height->boxBlur();
+            }
+            terrain->updateColors();
         }
 
         // create rain  
         if (keysDown.count(SDLK_r)){
-            for (int i = 0; i < K_MAP_SIZE * K_MAP_SIZE / 10; i++) {
-                ttmap->m_water->at(dist(eg),dist(eg)) += 0.01;
+            for (int i = 0; i < speed * K_MAP_SIZE * K_MAP_SIZE / 100; i++) {
+                terrain->m_water->at(dist(eg),dist(eg)) += 0.01;
             }
-            ttmap->updateColors();
+            terrain->updateColors();
+        }
+
+        if (keysDown.count(SDLK_d)) {
+            terrain->m_water->set(0.0);
+            terrain->updateColors();
         }
 
         // animate water engine
         if (keysDown.count(SDLK_w)) {
-            for (int lol = 0; lol< 10; lol++) {
-
-                for (int i = 0; i < K_MAP_SIZE; i++) {
-                    for (int j = 0; j < K_MAP_SIZE; j++) {
-                        ttmap->m_water->at(i,j) -= 0.00001 * speed * speed * speed;
-                        if (ttmap->m_water->at(i,j) < 0.0) {
-                            ttmap->m_water->at(i,j) = 0.0;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < K_MAP_SIZE; i++) {
-                    for (int j = 0; j < K_MAP_SIZE; j++) {
-                        double m = ttmap->m_height->get(i,j) +
-                                   ttmap->m_water->get(i,j);
-                        int mi = i;
-                        int mj = j;
-                        double mh = m;
-
-                        for (int ii = i-1; ii <= i+1; ii++) {
-                            for (int jj = j-1; jj <= j+1; jj++) {
-                                if (ttmap->m_height->get(ii,jj) +
-                                    ttmap->m_water->get(ii,jj) < mh) {
-                                    mi = ii;
-                                    mj = jj;
-                                    mh = ttmap->m_height->get(ii,jj) +
-                                         ttmap->m_water->get(ii,jj);
-                                }
-                            }
-                        }
-
-                        if (mh < m - 0.0001) {
-                            double diff = m-mh;
-                            diff *= 0.5;
-
-                            diff *= 1.0 - ttmap->m_water->get(i,j);
-                            if (diff > ttmap->m_water->get(i,j)) {
-                                diff = ttmap->m_water->get(i,j);
-                            }
-
-                            ttmap->m_moisture->at(mi,mj) += diff;
-                            ttmap->m_moisture->at(i,j) -= diff;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < K_MAP_SIZE; i++) {
-                    for (int j = 0; j < K_MAP_SIZE; j++) {
-
-                        if (keysDown.count(SDLK_e)) {
-                            double change = ttmap->m_moisture->at(i,j) > 0 ? 
-                                                        0.0 : ttmap->m_moisture->at(i,j);
-                            change *= abs(change * 40.0);
-                            ttmap->m_height->at(i  ,j  ) += change /  8.0f;
-                            ttmap->m_height->at(i+1,j+1) += change / 22.0f;
-                            ttmap->m_height->at(i+1,j  ) += change / 16.0f;
-                            ttmap->m_height->at(i+1,j-1) += change / 22.0f;
-                            ttmap->m_height->at(i  ,j+1) += change / 16.0f;
-                            ttmap->m_height->at(i  ,j-1) += change / 16.0f;
-                            ttmap->m_height->at(i-1,j+1) += change / 22.0f;
-                            ttmap->m_height->at(i-1,j  ) += change / 16.0f;
-                            ttmap->m_height->at(i-1,j-1) += change / 22.0f;
-                        }
-                        ttmap->m_water->at(i,j) += ttmap->m_moisture->at(i,j);
-                        if (ttmap->m_water->at(i,j) < 0.0) {
-                            ttmap->m_water->at(i,j) = 0.0;
-                        } 
-                        if (ttmap->m_water->at(i,j) > 1.0) {
-                            ttmap->m_water->at(i,j) = 1.0;
-                        }
-
-                        ttmap->m_moisture->at(i,j) = 0.0;
-                    }
-                }
+            for (int i = 0; i < speed; i++) {
+                terrain->updateWater(keysDown.count(SDLK_e));
             }
+            terrain->updateColors();
+        }
 
-            ttmap->updateColors();
+        // reclaculate normals
+        if (keysDown.count(SDLK_n)) {
+            terrain->updateNormals();
+            terrain->updateColors();
+        }
+
+        // update water!! omg 
+        if (keysDown.count(SDLK_m)) {
+            terrain->updateMoisture();
+            terrain->updateColors();
+        }
+
+        // toggle moisture / not
+        if (keysDown.count(SDLK_k)) {
+            // or else it would blink tooo fastttt
+            usleep(100000);
+            terrain->m_useMoisture = !terrain->m_useMoisture;
+            terrain->updateColors();
         }
 
         // Save the map: color and heightmap
         if (keysDown.count(SDLK_s)) {
 
             SDL_Surface *surface, *surface2;
-            Uint32 rmask, gmask, bmask, amask;
 
-            rmask = 0x00ff0000;
-            gmask = 0x0000ff00;
-            bmask = 0x000000ff;
-            amask = 0xff000000;
-
-            surface = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, 32,
-                                   rmask, gmask, bmask, amask);
+            surface = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, K_RGBA_BYTES,
+                                           K_R_MASK, K_G_MASK, K_B_MASK, K_A_MASK);
 
             SDL_LockSurface(surface);
 
-            memcpy(surface->pixels, ttmap->m_diffuse->m_pixels, K_MAP_SIZE * K_MAP_SIZE * 4);
+            memcpy(surface->pixels, terrain->m_diffuse->m_pixels, K_MAP_SIZE * K_MAP_SIZE * 4);
 
 
             SDL_UnlockSurface(surface);
@@ -281,7 +235,7 @@ int main(int argv, char* argc[]) {
 
             for (int i = 0; i < K_MAP_SIZE; i++) {
                 for (int j = 0; j < K_MAP_SIZE; j++) {
-                    map_height.at(i,j) = floor(ttmap->m_height->at(i,j) * 255);
+                    map_height.at(i,j) = floor(terrain->m_height->at(i,j) * 255);
                 }
             }
 
@@ -300,54 +254,65 @@ int main(int argv, char* argc[]) {
             }
 
 
-            surface2 = SDL_CreateRGBSurface(0, K_DISPLAY_SIZE, K_DISPLAY_SIZE, 32,
-                                   rmask, gmask, bmask, amask);
+            surface2 = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, K_RGBA_BYTES,
+                                            K_R_MASK, K_G_MASK, K_B_MASK, K_A_MASK);
 
             SDL_LockSurface(surface2);
-
-            memcpy(surface2->pixels, map_height.m_pixels, K_DISPLAY_SIZE * K_DISPLAY_SIZE * 4);
-
+            memcpy(surface2->pixels, map_height.m_pixels, K_MAP_SIZE * K_MAP_SIZE * sizeof(uint32_t));
             SDL_UnlockSurface(surface2);
 
             IMG_SavePNG(surface2, "height.png");
-            SDL_FreeSurface(surface2);
 
+            SDL_FreeSurface(surface2);
         }   
 
         
 
         if (keysDown.count(SDLK_UP))
-            y -= pixelSize * speed;
+            yOff -= pixelSize * speed;
         if (keysDown.count(SDLK_DOWN))
-            y += pixelSize * speed; 
+            yOff += pixelSize * speed; 
         if (keysDown.count(SDLK_LEFT))
-            x -= pixelSize * speed;
+            xOff -= pixelSize * speed;
         if (keysDown.count(SDLK_RIGHT))
-            x += pixelSize * speed;
+            xOff += pixelSize * speed;
 
-        if (x < 0)
-            x += sz(K_DISPLAY_SIZE);
-        if (x > sz(K_DISPLAY_SIZE))
-            x -= sz(K_DISPLAY_SIZE);
-        if (y < 0)
-            y += sz(K_DISPLAY_SIZE);
-        if (y > sz(K_DISPLAY_SIZE))
-            y -= sz(K_DISPLAY_SIZE);
+        if (xOff < 0)
+            xOff += sz(K_DISPLAY_SIZE);
+        if (xOff > sz(K_DISPLAY_SIZE))
+            xOff -= sz(K_DISPLAY_SIZE);
+        if (yOff < 0)
+            yOff += sz(K_DISPLAY_SIZE);
+        if (yOff > sz(K_DISPLAY_SIZE))
+            yOff -= sz(K_DISPLAY_SIZE);
 
         // clear screen
     	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	    SDL_RenderClear(renderer);
-
             
-        renderTextureWithOffset(renderer, map_texture, x, y, pixelSize);
+        renderTextureWithOffset(renderer, map_texture, xOff, yOff, pixelSize);
 
-        /** Update screen */
+        // update screen
         SDL_RenderPresent(renderer);
 
-        usleep(33 * 1000);
+        clock_t endFrame = clock();
+
+        deltaTime += endFrame - beginFrame;
+        frames ++;
+
+        // display FPS
+        if (clockToMilliseconds(deltaTime)>1000.0){ //every second
+            frameRate = (double)frames; //more stable
+            frames = 0;
+            deltaTime -= CLOCKS_PER_SEC;
+            averageFrameTimeMilliseconds  = 1000.0/(frameRate==0?0.001:frameRate);
+
+            std::cout <<"fps: " << frameRate << "        \r" ;
+            std::flush(std::cout);
+        }
     }
 
-    delete ttmap;
+    delete terrain;
 
     // SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);

@@ -40,9 +40,30 @@ inline T& TrPixels<T>::at(int r, int c) {
     return m_pixels[r*m_cols + c];
 }
 
+template<class T>
+pair<T, T> TrPixels<T>::getMinMax() {
+    T min = m_pixels[0];
+    T max = m_pixels[0];
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            if (this->at(i,j) < min) {
+                min = this->at(i,j);
+            } else if (this->at(i,j) > max) {
+                max = this->at(i,j);
+            }
+        }
+    }
+    return make_pair(min, max);
+}
 
-
-
+template<class T>
+void TrPixels<T>::set(T t) {
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            this->at(i,j) = t;
+        }
+    }
+}
 
 // Diamond Square algorithm.
 template<class T>
@@ -54,8 +75,6 @@ void TrPixels<T>::diamondSquare(int s, double level) {
     std::random_device rd;
     std::default_random_engine eg(rd());
     std::uniform_real_distribution<double> dist(-level, level);
-
-    T* p = m_pixels;
 
     int hs = s/2;
     for (int i = hs; i < K_MAP_SIZE + hs; i += s) {
