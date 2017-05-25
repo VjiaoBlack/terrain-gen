@@ -19,11 +19,8 @@
 
 
 inline double clockToMilliseconds(clock_t ticks){
-    // units/(units/time) => time (seconds) * 1000 = milliseconds
     return (ticks/(double)CLOCKS_PER_SEC)*1000.0;
 }
-//...
-
 
 
 int main(int argv, char* argc[]) {
@@ -62,9 +59,9 @@ int main(int argv, char* argc[]) {
 
     TrMap* terrain = new TrMap(K_MAP_SIZE, K_MAP_SIZE);
 
-    terrain->m_height->at(0,0) = 0.5;
-    terrain->m_height->diamondSquare(K_MAP_SIZE, 0.8);
-    // terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 5.0, 0.7);
+    // terrain->m_height->at(0,0) = 0.5;
+    // terrain->m_height->diamondSquare(K_MAP_SIZE, 0.8);
+    terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 2.0, 0.7);
 
     pair<double, double> minMax = terrain->m_height->getMinMax();
     cout << "min: " << minMax.first << endl;
@@ -72,7 +69,9 @@ int main(int argv, char* argc[]) {
 
     for (int i = 0; i < terrain->m_rows; i++) {
         for (int j = 0; j < terrain->m_cols; j++) {
-            terrain->m_height->at(i,j) = pow(terrain->m_height->at(i,j), 1.0);
+            terrain->m_height->at(i,j) = (terrain->m_height->at(i,j) - minMax.first) * 
+                                         (1.0 / (minMax.second - minMax.first));
+            terrain->m_height->at(i,j) = pow(terrain->m_height->at(i,j), 1);
         }
     }
 
@@ -150,7 +149,6 @@ int main(int argv, char* argc[]) {
                     terrain->m_height->m_pixels[i * K_MAP_SIZE + j] -= (double)speed / 255.0;
                 }
             }
-
             terrain->updateColors();
         }
 
@@ -160,7 +158,6 @@ int main(int argv, char* argc[]) {
                     terrain->m_height->m_pixels[i * K_MAP_SIZE + j] += (double)speed / 255.0;
                 }
             }
-
             terrain->updateColors();
         }
 

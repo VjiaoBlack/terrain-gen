@@ -27,10 +27,6 @@ inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp) {
     int cg = cg1 + round((cg2 - cg1) * lerp);
     int cb = cb1 + round((cb2 - cb1) * lerp);
 
-    // cr = floor(cr * 255.0);
-    // cg = floor(cg * 255.0);
-    // cb = floor(cb * 255.0);
-
     if (cr > 255) cr = 255;
     if (cg > 255) cg = 255;
     if (cb > 255) cb = 255;
@@ -97,9 +93,18 @@ inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
     return ret;
 }
 
-
-
 void TrMap::updateColors() {
+    if (0) {
+        for (int i = 0; i < m_rows; i++) {
+            for (int j = 0; j < m_cols; j++) {
+                // render land
+                m_diffuse->set(i,j,multiplyColor(0xFFFFFFFF, m_height->at(i,j), m_height->at(i,j), m_height->at(i,j)));
+               
+            }
+        }
+        return;
+    }
+
     if (!m_useMoisture) {
         int threshold[9] = {70, 100, 117, 132, 148, 165, 180, 198, 218};
 
@@ -172,11 +177,6 @@ void TrMap::updateColors() {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_cols; j++) {
                 // errr how do I do this....
-              
-                // double rr = m_wind->at(i,j).x;
-                // double gg = (m_wind->at(i,j).y + 1.0) * 0.5;
-                // double bb = (m_wind->at(i,j).z + 1.0) * 0.5;
-                // m_diffuse->at(i,j) = multiplyColor(0xFFFFFFFF, gg, gg, gg);
 
                 if (m_height->at(i,j) > 0.7) {
                     m_diffuse->at(i,j) = c_rock;
@@ -397,19 +397,19 @@ void TrMap::updateWater(bool erosion) {
                 mh = m_height->get(i,j-1) + m_water->get(i,j-1); }
 
             // diagonal
-            if (m - (m_height->get(i+1,j+1) + m_water->get(i+1,j+1)) > (m - mh) * 1.4) {
+            if (m - (m_height->get(i+1,j+1) + m_water->get(i+1,j+1)) > (m - mh) * 1.4142) {
                 mi = i+1; mj = j+1;
                 mh = m_height->get(i+1,j+1) + m_water->get(i+1,j+1); }
 
-            if (m - (m_height->get(i-1,j-1) + m_water->get(i-1,j-1)) > (m - mh) * 1.4) {
+            if (m - (m_height->get(i-1,j-1) + m_water->get(i-1,j-1)) > (m - mh) * 1.4142) {
                 mi = i-1; mj = j-1;
                 mh = m_height->get(i-1,j-1) + m_water->get(i-1,j-1); }
 
-            if (m - (m_height->get(i+1,j-1) + m_water->get(i+1,j-1)) > (m - mh) * 1.4) {
+            if (m - (m_height->get(i+1,j-1) + m_water->get(i+1,j-1)) > (m - mh) * 1.4142) {
                 mi = i+1; mj = j-1;
                 mh = m_height->get(i+1,j-1) + m_water->get(i+1,j-1); }
 
-            if (m - (m_height->get(i-1,j+1) + m_water->get(i-1,j+1)) > (m - mh) * 1.4) {
+            if (m - (m_height->get(i-1,j+1) + m_water->get(i-1,j+1)) > (m - mh) * 1.4142) {
                 mi = i-1; mj = j+1;
                 mh = m_height->get(i-1,j+1) + m_water->get(i-1,j+1); }
 
@@ -442,18 +442,19 @@ void TrMap::updateWater(bool erosion) {
                 if (change > 0.0) {
                     // adding land
                     // TODO WHAT DO I DO WITH THIS
+                    // currently this is the "erosoin rate"
                     change = change * 0.5;
                 }
                 change *= abs(change * 40.0);
                 m_height->at(i  ,j  ) += change /  8.0f;
-                m_height->at(i+1,j+1) += change / 22.0f;
+                m_height->at(i+1,j+1) += change / 22.63f;
                 m_height->at(i+1,j  ) += change / 16.0f;
-                m_height->at(i+1,j-1) += change / 22.0f;
+                m_height->at(i+1,j-1) += change / 22.63f;
                 m_height->at(i  ,j+1) += change / 16.0f;
                 m_height->at(i  ,j-1) += change / 16.0f;
-                m_height->at(i-1,j+1) += change / 22.0f;
+                m_height->at(i-1,j+1) += change / 22.63f;
                 m_height->at(i-1,j  ) += change / 16.0f;
-                m_height->at(i-1,j-1) += change / 22.0f;
+                m_height->at(i-1,j-1) += change / 22.63f;
             }
             m_water->at(i,j) += m_water_temp->at(i,j) -.00001;
 
