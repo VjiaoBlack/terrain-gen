@@ -14,6 +14,38 @@ float Q_rsqrt(float number) {
     return 1.0f / sqrt(number);
 }
 
+inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp) {
+    int cr1 = (color1 & K_R_MASK) >> 16;
+    int cg1 = (color1 & K_G_MASK) >> 8;
+    int cb1 = color1 & K_B_MASK;
+
+    int cr2 = (color2 & K_R_MASK) >> 16;
+    int cg2 = (color2 & K_G_MASK) >> 8;
+    int cb2 = color2 & K_B_MASK;
+
+    int cr = cr1 + round((cr2 - cr1) * lerp);
+    int cg = cg1 + round((cg2 - cg1) * lerp);
+    int cb = cb1 + round((cb2 - cb1) * lerp);
+
+    // cr = floor(cr * 255.0);
+    // cg = floor(cg * 255.0);
+    // cb = floor(cb * 255.0);
+
+    if (cr > 255) cr = 255;
+    if (cg > 255) cg = 255;
+    if (cb > 255) cb = 255;
+
+    if (cr < 0) cr = 0;
+    if (cg < 0) cg = 0;
+    if (cb < 0) cb = 0;
+
+    uint32_t ret = K_A_MASK;
+    ret |= cr << 16;
+    ret |= cg << 8;
+    ret |= cb;
+
+    return ret;
+}
 
 inline uint32_t multiplyColor(uint32_t color, double r, double g, double b) {
     int cr = (color & K_R_MASK) >> 16;
@@ -71,14 +103,14 @@ void TrMap::updateColors() {
     if (!m_useMoisture) {
         int threshold[9] = {70, 100, 117, 132, 148, 165, 180, 198, 218};
 
-        // uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
-        //                       0xFFEEDDBB,0xFF77BC49,0xFF58A327,
-        //                       0xFF28771F,0xFF210E04,0xFF5B3F31};
-
-        // no initial water colors,just land.
-        uint32_t colors[9] = {0xFF664433,0xFFBB8866,0xFFEEDDBB,
+        uint32_t colors[9] = {0xFF1A2B56,0xFF253C78,0xFF3A5BAA,
                               0xFFEEDDBB,0xFF77BC49,0xFF58A327,
                               0xFF28771F,0xFF210E04,0xFF5B3F31};
+
+        // no initial water colors,just land.
+        // uint32_t colors[9] = {0xFF664433,0xFFBB8866,0xFFEEDDBB,
+        //                       0xFFEEDDBB,0xFF77BC49,0xFF58A327,
+        //                       0xFF28771F,0xFF210E04,0xFF5B3F31};
 
         vec3 light(0.4, 0.2, 0.8);
         light.normalize();
@@ -98,20 +130,29 @@ void TrMap::updateColors() {
                     }
                 }
 
-                // render water
-                if (m_water->at(i,j) > 0.001) {
-                    float height = m_water->at(i,j) + m_height->at(i,j);
-                    m_diffuse->at(i,j) = 0xFF305090;
-
-                    int rip = floor(height * 128.0) - 32;
-                    m_diffuse->at(i,j) = shiftColor(m_diffuse->at(i,j), rip, rip, rip); 
-                } else {
-                    float wat = 0.6 * light.dot(m_normal->at(i,j));
-                    m_diffuse->at(i,j) = multiplyColor(m_diffuse->at(i,j), wat + 0.4, wat + 0.4, wat + 0.4);
-
+                if (m_height->at(i,j) * 255 > 117 && m_moisture->at(i,j) < 0.1) {
+                    m_diffuse->at(i,j) = lerpColor(
+                                            lerpColor(0xFFEEDDBB, 0xFF5B3F31, (m_height->at(i,j) - 0.458) * 0.8), 
+                                                   m_diffuse->at(i,j), 0.2 + 0.8 * m_moisture->at(i,j) * 10.0);
                 }
 
 
+                // render water
+                if (m_water->at(i,j) > 0.001 && m_height->at(i,j) * 255.0f > 117.0f) {
+                    float height = m_water->at(i,j) + m_height->at(i,j);
+                    m_diffuse->at(i,j) = 0xFF305090;
+
+                    int rip = floor(height * 160.0) - 64;
+                    m_diffuse->at(i,j) = shiftColor(m_diffuse->at(i,j), rip, rip, rip); 
+                } else {
+                    float wat = 0.6 * light.dot(m_normal->at(i,j));
+
+                    if (m_height->at(i,j) * 255.0f < 117.0f) {
+                        wat = 0.6;
+                    }
+
+                    m_diffuse->at(i,j) = multiplyColor(m_diffuse->at(i,j), wat + 0.4, wat + 0.4, wat + 0.4);
+                }
             }
         }
     } else {
@@ -131,20 +172,42 @@ void TrMap::updateColors() {
         for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_cols; j++) {
                 // errr how do I do this....
+              
+                // double rr = m_wind->at(i,j).x;
+                // double gg = (m_wind->at(i,j).y + 1.0) * 0.5;
+                // double bb = (m_wind->at(i,j).z + 1.0) * 0.5;
+                // m_diffuse->at(i,j) = multiplyColor(0xFFFFFFFF, gg, gg, gg);
+
                 if (m_height->at(i,j) > 0.7) {
                     m_diffuse->at(i,j) = c_rock;
                 } else {
-                    // TODO: LERPING
+
 
                     if (m_moisture->at(i,j) > 0.05) {
-                        m_diffuse->at(i,j) = c_wetdirt;
+                        m_diffuse->at(i,j) = lerpColor(c_drydirt, c_wetdirt, 0.4 + m_moisture->at(i,j) * 0.6);
+
                     } else {
                         m_diffuse->at(i,j) = c_drydirt;
                     }
 
-                    if (m_vegetation->at(i,j) > 0.5) {
+
+
+
+                    
+
+                    if (m_vegetation->at(i,j) > 0.2 && m_moisture->at(i,j) > 0.3) {
+                        m_diffuse->at(i,j) = c_grass;
+                    }
+
+                    if (m_vegetation->at(i,j) > 0.65 && m_moisture->at(i,j) > 0.4) {
+                        m_diffuse->at(i,j) = c_forest;
+                    }
+
+                    if (m_vegetation->at(i,j) > 0.8 && m_moisture->at(i,j) > 0.8) {
                         m_diffuse->at(i,j) = c_rainforest;
                     }
+
+
                 }
 
                 // render water
@@ -159,26 +222,69 @@ void TrMap::updateColors() {
                     m_diffuse->at(i,j) = multiplyColor(m_diffuse->at(i,j), wat + 0.4, wat + 0.4, wat + 0.4);
 
                 }
-
-
             }
         }
-        
     }
-    
+}
+
+void TrMap::updateWind() {
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            m_wind->at(i,j) = vec3::project(m_normal->at(i,j), vec3(1.0,0.0,0.0));
+            m_wind->at(i,j).normalize();
+        }
+    }
 }
 
 void TrMap::updateMoisture() {
-    // okay set moisture to 1 if there is some water
+
+    for (int j = 0; j < m_cols; j++) {
+        for (int i = 0; i < m_rows; i++) {
+            if (m_water->at(i,j) + m_height->at(i,j) < 0.458) {
+                m_water->at(i,j) = 0.458 - m_height->at(i,j);
+            }
+        }
+    }
+
+
+    // Good Moisture Carried by Wind
+    // m_moisture->set(0.0);
+
+    for (int j = 0; j < m_cols; j++) {
+        for (int i = 0; i < m_rows; i++) {
+            m_moisture->at(i,j) *= 0.9; // random drying bullshit
+            m_moisture->at(i,j) += m_water->at(i,j) * 3.0; // random water humidifying bullshit
+
+            if (m_moisture->at(i,j) < 0) m_moisture->at(i,j) = 0;
+            if (m_moisture->at(i,j) > 1.0) m_moisture->at(i,j) = 1.0;
+        }
+    }
+
+
+    for (int j = 0; j < m_cols; j++) {
+        for (int i = 0; i < m_rows; i++) {
+            // propogate moisture forwards based on current WATER and MOISTURE
+            m_moisture->at(i  ,j+1) += (m_moisture->at(i,j)*0.5) * (m_wind->at(i,j).x + m_wind->at(i,j).z * 0.25 + abs(m_wind->at(i,j).z) * 0.05) * 0.98;
+            if (m_wind->at(i,j).y > 0.0) {
+                m_moisture->at(i+1,j+1) += (m_moisture->at(i,j)*0.5) * m_wind->at(i,j).y * 0.98;
+            } else {
+                m_moisture->at(i-1,j+1) -= (m_moisture->at(i,j)*0.5) * m_wind->at(i,j).y * 0.98;
+            }
+            m_moisture->at(i,j) *= 0.5;
+
+        }
+    }
+
+    m_moisture->boxBlur();
+    m_moisture->boxBlur();
+    m_moisture->boxBlur();
+    m_moisture->boxBlur();
+    m_moisture->boxBlur();
+
+
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
-            if (m_water->at(i,j) > 0.002) {
-                m_moisture->at(i,j) = 1.0;
-            } else {
-                m_moisture->at(i,j) = m_moisture->at(i,j) * 0.95;
-            }
-
-            if (m_moisture->at(i,j) > 0.1 && m_moisture->at(i,j) < 0.5) {
+            if (m_moisture->at(i,j) > 0.1) {
                 m_vegetation->at(i,j) += 0.01;
             } else {
                 m_vegetation->at(i,j) -= 0.01;
@@ -186,7 +292,82 @@ void TrMap::updateMoisture() {
         }
     }
 
-    m_moisture->boxBlur();
+
+
+
+
+
+    // Moisture: carried by WIND...
+    // for (int i = 0; i < m_rows; i++) {
+    //     for (int j = 0; j < m_cols; j++) {
+    //         // if there is water
+    //         if (m_water->at(i,j) > 0.002) {
+    //             // increase moisture from previous tile
+    //             // wait, which is the previous tile???
+    //             m_moisture->at(i,j) = 1.0;
+    //         } else {
+    //             m_moisture->at(i,j) = m_moisture->at(i,j) * 0.35;
+    //         }
+
+    //         if (m_moisture->at(i,j) > 0.1 && m_moisture->at(i,j) < 0.9) {
+    //             m_vegetation->at(i,j) += 0.01;
+    //         } else {
+    //             m_vegetation->at(i,j) -= 0.01;
+    //         }
+
+    //         if (m_moisture->at(i,j) < 0.0) m_moisture->at(i,j) = 0;
+    //         if (m_moisture->at(i,j) > 1.0) m_moisture->at(i,j) = 1.0;
+    //     }
+    // }
+
+    // for (int i = 0; i < m_rows; i++) {
+    //     for (int j = 0; j < m_cols; j++) {
+    //         m_moisture->at(i  ,j+1) += m_moisture->at(i,j) * 0.60 * m_wind->at(i,j).y;
+    //         if (m_wind->at(i,j).x > 0.0) {
+    //             m_moisture->at(i+1,j+1) += m_moisture->at(i,j) * 0.60 * m_wind->at(i,j).x;
+    //         } else {
+    //             m_moisture->at(i-1,j+1) -= m_moisture->at(i,j) * 0.60 * m_wind->at(i,j).x;
+    //         }
+
+    //         if (m_moisture->at(i,j) < 0) {
+    //             m_moisture->at(i,j) = 0;
+    //             printf("%f\n", m_wind->at(i,j).x);
+    //         }
+    //     }
+    // }
+
+    // m_moisture->boxBlur();
+
+
+    // // Regular moisture
+    // // okay set moisture to 1 if there is some water
+    // for (int i = 0; i < m_rows; i++) {
+    //     for (int j = 0; j < m_cols; j++) {
+    //         if (m_water->at(i,j) > 0.002) {
+    //             m_moisture->at(i,j) = 1.0;
+    //         } else {
+    //             m_moisture->at(i,j) = m_moisture->at(i,j) * 0.50;
+    //         }
+
+    //         if (m_moisture->at(i,j) > 0.1 && m_moisture->at(i,j) < 0.5) {
+    //             m_vegetation->at(i,j) += 0.01;
+    //         } else {
+    //             m_vegetation->at(i,j) -= 0.01;
+    //         }
+    //     }
+    // }
+
+    // for (int i = 0; i < m_rows; i++) {
+    //     for (int j = 0; j < m_cols; j++) {
+
+
+    //         m_moisture->at(i,j+1) += m_moisture->at(i,j) * 0.25;
+    //         m_moisture->at(i+1,j+1) += m_moisture->at(i,j) * 0.125;
+    //         m_moisture->at(i-1,j+1) += m_moisture->at(i,j) * 0.125;
+    //     }
+    // }
+
+    // m_moisture->boxBlur();
 }
 
 void TrMap::updateWater(bool erosion) {
@@ -297,10 +478,7 @@ void TrMap::updateNormals() {
             // u->d
             vec3 ud(0.0, 2.0, 255.0 * (m_height->at(i+1,j) - m_height->at(i-1,j)));
             
-            m_normal->at(i,j).x = lr.y * ud.z - lr.z * ud.y;
-            m_normal->at(i,j).y = lr.z * ud.x - lr.x * ud.z;
-            m_normal->at(i,j).z = lr.x * ud.y - lr.y * ud.x;
-
+            m_normal->at(i,j) = vec3::cross(lr,ud);
             m_normal->at(i,j).normalize();
         }
     }

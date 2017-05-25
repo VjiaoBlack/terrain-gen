@@ -173,7 +173,7 @@ int main(int argv, char* argc[]) {
 
         // create rain  
         if (keysDown.count(SDLK_r)){
-            for (int i = 0; i < speed * K_MAP_SIZE * K_MAP_SIZE / 100; i++) {
+            for (int i = 0; i < speed * K_MAP_SIZE * K_MAP_SIZE / 1000; i++) {
                 terrain->m_water->at(dist(eg),dist(eg)) += 0.01;
             }
             terrain->updateColors();
@@ -200,8 +200,10 @@ int main(int argv, char* argc[]) {
 
         // update water!! omg 
         if (keysDown.count(SDLK_m)) {
-            terrain->updateMoisture();
-            terrain->updateColors();
+            for (int i = 0; i < speed; i++) {
+                terrain->updateMoisture();
+                terrain->updateColors();
+            }
         }
 
         // toggle moisture / not
@@ -210,6 +212,10 @@ int main(int argv, char* argc[]) {
             usleep(100000);
             terrain->m_useMoisture = !terrain->m_useMoisture;
             terrain->updateColors();
+        }
+
+        if (keysDown.count(SDLK_j)) {
+            terrain->updateWind();
         }
 
         // Save the map: color and heightmap

@@ -49,18 +49,41 @@ struct vec3 {
 
 	vec3() : vec3(0.0, 0.0, 0.0) {};
 
-	void normalize() {
+	vec3 operator*(float mult){
+		return vec3(x * mult, y * mult, z * mult);
+	}
+
+	vec3 operator-(vec3 v) {
+		return vec3(x -=v.x, y - v.y, z - v.z);
+	}
+
+	inline void normalize() {
 		float invsq = Q_rsqrt(x*x + y*y + z*z);
 		x *= invsq;
 		y *= invsq;
 		z *= invsq;
 	}
 
-	float dot(vec3 v) {
+	inline float dot(vec3 v) {
 		return x*v.x + y*v.y + z*v.z;
+	}
+
+	inline static vec3 cross(vec3 a, vec3 b) {
+		vec3 ans;
+        ans.x = a.y * b.z - a.z * b.y;
+        ans.y = a.z * b.x - a.x * b.z;
+        ans.z = a.x * b.y - a.y * b.x;
+        return ans;
+	}
+
+	inline static vec3 project(vec3 n, vec3 v) {
+		// get dist from v to plane n
+		// subt dist * n from v
+		return v - n * v.dot(n);
 	}
 };
 
+inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp);
 inline uint32_t multiplyColor(uint32_t color, double r, double g, double b);
 inline uint32_t shiftColor(uint32_t color, int r, int g, int b);
 
@@ -105,7 +128,7 @@ public:
 	// Or else it might be too much of a waste of memory.
 	TrPixels<double>* m_height;
 	TrPixels<vec3>* m_normal;
-	TrPixels<vec3>* m_wind;
+	TrPixels<vec3>* m_wind; 
 	TrPixels<double>* m_moisture;
 	TrPixels<double>* m_water;
 	TrPixels<double>* m_water_temp;
@@ -131,6 +154,7 @@ public:
 		for (int i = 0; i < m_rows; i++) {
             for (int j = 0; j < m_cols; j++) {
                 m_normal->at(i,j).z = 1.0f;
+                m_wind->at(i,j).y = 1.0f;
             }
         }
 	}
@@ -150,6 +174,7 @@ public:
 	void updateWater(bool erosion);
 	void updateNormals();
 	void updateMoisture();
+	void updateWind();
 };
 
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize);
