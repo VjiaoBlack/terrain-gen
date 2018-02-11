@@ -36,17 +36,33 @@ TrRenderer::TrRenderer() {
     // m_terrain->m_height->at(0,0) = 0.5;
     // m_terrain->m_height->diamondSquare(K_MAP_SIZE, 0.8);
     // terrain is doubley stretched
-    m_terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 1.0, 1.0);
-
-    pair<double, double> minMax = m_terrain->m_height->getMinMax();
-    cout << "min: " << minMax.first - 0.5 << endl;
-    cout << "max: " << minMax.second - 0.5 << endl;
+    m_terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 2.0, 1.0);
 
     for (int i = 0; i < m_terrain->m_rows; i++) {
         for (int j = 0; j < m_terrain->m_cols; j++) {
             m_terrain->m_height->at(i,j) -= 0.5;
+            m_terrain->m_height->at(i,j) -= 0.5;
+            m_terrain->m_height->at(i,j) *= 1.5;
+
+
+            m_terrain->m_height->at(i,j) *= fabs(m_terrain->m_height->at(i,j));
+
+            m_terrain->m_height->at(i,j) += 0.5;
+
+            if (m_terrain->m_height->at(i,j) > 1.0) {
+                m_terrain->m_height->at(i,j) = 1.0;
+            } else if (m_terrain->m_height->at(i,j) < 0.0) {
+                m_terrain->m_height->at(i,j) = 0.0;
+            }
+
+
+
         }
     }
+
+    pair<double, double> minMax = m_terrain->m_height->getMinMax();
+    cout << "min: " << minMax.first << endl;
+    cout << "max: " << minMax.second << endl;
 
     m_terrain->updateColors();
 
@@ -83,6 +99,9 @@ void TrRenderer::handleKey(int SDLKey) {
             break;
         case SDLK_LSHIFT:
             m_speed = 10;
+            break;
+        case SDLK_RSHIFT:
+            m_speed = 1;
             break;
         case SDLK_u:
              for (int i = 0; i < K_MAP_SIZE; i++) {
