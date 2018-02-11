@@ -127,7 +127,7 @@ void TrPixels<T>::boxBlur() {
 }
 
 template<class T>
-void TrPixels<T>::perlinNoise(int s, int level, double size, double magnitude) {
+void TrPixels<T>::perlinNoise(unsigned int s, int level, double size, double magnitude) {
     // Create a PerlinNoise object with the reference permutation vector
 
     PerlinNoise perlin = PerlinNoise();
@@ -137,14 +137,14 @@ void TrPixels<T>::perlinNoise(int s, int level, double size, double magnitude) {
     }
 
     // Visit every pixel of the image and assign a color generated with Perlin noise
-    for (unsigned int i = 0; i < s; ++i) {     // y
+    for (unsigned int i = 0; i < s; ++i) {      // y
         for (unsigned int j = 0; j < s; ++j) {  // x
-            double x = (double)j/((double)(s));
-            double y = (double)i/((double)(s));
+            double x = (double)j/((double)(s)); 
+            double y = (double)i/((double)(s)); 
 
             // Typical Perlin noise
-            double n = perlin.noise(1.0+x * size, 1.0+y * size, 0);
-            m_pixels[i * K_MAP_SIZE + j] += magnitude * n;
+            double n = perlin.noise(1.0 + x * size, 1.0 + y * size, 0);
+            m_pixels[i * K_MAP_SIZE + j] += n * magnitude;
             
         }
     }
