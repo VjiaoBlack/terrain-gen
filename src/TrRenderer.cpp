@@ -24,6 +24,14 @@ TrRenderer::TrRenderer() {
         exit(1);
     }
     
+
+
+    
+    if (TTF_Init()==-1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
+
     // setup for rendering loop
     m_quit = false;
 
@@ -36,7 +44,7 @@ TrRenderer::TrRenderer() {
     // m_terrain->m_height->at(0,0) = 0.5;
     // m_terrain->m_height->diamondSquare(K_MAP_SIZE, 0.8);
     // terrain is doubley stretched
-    m_terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 2.0, 1.0);
+    m_terrain->m_height->perlinNoise(K_MAP_SIZE, 8, 1.0, 1.0);
 
     for (int i = 0; i < m_terrain->m_rows; i++) {
         for (int j = 0; j < m_terrain->m_cols; j++) {
@@ -45,7 +53,8 @@ TrRenderer::TrRenderer() {
             m_terrain->m_height->at(i,j) *= 1.5;
 
 
-            m_terrain->m_height->at(i,j) *= fabs(m_terrain->m_height->at(i,j));
+            m_terrain->m_height->at(i,j) = m_terrain->m_height->at(i,j) *
+                                           fabs(m_terrain->m_height->at(i,j));
 
             m_terrain->m_height->at(i,j) += 0.5;
 
@@ -81,11 +90,18 @@ TrRenderer::TrRenderer() {
     m_frameRate = 30;
     // double  averageFrameTimeMilliseconds = 33.333;
 
+
+    m_font = TTF_OpenFont("neris.thin.ttf", 16);
+    if(!m_font) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        // handle error
+    }
 }
 
 TrRenderer::~TrRenderer() {
     delete m_terrain;
 
+    TTF_Quit();
     SDL_DestroyTexture(m_mapTexture);
     SDL_DestroyRenderer(m_SDLRenderer);
     SDL_DestroyWindow(m_SDLWindow);
@@ -127,8 +143,8 @@ void TrRenderer::handleKey(int SDLKey) {
             break;
         case SDLK_r:
             // create rain  
-            for (int i = 0; i < m_speed * K_MAP_SIZE * K_MAP_SIZE / 1000; i++) {
-                m_terrain->m_water->at(m_randDist(m_randEngine),m_randDist(m_randEngine)) += 0.01;
+            for (int i = 0; i < m_speed * K_MAP_SIZE * K_MAP_SIZE / 200; i++) {
+                m_terrain->m_water->at(m_randDist(m_randEngine),m_randDist(m_randEngine)) += 0.001;
             }
             m_terrain->updateColors();
             break;
@@ -185,10 +201,25 @@ void TrRenderer::handleKey(int SDLKey) {
 }
 
 void TrRenderer::run() {
+
+    int score = 10;
+
+    std::string score_text = "athena ATHENA: 1234567890";       
+    SDL_Color textColor = { 0, 0, 0, 255 };
+    SDL_Surface* textSurface = TTF_RenderText_Solid(m_font, score_text.c_str(), textColor);
+    SDL_Texture* text = SDL_CreateTextureFromSurface(m_SDLRenderer, textSurface);
+    int text_width = textSurface->w;
+    int text_height = textSurface->h;
+    SDL_FreeSurface(textSurface);
+    SDL_Rect renderQuad = { 20, 20, text_width, text_height };
+    SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
+    // SDL_DestroyTexture(text);
+
+
     while (!m_quit) {
         clock_t beginFrame = clock();
 
-        SDL_UpdateTexture(m_mapTexture, NULL, m_terrain->m_diffuse->m_pixels, K_MAP_SIZE * sizeof(uint32_t));
+        SDL_UpdateTexture(m_mapTexture, NULL, m_terrain->m_color->m_pixels, K_MAP_SIZE * sizeof(uint32_t));
 
         // Update keysDown and buttonsDown
         while (SDL_PollEvent(&m_SDLEvent) != 0) {
@@ -239,6 +270,15 @@ void TrRenderer::run() {
             
         renderTextureWithOffset(m_SDLRenderer, m_mapTexture, m_xOff, m_yOff, c_pixelSize);
 
+
+
+
+
+        SDL_Rect renderQuad = { 0, 0, text_width * sz(K_DISPLAY_SIZE / K_MAP_SIZE), text_height * sz(K_DISPLAY_SIZE / K_MAP_SIZE) };
+        SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
+
+
+
         // update screen
         SDL_RenderPresent(m_SDLRenderer);
 
@@ -274,7 +314,7 @@ void TrRenderer::saveMap() {
 
     SDL_LockSurface(surface);
 
-    memcpy(surface->pixels, m_terrain->m_diffuse->m_pixels, K_MAP_SIZE * K_MAP_SIZE * 4);
+    memcpy(surface->pixels, m_terrain->m_color->m_pixels, K_MAP_SIZE * K_MAP_SIZE * 4);
 
 
     SDL_UnlockSurface(surface);

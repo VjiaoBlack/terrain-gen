@@ -2,6 +2,7 @@
 #include <unordered_set>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
 #include <stdlib.h>
@@ -15,7 +16,6 @@
 #include <iostream>
 #include <math.h>
 
-#include "Utils.hpp"
 #include "TrGraphics.hpp"
 
 #ifndef _TR_RENDER_HPP_
@@ -35,6 +35,8 @@ public:
 
     // create texture for map
     SDL_Texture* m_mapTexture;
+
+    TTF_Font *m_font;
 
     TrMap* m_terrain;
 

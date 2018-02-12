@@ -144,12 +144,12 @@ void TrPixels<T>::perlinNoise(unsigned int s, int level, double size, double mag
 
             // Typical Perlin noise
             double n = perlin.noise(1.0 + x * size, 1.0 + y * size, 0);
-            m_pixels[i * K_MAP_SIZE + j] += n * magnitude;
+            m_pixels[i * K_MAP_SIZE + j] += n * magnitude * 1.2;
             
         }
     }
 
-    this->perlinNoise(s, level-1, size * 2.0, magnitude * .5);
+    this->perlinNoise(s, level-1, size * 2.0, magnitude * .4);
 }
 
 #endif

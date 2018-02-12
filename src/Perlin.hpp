@@ -18,6 +18,8 @@
 #ifndef _PERLIN_HPP_
 #define _PERLIN_HPP_
 
+#include "Utils.hpp"
+
 // Perlin Noise
 class PerlinNoise {
 	// The permutation vector

@@ -5,12 +5,123 @@
 #include <vector>
 #include <random>
 
+
 #ifndef _UTILS_HPP_
 #define _UTILS_HPP_
 
+
+// set to 2 (or more) if it's a retina screen, 1 if not.
+#define K_RETINA 1
+#define sz(x) ((x) * K_RETINA)
+#define K_MAP_SIZE 256
+#define K_DISPLAY_SIZE 1024
+
+#define K_R_MASK 0x00ff0000
+#define K_G_MASK 0x0000ff00
+#define K_B_MASK 0x000000ff
+#define K_A_MASK 0xff000000
+
+#define K_RGBA_BYTES 32
+
+
+
+
+
+
 // edited from
 // https://en.wikipedia.org/wiki/Fast_inverse_square_root
-float Q_rsqrt(float number);
+// TODO: fast square root
+// TODO: macro
+inline float Q_rsqrt(float number) {
+  return 1.0f / sqrt(number);
+}
+
+
+inline double clockToMilliseconds(clock_t ticks) {
+    return (ticks/(double)CLOCKS_PER_SEC) * 1000.0;
+}
+
+inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp) {
+  int cr1 = (color1 & K_R_MASK) >> 16;
+  int cg1 = (color1 & K_G_MASK) >> 8;
+  int cb1 = color1 & K_B_MASK;
+
+  int cr2 = (color2 & K_R_MASK) >> 16;
+  int cg2 = (color2 & K_G_MASK) >> 8;
+  int cb2 = color2 & K_B_MASK;
+
+  int cr = cr1 + round((cr2 - cr1) * lerp);
+  int cg = cg1 + round((cg2 - cg1) * lerp);
+  int cb = cb1 + round((cb2 - cb1) * lerp);
+
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
+
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
+
+  uint32_t ret = K_A_MASK;
+  ret |= cr << 16;
+  ret |= cg << 8;
+  ret |= cb;
+
+  return ret;
+}
+
+inline uint32_t multiplyColor(uint32_t color, double r, double g, double b) {
+  int cr = (color & K_R_MASK) >> 16;
+  int cg = (color & K_G_MASK) >> 8;
+  int cb = color & K_B_MASK;
+
+  cr = floor(cr * r);
+  cg = floor(cg * g);
+  cb = floor(cb * b);
+
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
+
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
+
+  uint32_t ret = K_A_MASK;
+  ret |= cr << 16;
+  ret |= cg << 8;
+  ret |= cb;
+
+  return ret;
+}
+
+inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
+  int cr = (color & K_R_MASK) >> 16;
+  int cg = (color & K_G_MASK) >> 8;
+  int cb = color & K_B_MASK;
+
+  cr += r;
+  cg += g;
+  cb += b;
+
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
+
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
+
+  uint32_t ret = K_A_MASK;
+  ret |= cr << 16;
+  ret |= cg << 8;
+  ret |= cb;
+
+  return ret;
+}
+
+
+
 
 // I heard that floats are much faster.
 class Vec3 {
@@ -58,12 +169,6 @@ public:
 	}
 };
 
-inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp);
-inline uint32_t multiplyColor(uint32_t color, double r, double g, double b);
-inline uint32_t shiftColor(uint32_t color, int r, int g, int b);
 
-inline double clockToMilliseconds(clock_t ticks) {
-    return (ticks/(double)CLOCKS_PER_SEC) * 1000.0;
-}
 
 #endif

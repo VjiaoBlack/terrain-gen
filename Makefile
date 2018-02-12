@@ -6,7 +6,8 @@
 
 COMPILE=g++ 
 FLAGS=-std=gnu++11 -Winline -Wall -O3
-LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image
+LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
+
 
 # File names
 EXEC = athena

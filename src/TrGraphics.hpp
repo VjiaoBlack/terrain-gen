@@ -15,26 +15,16 @@
 #include <vector>
 #include <random>
 
-#include "Perlin.hpp"
-#include "Utils.hpp"
 
 #ifndef _TR_GRAPHICS_HPP_
 #define _TR_GRAPHICS_HPP_
 
+#include "Utils.hpp"
+#include "Perlin.hpp"
+
+
 using namespace std;
 
-// set to 2 (or more) if it's a retina screen, 1 if not.
-#define K_RETINA 1
-#define sz(x) ((x) * K_RETINA)
-#define K_MAP_SIZE 256
-#define K_DISPLAY_SIZE 1024
-
-#define K_R_MASK 0x00ff0000
-#define K_G_MASK 0x0000ff00
-#define K_B_MASK 0x000000ff
-#define K_A_MASK 0xff000000
-
-#define K_RGBA_BYTES 32
 
 // stores pixels and stuff
 template <class T>
@@ -78,12 +68,13 @@ public:
 	TrPixels<double>* m_height;
 	TrPixels<Vec3>* m_normal;
 	TrPixels<Vec3>* m_wind; 
-	TrPixels<double>* m_moisture;
+	TrPixels<double>* m_moisture;   // for calculating vegetation
 	TrPixels<double>* m_water;
-	TrPixels<double>* m_water_temp;
+	TrPixels<double>* m_water_temp; // temporary
 	TrPixels<double>* m_vegetation;
 
-	TrPixels<uint32_t>* m_diffuse;
+	TrPixels<uint32_t>* m_color;
+	TrPixels<uint8_t>* m_terrainTypes;
 
 	int m_rows;
 	int m_cols;
@@ -97,7 +88,7 @@ public:
 		, m_water(new TrPixels<double>(rows,cols))
 		, m_water_temp(new TrPixels<double>(rows,cols))
 		, m_vegetation(new TrPixels<double>(rows,cols))
-		, m_diffuse(new TrPixels<uint32_t>(rows,cols))
+		, m_color(new TrPixels<uint32_t>(rows,cols))
 		, m_rows(rows), m_cols(cols) 
 		, m_useMoisture(false) {
 		for (int i = 0; i < m_rows; i++) {
@@ -116,7 +107,7 @@ public:
 		delete m_water;
 		delete m_water_temp;
 		delete m_vegetation;
-		delete m_diffuse;
+		delete m_color;
 	}
 
 	void updateColors();
