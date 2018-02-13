@@ -1,49 +1,103 @@
+#pragma once 
 /**
- * TrGraphics-impl.hpp
+ * TrGraphics.hpp
  *
- * Includes implementation of <T> functions in TrGraphics.hpp
+ * Victor Jiao
+ *
+ * Stores wrappers for SDL2
  */
 
-#ifndef _TR_GRAPHICS_IMPL_HPP_
-#define _TR_GRAPHICS_IMPL_HPP_
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include <stdlib.h>
+#include <iostream>
+#include <time.h>
+#include <vector>
+#include <random>
+
+
+#include "../Perlin.hpp"
+#include "../Utils.hpp"
+
+class TrMap;
+
+
+using namespace std;
+
+// stores pixels and stuff
+template <class T>
+class TrMapData {
+public:
+	T* m_data ;
+
+	int m_rows;
+	int m_cols;
+
+	TrMapData(int rows, int cols)
+		: m_data (NULL)
+		, m_rows(rows)
+		, m_cols(cols) {
+		m_data  = new T[rows * cols];
+    	memset(m_data , 0, rows * cols * sizeof(T));
+	}
+
+	virtual ~TrMapData() {
+		delete[] m_data ;
+	}
+
+	// defined at bottom of file.
+	inline T get(int r, int c);
+	inline void set(int r, int c, T p);
+	inline T& at(int r, int c);
+
+	virtual void update(TrMap* map) {};
+
+	void diamondSquare(int s, double level);
+	void boxBlur();
+	void perlinNoise(unsigned int s, int level, double size, double magnitude);
+	pair<T, T> getMinMax();
+	void set(T t);
+};
+ 
 
 template<class T>
-inline void TrPixels<T>::set(int r, int c, T p) {
+inline void TrMapData<T>::set(int r, int c, T p) {
     if (r < 0) r += m_rows;
     if (c < 0) c += m_cols;
 
     if (r >= m_rows) r -= m_rows;
     if (c >= m_cols) c -= m_cols;
 
-    m_pixels[r*m_cols + c] = p;
+    m_data[r*m_cols + c] = p;
 }
 
 template<class T>
-inline T TrPixels<T>::get(int r, int c) {
+inline T TrMapData<T>::get(int r, int c) {
     if (r < 0) r += m_rows;
     if (c < 0) c += m_cols;
 
     if (r >= m_rows) r -= m_rows;
     if (c >= m_cols) c -= m_cols;
 
-    return m_pixels[r*m_cols + c];
+    return m_data[r*m_cols + c];
 }
 
 template<class T>
-inline T& TrPixels<T>::at(int r, int c) {
+inline T& TrMapData<T>::at(int r, int c) {
     if (r < 0) r += m_rows;
     if (c < 0) c += m_cols;
 
     if (r >= m_rows) r -= m_rows;
     if (c >= m_cols) c -= m_cols;
 
-    return m_pixels[r*m_cols + c];
+    return m_data[r*m_cols + c];
 }
 
 template<class T>
-pair<T, T> TrPixels<T>::getMinMax() {
-    T min = m_pixels[0];
-    T max = m_pixels[0];
+pair<T, T> TrMapData<T>::getMinMax() {
+    T min = m_data[0];
+    T max = m_data[0];
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             if (this->at(i,j) < min) {
@@ -57,7 +111,7 @@ pair<T, T> TrPixels<T>::getMinMax() {
 }
 
 template<class T>
-void TrPixels<T>::set(T t) {
+void TrMapData<T>::set(T t) {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             this->at(i,j) = t;
@@ -67,7 +121,7 @@ void TrPixels<T>::set(T t) {
 
 // Diamond Square algorithm.
 template<class T>
-void TrPixels<T>::diamondSquare(int s, double level) {
+void TrMapData<T>::diamondSquare(int s, double level) {
     if (s < 1) {
         return;
     }
@@ -108,7 +162,7 @@ void TrPixels<T>::diamondSquare(int s, double level) {
 // good enough small blur
 // even though it's technically incorrect since we immediately place back into the grid
 template<class T>
-void TrPixels<T>::boxBlur() {
+void TrMapData<T>::boxBlur() {
     for (int i = 0; i < K_MAP_SIZE; i++) {
         for (int j = 0; j < K_MAP_SIZE; j++) {
             T sum = (this->get(i-1.0, j-1.0) +
@@ -121,13 +175,13 @@ void TrPixels<T>::boxBlur() {
                      this->get(i+1.0, j    ) +
                      this->get(i+1.0, j+1.0));
 
-            m_pixels[i * K_MAP_SIZE + j] = sum / 9.0;
+            m_data[i * K_MAP_SIZE + j] = sum / 9.0;
         }
     }  
 }
 
 template<class T>
-void TrPixels<T>::perlinNoise(unsigned int s, int level, double size, double magnitude) {
+void TrMapData<T>::perlinNoise(unsigned int s, int level, double size, double magnitude) {
     // Create a PerlinNoise object with the reference permutation vector
 
     PerlinNoise perlin = PerlinNoise();
@@ -144,12 +198,10 @@ void TrPixels<T>::perlinNoise(unsigned int s, int level, double size, double mag
 
             // Typical Perlin noise
             double n = perlin.noise(1.0 + x * size, 1.0 + y * size, 0);
-            m_pixels[i * K_MAP_SIZE + j] += n * magnitude * 1.2;
+            m_data[i * K_MAP_SIZE + j] += n * magnitude * 1.2;
             
         }
     }
 
     this->perlinNoise(s, level-1, size * 2.0, magnitude * .4);
-}
-
-#endif
+} 

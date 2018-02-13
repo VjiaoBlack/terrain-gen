@@ -11,18 +11,22 @@ LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 
 # File names
 EXEC = athena
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(shell find src/ -type f -name '*.cpp')
 OBJECTS = $(addprefix build/, $(notdir $(SOURCES:.cpp=.o)))
-
+      
 # Main target
 $(EXEC): $(OBJECTS)
 	$(COMPILE) $(OBJECTS) $(LINK) $(FLAGS) -o $(EXEC)
  
 # To obtain object files
 # this one doesnt correctly recompile with impl
-build/%.o: src/%.cpp src/%.hpp src/%-impl.hpp
+build/%.o: src/*/%.cpp src/*/%.hpp src/*/%-impl.hpp
 	$(COMPILE) -c $(FLAGS) $< -o $@
 
+build/%.o: src/*/%.cpp src/*/%.hpp
+	$(COMPILE) -c $(FLAGS) $< -o $@
+
+ 
 build/%.o: src/%.cpp src/%.hpp
 	$(COMPILE) -c $(FLAGS) $< -o $@
 

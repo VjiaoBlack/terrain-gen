@@ -1,5 +1,6 @@
+#pragma once 
 
-#include <unordered_set>
+#include <set>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -16,29 +17,27 @@
 #include <iostream>
 #include <math.h>
 
-#include "TrGraphics.hpp"
+#include "TrMap/TrMap.hpp"
 
-#ifndef _TR_RENDER_HPP_
-#define _TR_RENDER_HPP_
-
-class TrRenderer {
+class TrGame {
 public:
     SDL_Window* m_SDLWindow;
     SDL_Renderer* m_SDLRenderer;
 
+    TrMap* m_map;
     // setup for rendering loop
     SDL_Event m_SDLEvent;
     bool m_quit = false;
 
-    unordered_set<int> m_keysDown;
-    unordered_set<char> m_buttonsDown;
+    set<int> m_keysDown;
+    set<char> m_buttonsDown;
 
     // create texture for map
     SDL_Texture* m_mapTexture;
 
     TTF_Font *m_font;
 
-    TrMap* m_terrain;
+    // TrMap* m_terrain;
 
     int m_xOff = 0;
     int m_yOff = 0;
@@ -52,19 +51,19 @@ public:
     std::default_random_engine m_randEngine;
     std::uniform_int_distribution<int> m_randDist;
 
+
     // initialize framerate counter
     clock_t m_deltaTime = 0;
     unsigned int m_frames = 0;
     double  m_frameRate = 30;
 
 
-    TrRenderer();
-    ~TrRenderer();
+    TrGame();
+    ~TrGame();
 
+    void handleInput();
     void handleKey(int SDLKey);
-    void saveMap();
     void run();
 
 };
 
-#endif

@@ -1,4 +1,6 @@
 
+#pragma once 
+
 #include <stdlib.h>
 #include <iostream>
 #include <time.h>
@@ -6,9 +8,9 @@
 #include <random>
 
 
-#ifndef _UTILS_HPP_
-#define _UTILS_HPP_
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 // set to 2 (or more) if it's a retina screen, 1 if not.
 #define K_RETINA 1
@@ -24,8 +26,7 @@
 #define K_RGBA_BYTES 32
 
 
-
-
+void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize);
 
 
 // edited from
@@ -171,4 +172,3 @@ public:
 
 
 
-#endif

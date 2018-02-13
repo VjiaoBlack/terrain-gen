@@ -1,3 +1,5 @@
+
+#pragma once 
 /**
  * Perlin.hpp
  *
@@ -14,9 +16,6 @@
 #include <random>
 #include <algorithm>
 #include <numeric>
-
-#ifndef _PERLIN_HPP_
-#define _PERLIN_HPP_
 
 #include "Utils.hpp"
 
@@ -37,4 +36,3 @@ private:
 	double grad(int hash, double x, double y, double z);
 };
 
-#endif

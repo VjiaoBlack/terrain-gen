@@ -12,13 +12,13 @@
 #include <iostream>
 #include <sys/time.h>
 #include <math.h>
-#include <unordered_set>
+#include <set>
 
-#include "TrGraphics.hpp"
-#include "TrRenderer.hpp"
+#include "TrMap/TrMap.hpp"
+#include "TrGame.hpp"
 
 int main(int argv, char* argc[]) {
-    TrRenderer renderer;
+    TrGame renderer;
     renderer.run();
 
     return 0;
