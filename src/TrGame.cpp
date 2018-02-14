@@ -178,7 +178,7 @@ void TrGame::run() {
         m_frames++;
 
         // display FPS
-        if (clockToMilliseconds(m_deltaTime)>1000.0){ //every second
+        if (clockToMilliseconds(m_deltaTime)>100.0){ //every second
             m_frameRate = (double)m_frames; //more stable
             m_frames = 0;
             m_deltaTime -= CLOCKS_PER_SEC;

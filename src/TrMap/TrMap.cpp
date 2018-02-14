@@ -11,6 +11,8 @@
 TrMap::TrMap(int rows, int cols) 
 : m_rows(rows)
 , m_cols(cols)
+, m_renderState(0)
+, m_erosionState(0)
 , m_color(new TrColorMap(rows, cols))
 , m_height(new TrHeightMap(rows, cols))
 , m_moisture(new TrMoistureMap(rows, cols))
@@ -21,6 +23,7 @@ TrMap::TrMap(int rows, int cols)
 
     m_randEngine = std::default_random_engine(m_randDevice());
     m_randDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE);
+    m_frandDist = std::uniform_real_distribution<double>(0, K_MAP_SIZE);
 
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -57,6 +60,7 @@ TrMap::TrMap(int rows, int cols)
 }
 
 void TrMap::update(set<int> keysDown) {
+
     int m_speed = 1;
     for (auto key : keysDown) {
         switch(key) {
@@ -86,24 +90,21 @@ void TrMap::update(set<int> keysDown) {
 
                 break;
             case SDLK_r:
-                // create rain  
-                if (!this->m_water) {
-                    exit(0);
-                } 
-                // cout << m_randDist(m_randEngine) << endl;
-                for (int i = 0; i < m_speed * K_MAP_SIZE * K_MAP_SIZE / 150; i++) {
-                    this->m_water->at(m_randDist(m_randEngine),m_randDist(m_randEngine)) += 0.001;
-                }
+                m_water->rain(this);
                 m_color->update(this);
                 break;
             case SDLK_d:
                 this->m_water->set(0.0);
                 m_color->update(this);  
                 break;
+            case SDLK_e:
+                this->m_erosionState = !this->m_erosionState;
+                usleep(100000);
+                break;
+
             case SDLK_w:
                 // animate water engine
                 for (int i = 0; i < m_speed; i++) {
-                // m_water->(m_keysDown.count(SDLK_e));
                     m_water->update(this);
                 }
                 m_color->update(this);
@@ -122,10 +123,14 @@ void TrMap::update(set<int> keysDown) {
                 break;
             case SDLK_k:
                 // toggle moisture / not
-                // or else it would blink tooo fastttt
-                usleep(100000);
-                // this->m_useMoisture = !this->m_useMoisture;
+                m_renderState++;
+                if (m_renderState > 3) {
+                  m_renderState = 0;
+                }
+
                 m_color->update(this);
+                usleep(100000);
+
                 break;
             case SDLK_j:
                 m_wind->update(this);
@@ -187,7 +192,7 @@ void TrMap::saveMap() {
     IMG_SavePNG(surface, "color.png");
     SDL_FreeSurface(surface);
 
-    TrMapData<uint32_t> map_height(K_MAP_SIZE, K_MAP_SIZE);
+    TrColorMap map_height(K_MAP_SIZE, K_MAP_SIZE);
 
 
     for (int i = 0; i < K_MAP_SIZE; i++) {

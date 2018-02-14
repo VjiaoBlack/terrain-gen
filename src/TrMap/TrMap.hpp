@@ -58,9 +58,13 @@ public:
     TrWaterMap* m_water;
     TrWindMap* m_wind;
 
+    int m_renderState; 
+    int m_erosionState;
+    
     std::random_device m_randDevice;
     std::default_random_engine m_randEngine;
     std::uniform_int_distribution<int> m_randDist;
+    std::uniform_real_distribution<double> m_frandDist;
     
     TrMap(int rows, int cols);
 
@@ -76,7 +80,6 @@ public:
     }
 
     
-
     void update(set<int> keysDown);
     void printSimpleHeightMatrix();
     void saveMap();

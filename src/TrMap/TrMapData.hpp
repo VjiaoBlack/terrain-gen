@@ -15,6 +15,7 @@
 #include <time.h>
 #include <vector>
 #include <random>
+#include <set>
 
 
 #include "../Perlin.hpp"
@@ -23,7 +24,6 @@
 class TrMap;
 
 
-using namespace std;
 
 // stores pixels and stuff
 template <class T>
@@ -51,12 +51,12 @@ public:
 	inline void set(int r, int c, T p);
 	inline T& at(int r, int c);
 
-	virtual void update(TrMap* map) {};
+    virtual void update(TrMap* map) = 0;
 
 	void diamondSquare(int s, double level);
 	void boxBlur();
 	void perlinNoise(unsigned int s, int level, double size, double magnitude);
-	pair<T, T> getMinMax();
+	std::pair<T, T> getMinMax();
 	void set(T t);
 };
  
@@ -95,7 +95,7 @@ inline T& TrMapData<T>::at(int r, int c) {
 }
 
 template<class T>
-pair<T, T> TrMapData<T>::getMinMax() {
+std::pair<T, T> TrMapData<T>::getMinMax() {
     T min = m_data[0];
     T max = m_data[0];
     for (int i = 0; i < m_rows; i++) {

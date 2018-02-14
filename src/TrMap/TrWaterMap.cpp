@@ -3,8 +3,19 @@
 
 #include "TrMap.hpp"
 
+void TrWaterMap::rain(TrMap* map) {
+  // this->experimentalRain(map);
+  // return;
+
+  int m_speed = 1;
+  for (int i = 0; i < m_speed * K_MAP_SIZE * K_MAP_SIZE / 150; i++) {
+    this->at(map->m_randDist(map->m_randEngine),map->m_randDist(map->m_randEngine)) += 0.001;
+  }
+}
+
 void TrWaterMap::update(TrMap* map) {
-  bool erosion = true;
+  // this->experimentalUpdate(map);
+  // return; 
 
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
@@ -68,8 +79,9 @@ void TrWaterMap::update(TrMap* map) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
 
-      if (erosion) {
+      if (map->m_erosionState) {
         double change = m_water_temp->at(i,j);
+        // double change = 0;
         if (change > 0.0) {
           // adding land
           // TODO: WHAT DO I DO WITH THIS
@@ -108,3 +120,128 @@ void TrWaterMap::update(TrMap* map) {
     }
   }
 }
+
+
+
+
+// void TrWaterMap::experimentalRain(TrMap* map) {
+//   for (int i = 0; i < 1000; i++) {
+//     double x = map->m_frandDist(map->m_randEngine);
+//     double y = map->m_frandDist(map->m_randEngine);
+//     double id = map->m_frandDist(map->m_randEngine);
+
+//     TrWaterPoint w(id, x, y);
+//     m_water[id] = w;
+
+//     map->m_water->at(round(x), round(y)) += w.amt;    
+//   }
+
+// }
+
+
+// void TrWaterMap::experimentalUpdate(TrMap* map) {
+//   // merge... rip
+
+
+//   // for (auto wp = m_water.begin(); wp != m_water.end(); wp++) {
+//   //   int x = round(wp->second.x);
+//   //   int y = round(wp->second.y);
+
+//   //   m_water_temp->at(y,x).amt = 0;
+//   // }
+  
+//   for (int i = 0; i < m_rows; i++) {
+//     for (int j = 0; j < m_cols; j++) {
+//       m_water_temp->at(i, j) = TrWaterPoint();
+//     }
+//   }
+
+
+//   std::unordered_map<double, TrWaterPoint> add_pts;
+//   std::unordered_set<double> rm_pts;
+
+//   // put rain into the buffer and merge them
+//   for (auto wp = m_water.begin(); wp != m_water.end(); wp++) {
+//     // TODO: no rounding
+//     // 
+//     int x = round(wp->second.x);
+//     int y = round(wp->second.y);
+
+//     // printf("%d, %d\n", x, y);
+
+//     // TODO: should check this? idk
+//     TrWaterPoint w = TrWaterPoint::Merge(m_water_temp->at(y, x), wp->second);
+
+//     m_water_temp->at(y,x) = w;
+
+//   } 
+
+
+//   // printf("done\n");
+//   m_water.clear();
+
+
+//   // printf("wtf\n");
+//   for (int i = 0; i < m_rows; i++) {
+//     for (int j = 0; j < m_cols; j++) {
+//       if (m_water_temp->at(i,j)._id > 0) {
+//         m_water[m_water_temp->at(i,j)._id] = m_water_temp->at(i,j);
+//       }
+//     }
+//   }
+
+
+//   // printf("done!!\n");
+
+//   for (auto wp = m_water.begin(); wp != m_water.end(); wp++) {
+//     // TrWaterPoint *w = &(wp->second);
+//     wp->second.x += wp->second.vx;
+//     wp->second.y += wp->second.vy;
+
+//     // TODO: no rounding
+//     int x = round(wp->second.x); 
+//     int y = round(wp->second.y);
+
+//     double nx = map->m_normal->at(x,y).x;
+//     double ny = map->m_normal->at(x,y).y;
+
+//     double len = sqrt(nx * nx + ny * ny);
+
+//     nx /= len;
+//     ny /= len;
+
+//     wp->second.vx = ny * 0.1 + 0.9 * wp->second.vx; 
+//     wp->second.vy = nx * 0.1 + 0.9 * wp->second.vy;
+//   }
+
+//   // printf("endc\n");
+
+//   for (int i = 0; i < m_rows; i++) {
+//     for (int j = 0; j < m_cols; j++) {
+//       map->m_water->at(i, j) = 0.0;
+//     }
+//   }
+
+//   for (auto wp = m_water.begin(); wp != m_water.end(); wp++) {
+//     wp->second.amt -= 0.00001;
+//   }
+
+//   std::unordered_set<TrWaterPoint> rm;
+
+//   for (auto wp = m_water.begin(); wp != m_water.end(); wp++) {
+//     if (wp->second.amt < 0.0001) {
+//       rm.insert(wp->second);
+//     }
+//   }
+
+//   for (auto w : rm) {
+//     m_water.erase(w._id);
+//   }
+
+
+ 
+//   for (auto wp : m_water) {
+//     map->m_water->at(round(wp.second.x), round(wp.second.y)) += wp.second.amt;    
+//   }
+
+// }

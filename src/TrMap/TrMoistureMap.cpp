@@ -2,6 +2,7 @@
 #include "TrMoistureMap.hpp"
 #include "TrMap.hpp"
  
+
 void TrMoistureMap::update(TrMap* map) {
 
   // for (int j = 0; j < m_cols; j++) {

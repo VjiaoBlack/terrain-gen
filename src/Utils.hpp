@@ -37,6 +37,16 @@ inline float Q_rsqrt(float number) {
   return 1.0f / sqrt(number);
 }
 
+inline double lerp5(double omin, double omax, double imin, double xx, double imax) {
+  double asdf = 1.0 / (imax - imin);
+  return omin * (1.0 - (xx - imin) * asdf) + (xx - imin) * (omax * asdf);
+}
+
+inline double lerp3(double omin, double omax, double xx) {
+  return omin + xx * (omax - omin);
+
+}
+
 
 inline double clockToMilliseconds(clock_t ticks) {
     return (ticks/(double)CLOCKS_PER_SEC) * 1000.0;

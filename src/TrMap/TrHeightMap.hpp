@@ -11,9 +11,9 @@ class TrMap;
 class TrHeightMap : public TrMapData<double> {
 public:
 
-	TrHeightMap(int rows, int cols) 
-		: TrMapData<double>(rows, cols) {}
+  TrHeightMap(int rows, int cols) 
+    : TrMapData<double>(rows, cols) {}
 
-	void update(TrMap* map); 
+  void update(TrMap* map); 
 };
 

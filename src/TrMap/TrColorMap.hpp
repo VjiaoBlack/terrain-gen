@@ -9,12 +9,20 @@ class TrMap;
 // is this too much memory? make sure to check
 class TrColorMap : public TrMapData<uint32_t> {
 public:
-	TrColorMap(int rows, int cols) 
-		: TrMapData<uint32_t>(rows, cols) {}
+  int m_renderState;
 
-	~TrColorMap() {}
+  TrColorMap(int rows, int cols) 
+  : TrMapData<uint32_t>(rows, cols)
+  , m_renderState(0) {}
 
-	void update(TrMap* map);  
+  ~TrColorMap() {}
+
+  void update(TrMap* map);  
+
+  void updateGrayscale(TrMap* map);
+  void updateHistogram(TrMap* map);
+  void updateDisplay(TrMap* map);
+  void updateMoistureDemo(TrMap* map);
 };
 
 
