@@ -71,5 +71,6 @@ public:
     void handleKey(int SDLKey);
     void run();
 
+    void mainMenu();
 };
 

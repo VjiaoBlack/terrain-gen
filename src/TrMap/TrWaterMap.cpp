@@ -20,8 +20,8 @@ void TrWaterMap::update(TrMap* map) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       map->m_water->m_water_avg->at(i,j) =
-        map->m_water->m_water_avg->at(i,j) * 0.99 + 
-        map->m_water->at(i,j) * 0.01;
+        map->m_water->m_water_avg->at(i,j) * 0.95 + 
+        map->m_water->at(i,j) * 0.05;
 
       double m = map->m_height->get(i,j) +
              map->m_water->get(i,j);

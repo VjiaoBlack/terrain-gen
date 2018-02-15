@@ -117,6 +117,7 @@ void TrMap::update(set<int> keysDown) {
                 break;
             case SDLK_n:
                 // reclaculate normals
+                m_height->update(this);
                 m_normal->update(this);
                 m_color->update(this);
                 break;

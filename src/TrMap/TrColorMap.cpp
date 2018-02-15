@@ -54,7 +54,7 @@ void TrColorMap::updateHistogram(TrMap* map) {
     double amt = (double) this->at(0,j) / (double) m_cols;
     if (floor(cur_col + amt) > floor(cur_col)) {
       if (cur_col < m_cols) {
-        for (int r = j; r < m_rows; r++) {
+        for (int r = j * m_rows / m_cols; r < m_rows; r++) {
           this->set(r,(int)floor(cur_col), 0xFFFFFFFF);
         }
       }
@@ -115,12 +115,35 @@ void TrColorMap::updateDisplay(TrMap* map) {
         }
       }
 
-      // moisture lerping
-      if (map->m_height->at(i,j)  * 255 > threshold[2] && map->m_moisture->at(i,j) < 0.1) {
-        this->at(i,j) = lerpColor(
-                    lerpColor(0xFFEEDDBB, 0xFF5B3F31, (map->m_height->at(i,j) - 0.458) * 0.8), 
-                         this->at(i,j), 0.2 + 0.8 * map->m_moisture->at(i,j) * 10.0);
+      // // moisture lerping
+      // if (map->m_height->at(i,j)  * 255 > threshold[2] && map->m_moisture->at(i,j) < 0.1) {
+      //   this->at(i,j) = lerpColor(
+      //               lerpColor(0xFFEEDDBB, 0xFF5B3F31, (map->m_height->at(i,j) - 0.458) * 0.8), 
+      //                    this->at(i,j), 0.2 + 0.8 * map->m_moisture->at(i,j) * 10.0);
+      // }
+      float wat = 0.6;
+      
+      uint32_t cur = map->m_height->m_terrace.get(i,j);
+      if (map->m_height->m_terrace.get(i-1,j) < cur ||
+          map->m_height->m_terrace.get(i,j-1) < cur) {
+        wat = 0.8;
       }
+
+      if (map->m_height->m_terrace.get(i-2,j  ) > cur ||
+          map->m_height->m_terrace.get(i  ,j-2) > cur ||
+          map->m_height->m_terrace.get(i-1,j-1) > cur ||
+          map->m_height->m_terrace.get(i-2,j-1) > cur ||
+          map->m_height->m_terrace.get(i-1,j-2) > cur) {
+        wat = 0.45;
+      }
+
+      if (map->m_height->m_terrace.get(i-1,j) > cur ||
+          map->m_height->m_terrace.get(i,j-1) > cur) {
+        wat = 0.15;
+      }
+      // if (map->m_height->m_terrace.get(i,j-1) > cur) {
+      //   wat = 0.4;
+      // }
 
 
       // render water
@@ -131,11 +154,12 @@ void TrColorMap::updateDisplay(TrMap* map) {
         int rip = floor(height * 160.0) - 64;
         this->at(i,j) = shiftColor(this->at(i,j), rip, rip, rip); 
       } else {
-        float wat = 0.6 * light.dot(map->m_normal->at(i,j));
+        // wat = 0.6 * light.dot(map->m_normal->at(i,j));
 
-        if (map->m_height->at(i,j) * 255  < threshold[2]) {
-          wat = 0.6;
-        }
+        // if (map->m_height->at(i,j) * 255  < threshold[2]) {
+        //   wat = 0.6;
+        // }
+        
 
         this->at(i,j) = multiplyColor(this->at(i,j), wat + 0.4, wat + 0.4, wat + 0.4);
       }

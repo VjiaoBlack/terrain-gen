@@ -51,7 +51,7 @@ public:
 	inline void set(int r, int c, T p);
 	inline T& at(int r, int c);
 
-    virtual void update(TrMap* map) = 0;
+    virtual void update(TrMap* map) {};
 
 	void diamondSquare(int s, double level);
 	void boxBlur();
