@@ -21,9 +21,15 @@ TrMap::TrMap(int rows, int cols)
 , m_water(new TrWaterMap(rows, cols))
 , m_wind(new TrWindMap(rows, cols)) {
 
-    m_randEngine = std::default_random_engine(m_randDevice());
-    m_randDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE);
-    m_frandDist = std::uniform_real_distribution<double>(0, K_MAP_SIZE);
+    m_xrandEngine = std::default_random_engine(m_xrandDevice());
+    m_yrandEngine = std::default_random_engine(m_yrandDevice());
+
+    // TODO fix _X _Y
+    m_xrandDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE_X);
+    m_xfrandDist = std::uniform_real_distribution<double>(0, K_MAP_SIZE_X);
+
+    m_yrandDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE_Y);
+    m_yfrandDist = std::uniform_real_distribution<double>(0, K_MAP_SIZE_Y);
 
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -32,7 +38,7 @@ TrMap::TrMap(int rows, int cols)
         }
     }
 
-    m_height->perlinNoise(K_MAP_SIZE, 8, 1.0, 1.0);
+    m_height->perlinNoise(K_MAP_SIZE_Y, 8, 1.0, 1.0);
 
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -41,7 +47,7 @@ TrMap::TrMap(int rows, int cols)
             m_height->at(i,j) *= 1.5;
 
             m_height->at(i,j) = m_height->at(i,j) *
-            fabs(m_height->at(i,j));
+                pow(fabs(m_height->at(i,j)), 0.8);
 
             m_height->at(i,j) += 0.5;
 
@@ -50,11 +56,11 @@ TrMap::TrMap(int rows, int cols)
             } else if (m_height->at(i,j) < 0.0) {
                 m_height->at(i,j) = 0.0;
             }
-
-
-
         }
     }
+
+
+
 
     m_color->update(this);
 }
@@ -65,18 +71,18 @@ void TrMap::update(set<int> keysDown) {
     for (auto key : keysDown) {
         switch(key) {
             case SDLK_u:
-                for (int i = 0; i < K_MAP_SIZE; i++) {
-                    for (int j = 0; j < K_MAP_SIZE; j++) {
-                        this->m_height->m_data[i * K_MAP_SIZE + j] -= (double)m_speed / 255.0;
+                for (int i = 0; i < K_MAP_SIZE_Y; i++) {
+                    for (int j = 0; j < K_MAP_SIZE_X; j++) {
+                        this->m_height->m_data[i * K_MAP_SIZE_X + j] -= (double)m_speed / 255.0;
                     }
                 }
                 m_color->update(this);
 
                 break;
             case SDLK_i:
-                for (int i = 0; i < K_MAP_SIZE; i++) {
-                    for (int j = 0; j < K_MAP_SIZE; j++) {
-                        this->m_height->m_data[i * K_MAP_SIZE + j] += (double)m_speed / 255.0;
+                for (int i = 0; i < K_MAP_SIZE_Y; i++) {
+                    for (int j = 0; j < K_MAP_SIZE_X; j++) {
+                        this->m_height->m_data[i * K_MAP_SIZE_X + j] += (double)m_speed / 255.0;
                     }
                 }
                 m_color->update(this);
@@ -179,7 +185,7 @@ void TrMap::printSimpleHeightMatrix() {
 void TrMap::saveMap() {
     SDL_Surface *surface, *surface2;
 
-    surface = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, K_RGBA_BYTES,
+    surface = SDL_CreateRGBSurface(0, K_MAP_SIZE_X, K_MAP_SIZE_Y, K_RGBA_BYTES,
         K_R_MASK, K_G_MASK, K_B_MASK, K_A_MASK);
 
     SDL_LockSurface(surface);
@@ -192,35 +198,35 @@ void TrMap::saveMap() {
     IMG_SavePNG(surface, "color.png");
     SDL_FreeSurface(surface);
 
-    TrColorMap map_height(K_MAP_SIZE, K_MAP_SIZE);
+    TrColorMap map_height(K_MAP_SIZE_X, K_MAP_SIZE_Y);
 
 
-    for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
+    for (int i = 0; i < K_MAP_SIZE_Y; i++) {
+        for (int j = 0; j < K_MAP_SIZE_X; j++) {
             // map_height.at(i,j) = floor(this->m_height->at(i,j) * 255);
         }
     }
 
 
-    for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
-            map_height.m_data[i * K_MAP_SIZE + j] |= 
-            map_height.m_data[i * K_MAP_SIZE + j] << 8;
-            map_height.m_data[i * K_MAP_SIZE + j] |= 
-            map_height.m_data[i * K_MAP_SIZE + j] << 16;
-            map_height.m_data[i * K_MAP_SIZE + j] |= 
-            map_height.m_data[i * K_MAP_SIZE + j] << 24;
-            map_height.m_data[i * K_MAP_SIZE + j] = 
-            map_height.m_data[i * K_MAP_SIZE + j] | 0xFF000000;
+    for (int i = 0; i < K_MAP_SIZE_Y; i++) {
+        for (int j = 0; j < K_MAP_SIZE_X; j++) {
+            map_height.m_data[i * K_MAP_SIZE_X + j] |= 
+            map_height.m_data[i * K_MAP_SIZE_X + j] << 8;
+            map_height.m_data[i * K_MAP_SIZE_X + j] |= 
+            map_height.m_data[i * K_MAP_SIZE_X + j] << 16;
+            map_height.m_data[i * K_MAP_SIZE_X + j] |= 
+            map_height.m_data[i * K_MAP_SIZE_X + j] << 24;
+            map_height.m_data[i * K_MAP_SIZE_X + j] = 
+            map_height.m_data[i * K_MAP_SIZE_X + j] | 0xFF000000;
         }
     }
 
 
-    surface2 = SDL_CreateRGBSurface(0, K_MAP_SIZE, K_MAP_SIZE, K_RGBA_BYTES,
+    surface2 = SDL_CreateRGBSurface(0, K_MAP_SIZE_X, K_MAP_SIZE_Y, K_RGBA_BYTES,
         K_R_MASK, K_G_MASK, K_B_MASK, K_A_MASK);
 
     SDL_LockSurface(surface2);
-    memcpy(surface2->pixels, map_height.m_data, K_MAP_SIZE * K_MAP_SIZE * sizeof(uint32_t));
+    memcpy(surface2->pixels, map_height.m_data, K_MAP_SIZE_X * K_MAP_SIZE_Y * sizeof(uint32_t));
     SDL_UnlockSurface(surface2);
 
     IMG_SavePNG(surface2, "height.png");

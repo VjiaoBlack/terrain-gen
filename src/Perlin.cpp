@@ -9,7 +9,7 @@
 
 // Generate a new permutation vector based on the value of seed
 PerlinNoise::PerlinNoise(unsigned int seed) {
-    p.resize(256);
+    p.resize(512);
 
     // Fill p with values from 0 to 255
     std::iota(p.begin(), p.end(), 0);
@@ -25,7 +25,7 @@ PerlinNoise::PerlinNoise(unsigned int seed) {
 }
 
 PerlinNoise::PerlinNoise() {
-    p.resize(256);
+    p.resize(512); // TODO
 
     // Fill p with values from 0 to 255
     std::iota(p.begin(), p.end(), 0);

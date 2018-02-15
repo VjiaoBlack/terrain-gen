@@ -42,14 +42,20 @@ public:
     int m_xOff = 0;
     int m_yOff = 0;
 
-    const int c_pixelSize = sz(K_DISPLAY_SIZE) / K_MAP_SIZE;
+    // TODO: help
+    const int c_pixelSize = sz(K_DISPLAY_SIZE_X) / K_MAP_SIZE_X;
 
     int m_speed = 1;
 
     // initialize random number generator for rain
-    std::random_device m_randDevice;
-    std::default_random_engine m_randEngine;
-    std::uniform_int_distribution<int> m_randDist;
+    std::random_device m_yrandDevice;
+    std::default_random_engine m_yrandEngine;
+    std::uniform_int_distribution<int> m_yrandDist;
+
+    std::random_device m_xrandDevice;
+    std::default_random_engine m_xrandEngine;
+    std::uniform_int_distribution<int> m_xrandDist;
+
 
 
     // initialize framerate counter

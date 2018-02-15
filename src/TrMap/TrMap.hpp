@@ -61,10 +61,15 @@ public:
     int m_renderState; 
     int m_erosionState;
     
-    std::random_device m_randDevice;
-    std::default_random_engine m_randEngine;
-    std::uniform_int_distribution<int> m_randDist;
-    std::uniform_real_distribution<double> m_frandDist;
+    std::random_device m_xrandDevice;
+    std::default_random_engine m_xrandEngine;
+    std::uniform_int_distribution<int> m_xrandDist;
+    std::uniform_real_distribution<double> m_xfrandDist;
+
+    std::random_device m_yrandDevice;
+    std::default_random_engine m_yrandEngine;
+    std::uniform_int_distribution<int> m_yrandDist;
+    std::uniform_real_distribution<double> m_yfrandDist;
     
     TrMap(int rows, int cols);
 

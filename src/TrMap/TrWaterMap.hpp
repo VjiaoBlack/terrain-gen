@@ -121,13 +121,20 @@ public:
   // TrWaterDataMap* m_water_temp;
   TrWaterTempMap* m_water_temp;
   // TrWaterDataMap* m_water_data;
+  TrWaterTempMap* m_water_avg; 
+
 
   TrWaterMap(int rows, int cols) 
     : TrMapData(rows, cols)
-    , m_water_temp(new TrWaterTempMap(rows, cols)) {
+    , m_water_temp(new TrWaterTempMap(rows, cols)) 
+    , m_water_avg(new TrWaterTempMap(rows, cols)) {
     // , m_water_temp(new TrWaterDataMap(rows, cols)) {
   }
 
+  ~TrWaterMap() {
+    delete m_water_temp;
+    delete m_water_avg;
+  }
   
   void update(TrMap* map); 
   void experimentalUpdate(TrMap* map); 

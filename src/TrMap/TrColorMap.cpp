@@ -29,7 +29,6 @@ void TrColorMap::updateGrayscale(TrMap* map) {
     for (int j = 0; j < m_cols; j++) {
       // render land
       this->set(i,j,multiplyColor(0xFFFFFFFF, map->m_height->at(i,j), map->m_height->at(i,j), map->m_height->at(i,j)));
-        
     }
   }
 }
@@ -71,6 +70,7 @@ void TrColorMap::updateHistogram(TrMap* map) {
 }
 
 void TrColorMap::updateDisplay(TrMap* map) {
+
   int threshold[9];
   // -: deep 
   threshold[0] = 0.20 * 256; 
@@ -124,8 +124,8 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
 
       // render water
-      if (map->m_water->at(i,j) > 0.001 && map->m_height->at(i,j)  * 255 > threshold[2]) {
-        float height = map->m_water->at(i,j) + map->m_height->at(i,j);
+      if (map->m_water->m_water_avg->at(i,j) > 0.001 && map->m_height->at(i,j)  * 255 > threshold[2]) {
+        float height = map->m_water->m_water_avg->at(i,j) + map->m_height->at(i,j);
         this->at(i,j) = 0xFF305090;
 
         int rip = floor(height * 160.0) - 64;
@@ -183,8 +183,8 @@ void TrColorMap::updateMoistureDemo(TrMap* map) {
       }
 
       // render water
-      if (map->m_water->at(i,j) > 0.001) {
-        float height = map->m_water->at(i,j) + map->m_height->at(i,j);
+      if (map->m_water->m_water_avg->at(i,j) > 0.001) {
+        float height = map->m_water->m_water_avg->at(i,j) + map->m_height->at(i,j);
         this->at(i,j) = 0xFF305090;
 
         int rip = floor(height * 128.0) - 32;

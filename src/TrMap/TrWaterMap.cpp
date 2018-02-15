@@ -8,17 +8,21 @@ void TrWaterMap::rain(TrMap* map) {
   // return;
 
   int m_speed = 1;
-  for (int i = 0; i < m_speed * K_MAP_SIZE * K_MAP_SIZE / 150; i++) {
-    this->at(map->m_randDist(map->m_randEngine),map->m_randDist(map->m_randEngine)) += 0.001;
+  for (int i = 0; i < m_speed * K_MAP_SIZE_X * K_MAP_SIZE_Y / 150; i++) {
+    this->at(map->m_yrandDist(map->m_yrandEngine),map->m_xrandDist(map->m_xrandEngine)) += 0.001;
   }
 }
 
 void TrWaterMap::update(TrMap* map) {
   // this->experimentalUpdate(map);
   // return; 
-
+  // 
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
+      map->m_water->m_water_avg->at(i,j) =
+        map->m_water->m_water_avg->at(i,j) * 0.99 + 
+        map->m_water->at(i,j) * 0.01;
+
       double m = map->m_height->get(i,j) +
              map->m_water->get(i,j);
       int mi = i;

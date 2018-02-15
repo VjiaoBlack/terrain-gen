@@ -11,7 +11,7 @@ TrGame::TrGame() {
     // Create window 
     m_SDLWindow = SDL_CreateWindow("test_driving",
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              sz(K_DISPLAY_SIZE), sz(K_DISPLAY_SIZE), SDL_WINDOW_SHOWN);
+                              sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y), SDL_WINDOW_SHOWN);
     if (m_SDLWindow == NULL) {
         printf("Window could not be created - SDL Error: %s\n", SDL_GetError());
         exit(1);
@@ -37,9 +37,10 @@ TrGame::TrGame() {
 
     // create texture for map
     m_mapTexture = SDL_CreateTexture(m_SDLRenderer,
-        SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, K_MAP_SIZE, K_MAP_SIZE);
+        SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, K_MAP_SIZE_X, K_MAP_SIZE_Y);
 
-    m_map = new TrMap(K_MAP_SIZE, K_MAP_SIZE);
+    m_map = new TrMap(K_MAP_SIZE_Y, K_MAP_SIZE_X);
+
 
 
     m_xOff = 0;
@@ -48,8 +49,11 @@ TrGame::TrGame() {
     m_speed = 1;
 
     // initialize random number generator for rain
-    m_randEngine = std::default_random_engine(m_randDevice());
-    m_randDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE);
+    m_xrandEngine = std::default_random_engine(m_xrandDevice());
+    m_yrandEngine = std::default_random_engine(m_yrandDevice());
+    // TODO: _X vs _Y??
+    m_xrandDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE_X);
+    m_yrandDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE_Y);
 
     // initialize framerate counter
     m_deltaTime = 0;
@@ -129,7 +133,7 @@ void TrGame::run() {
     while (!m_quit) {
         clock_t beginFrame = clock();
 
-        SDL_UpdateTexture(m_mapTexture, NULL, m_map->m_color->m_data, K_MAP_SIZE * sizeof(uint32_t));
+        SDL_UpdateTexture(m_mapTexture, NULL, m_map->m_color->m_data, K_MAP_SIZE_X * sizeof(uint32_t));
 
         // Update keysDown and buttonsDown
         handleInput();
@@ -143,14 +147,14 @@ void TrGame::run() {
         m_map->update(m_keysDown);
 
 
-        if (m_xOff < 0)
-            m_xOff += sz(K_DISPLAY_SIZE);
-        if (m_xOff > sz(K_DISPLAY_SIZE))
-            m_xOff -= sz(K_DISPLAY_SIZE);
-        if (m_yOff < 0)
-            m_yOff += sz(K_DISPLAY_SIZE);
-        if (m_yOff > sz(K_DISPLAY_SIZE))
-            m_yOff -= sz(K_DISPLAY_SIZE);
+        // if (m_xOff < 0)
+        //     m_xOff += sz(K_DISPLAY_SIZE);
+        // if (m_xOff > sz(K_DISPLAY_SIZE))
+        //     m_xOff -= sz(K_DISPLAY_SIZE);
+        // if (m_yOff < 0)
+        //     m_yOff += sz(K_DISPLAY_SIZE);
+        // if (m_yOff > sz(K_DISPLAY_SIZE))
+        //     m_yOff -= sz(K_DISPLAY_SIZE);
 
         // clear screen
         SDL_SetRenderDrawColor(m_SDLRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -162,7 +166,7 @@ void TrGame::run() {
 
 
 
-        SDL_Rect renderQuad = { 0, 0, text_width * sz(K_DISPLAY_SIZE / K_MAP_SIZE), text_height * sz(K_DISPLAY_SIZE / K_MAP_SIZE) };
+        SDL_Rect renderQuad = { 0, 0, text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X), text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y) };
         SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
 
 
@@ -210,14 +214,14 @@ void TrGame::handleInput() {
             m_buttonsDown.erase(m_SDLEvent.button.button);
         } else if (m_SDLEvent.type == SDL_MOUSEMOTION) {
             if (m_buttonsDown.count(SDL_BUTTON_LEFT) &&
-                m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE)) {
+                m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE_X)) {
                 int mouseX = m_SDLEvent.motion.x / c_pixelSize;
                 int mouseY = m_SDLEvent.motion.y / c_pixelSize;
                 // m_terrain->m_height->m_data[mouseY * K_MAP_SIZE + mouseX] = 0;
             }
 
             if (m_buttonsDown.count(SDL_BUTTON_RIGHT) &&
-                m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE)) {
+                m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE_Y)) {
                 int mouseX = m_SDLEvent.motion.x / c_pixelSize;
                 int mouseY = m_SDLEvent.motion.y / c_pixelSize;
                 // m_terrain->m_height->m_data[mouseY * K_MAP_SIZE + mouseX] = 255;

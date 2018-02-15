@@ -131,8 +131,8 @@ void TrMapData<T>::diamondSquare(int s, double level) {
     std::uniform_real_distribution<double> dist(-level, level);
 
     int hs = s/2;
-    for (int i = hs; i < K_MAP_SIZE + hs; i += s) {
-        for (int j = hs; j < K_MAP_SIZE + hs; j += s) {
+    for (int i = hs; i < K_MAP_SIZE_Y + hs; i += s) {
+        for (int j = hs; j < K_MAP_SIZE_X + hs; j += s) {
             double a = this->get(i-hs, j-hs);
             double b = this->get(i+hs, j-hs);
             double c = this->get(i-hs, j+hs);
@@ -142,8 +142,8 @@ void TrMapData<T>::diamondSquare(int s, double level) {
     }
 
 
-    for (int i = 0; i < K_MAP_SIZE; i += s) {
-        for (int j = 0; j < K_MAP_SIZE; j += s) {
+    for (int i = 0; i < K_MAP_SIZE_Y; i += s) {
+        for (int j = 0; j < K_MAP_SIZE_X; j += s) {
             double a = this->get(i   , j);
             double b = this->get(i+ s, j);
             double c = this->get(i+hs, j-hs);
@@ -163,8 +163,8 @@ void TrMapData<T>::diamondSquare(int s, double level) {
 // even though it's technically incorrect since we immediately place back into the grid
 template<class T>
 void TrMapData<T>::boxBlur() {
-    for (int i = 0; i < K_MAP_SIZE; i++) {
-        for (int j = 0; j < K_MAP_SIZE; j++) {
+    for (int i = 0; i < K_MAP_SIZE_Y; i++) {
+        for (int j = 0; j < K_MAP_SIZE_X; j++) {
             T sum = (this->get(i-1.0, j-1.0) +
                      this->get(i-1.0, j    ) +
                      this->get(i-1.0, j+1.0) +
@@ -175,7 +175,7 @@ void TrMapData<T>::boxBlur() {
                      this->get(i+1.0, j    ) +
                      this->get(i+1.0, j+1.0));
 
-            m_data[i * K_MAP_SIZE + j] = sum / 9.0;
+            this->at(i,j) = sum / 9.0;
         }
     }  
 }
@@ -191,15 +191,20 @@ void TrMapData<T>::perlinNoise(unsigned int s, int level, double size, double ma
     }
 
     // Visit every pixel of the image and assign a color generated with Perlin noise
-    for (unsigned int i = 0; i < s; ++i) {      // y
-        for (unsigned int j = 0; j < s; ++j) {  // x
+    // for (unsigned int i = 0; i < s; ++i) {      // y
+    //     for (unsigned int j = 0; j < s; ++j) {  // x
+    printf("%d, %d\n", m_rows, m_cols);
+    for (unsigned int i = 0; i < m_rows; ++i) {      // y
+        for (unsigned int j = 0; j < m_cols; ++j) {  // x
             double x = (double)j/((double)(s)); 
             double y = (double)i/((double)(s)); 
 
             // Typical Perlin noise
             double n = perlin.noise(1.0 + x * size, 1.0 + y * size, 0);
-            m_data[i * K_MAP_SIZE + j] += n * magnitude * 1.2;
-            
+
+            this->at(i,j) = this->at(i,j) + n * magnitude * 1.2;
+
+
         }
     }
 
