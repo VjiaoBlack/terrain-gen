@@ -96,7 +96,9 @@ void TrColorMap::updateDisplay(TrMap* map) {
     0xFF210E04,
     0xFF5B3F31};
 
-  Vec3 light(0.4, 0.2, 0.8);
+  // Vec3 light(0.4, 0.2, 0.8);
+  // Vec3 light(0.0, 1.0, 0.0);
+  Vec3 light(0.0, 0.0, 1.0);
   light.normalize();
 
   for (int i = 0; i < m_rows; i++) {
@@ -110,7 +112,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
         }
 
         if (map->m_height->get(i,j) * 255 >= threshold[8]) {
-          this->set(i,j,0xFFFFFFFF);
+          this->set(i,j,0xFFEEEEEE);
           break;
         }
       }
@@ -154,7 +156,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
         int rip = floor(height * 160.0) - 64;
         this->at(i,j) = shiftColor(this->at(i,j), rip, rip, rip); 
       } else {
-        // wat = 0.6 * light.dot(map->m_normal->at(i,j));
+        wat *= light.dot(map->m_normal->at(i,j));
 
         // if (map->m_height->at(i,j) * 255  < threshold[2]) {
         //   wat = 0.6;
@@ -177,7 +179,8 @@ void TrColorMap::updateMoistureDemo(TrMap* map) {
   uint32_t c_rainforest = 0xFF28771F;
   uint32_t c_rock = 0xFFAB9F91;
 
-  Vec3 light(0.4, 0.2, 0.8);
+  // Vec3 light(0.4, 0.2, 0.8);
+  Vec3 light(0.0, 0.0, 1.0);
   light.normalize();
 
   for (int i = 0; i < m_rows; i++) {

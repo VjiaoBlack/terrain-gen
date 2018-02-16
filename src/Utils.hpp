@@ -20,6 +20,8 @@
 #define K_DISPLAY_SIZE_X 1120
 #define K_DISPLAY_SIZE_Y 800
 
+#define K_DISPLAY_SCALE 4
+
 #define K_R_MASK 0x00ff0000
 #define K_G_MASK 0x0000ff00
 #define K_B_MASK 0x000000ff

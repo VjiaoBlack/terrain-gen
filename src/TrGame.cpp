@@ -25,6 +25,9 @@ TrGame::TrGame() {
     }
     
 
+        
+    
+    SDL_SetRenderDrawBlendMode(m_SDLRenderer, SDL_BLENDMODE_BLEND);
 
     
     if (TTF_Init()==-1) {
@@ -62,7 +65,7 @@ TrGame::TrGame() {
     // double  averageFrameTimeMilliseconds = 33.333;
 
 
-    m_font = TTF_OpenFont("neris.thin.ttf", 16);
+    m_font = TTF_OpenFont("anirb.ttf", 26);
     if(!m_font) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         // handle error
@@ -105,6 +108,141 @@ void TrGame::handleKey(int SDLKey) {
     }
 }
 
+void TrGame::mainMenu() {
+    bool menu = true;
+
+
+    int score = 10;
+
+    std::string score_text = "ATHENA";       
+    SDL_Color textColor0 = { 255, 215, 0, 255 };
+    SDL_Color textColor1 = { 218, 165, 32, 255 };
+    SDL_Surface* textSurface0 = TTF_RenderText_Solid(m_font, score_text.c_str(), textColor0);
+    SDL_Surface* textSurface1 = TTF_RenderText_Solid(m_font, score_text.c_str(), textColor1);
+
+    // SDL_Color textColor2 = { 218, 165, 32, 255 };
+    SDL_Color textColor2 = { 139, 69, 19, 255 };
+    SDL_Surface* textSurface2 = TTF_RenderText_Solid(m_font, score_text.c_str(), textColor2);
+
+
+    SDL_Texture* text0 = SDL_CreateTextureFromSurface(m_SDLRenderer, textSurface0);
+    SDL_Texture* text1 = SDL_CreateTextureFromSurface(m_SDLRenderer, textSurface1);
+    SDL_Texture* text2 = SDL_CreateTextureFromSurface(m_SDLRenderer, textSurface2);
+    int text_width = textSurface1->w;
+    int text_height = textSurface1->h;
+    SDL_FreeSurface(textSurface0);
+    SDL_FreeSurface(textSurface1);
+    SDL_FreeSurface(textSurface2);
+    // SDL_Rect renderQuad = { 0, 0, text_width, text_height };
+    // SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
+    // SDL_DestroyTexture(text);
+
+
+
+    while (menu && !m_quit) {
+        clock_t beginFrame = clock();
+
+        SDL_UpdateTexture(m_mapTexture, NULL, m_map->m_color->m_data, K_MAP_SIZE_X * sizeof(uint32_t));
+
+        // Update keysDown and buttonsDown
+        handleInput();
+
+        // Assuming that order of processing doesn't matter.
+        for (auto it = m_keysDown.begin(); it != m_keysDown.end(); it++) {
+            handleKey(*it);
+        }
+
+        m_map->update(m_keysDown);
+
+        // clear screen
+        SDL_SetRenderDrawColor(m_SDLRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderClear(m_SDLRenderer);
+            
+        renderTextureWithOffset(m_SDLRenderer, m_mapTexture, m_xOff, m_yOff, c_pixelSize);
+
+
+        SDL_Rect fillRect = {
+            0, 0,
+            sz(K_DISPLAY_SIZE_X),
+            sz(K_DISPLAY_SIZE_Y)
+        };
+
+        SDL_SetRenderDrawColor(m_SDLRenderer, 0x00, 0x00, 0x00, 0x40);
+
+        SDL_RenderFillRect(m_SDLRenderer, &fillRect);
+
+
+
+
+        // text
+        SDL_Rect renderQuad = {
+            sz(-4 + K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2), 
+            sz(-4 + K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2), 
+            text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X), 
+            text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y) };
+
+
+        SDL_RenderCopy(m_SDLRenderer, text0, NULL, &renderQuad);
+
+        renderQuad = {
+            sz(4 + K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2), 
+            sz(4 + K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2), 
+            text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X), 
+            text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y) };
+
+        SDL_RenderCopy(m_SDLRenderer, text2, NULL, &renderQuad);
+
+        
+
+
+
+        renderQuad = {
+            sz(K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2), 
+            sz(K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2), 
+            text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X), 
+            text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y) };
+
+
+        SDL_RenderCopy(m_SDLRenderer, text1, NULL, &renderQuad);
+
+
+
+
+
+
+
+
+
+
+
+
+        // update screen
+        SDL_RenderPresent(m_SDLRenderer);
+
+        clock_t endFrame = clock();
+
+        m_deltaTime += endFrame - beginFrame;
+        m_frames++;
+
+        // display FPS
+        if (clockToMilliseconds(m_deltaTime)>100.0){ //every second
+            m_frameRate = (double)m_frames; //more stable
+            m_frames = 0;
+            m_deltaTime -= CLOCKS_PER_SEC;
+            // averageFrameTimeMilliseconds  = 1000.0/(frameRate==0?0.001:frameRate);
+
+            std::cout <<"fps: " << m_frameRate << "        \r" ;
+            std::flush(std::cout);
+        } 
+
+        float calcMs = clockToMilliseconds(endFrame - beginFrame);
+        if (calcMs < 16.6) {
+            // limit to 60 FPS
+            usleep(1000 * ((int) (16.6 - calcMs)));
+        }
+    }
+}
+
 void TrGame::run() {
 
     // create random map
@@ -116,19 +254,8 @@ void TrGame::run() {
     // render game loop
     
 
-    int score = 10;
 
-    std::string score_text = "athena ATHENA: 1234567890";       
-    SDL_Color textColor = { 0, 0, 0, 255 };
-    SDL_Surface* textSurface = TTF_RenderText_Solid(m_font, score_text.c_str(), textColor);
-    SDL_Texture* text = SDL_CreateTextureFromSurface(m_SDLRenderer, textSurface);
-    int text_width = textSurface->w;
-    int text_height = textSurface->h;
-    SDL_FreeSurface(textSurface);
-    SDL_Rect renderQuad = { 20, 20, text_width, text_height };
-    SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
-    // SDL_DestroyTexture(text);
-
+    mainMenu();
 
     while (!m_quit) {
         clock_t beginFrame = clock();
@@ -161,13 +288,6 @@ void TrGame::run() {
         SDL_RenderClear(m_SDLRenderer);
             
         renderTextureWithOffset(m_SDLRenderer, m_mapTexture, m_xOff, m_yOff, c_pixelSize);
-
-
-
-
-
-        SDL_Rect renderQuad = { 0, 0, text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X), text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y) };
-        SDL_RenderCopy(m_SDLRenderer, text, NULL, &renderQuad);
 
 
 
