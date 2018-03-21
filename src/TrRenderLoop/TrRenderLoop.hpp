@@ -24,7 +24,8 @@
 #include <math.h>
 
 #include "../TrMap/TrMap.hpp"
-#include "../TrGame.hpp"
+
+class TrGame;
 
 class TrRenderLoop {
 public:

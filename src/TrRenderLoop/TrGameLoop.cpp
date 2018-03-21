@@ -3,6 +3,12 @@
  */
 
 #include "TrGameLoop.hpp"
+#include "../TrGame.hpp"
+
+TrGameLoop::TrGameLoop(const TrGame* game) {
+	
+}
+
 
 void TrGameLoop::update(const TrGame* game) {
     game->m_map->update(game->m_keysDown);
