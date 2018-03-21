@@ -1,3 +1,4 @@
+#pragma once
 /**
  * TrGraphics.hpp
  *
@@ -16,9 +17,6 @@
 #include <random>
 
 
-#ifndef _TR_GRAPHICS_HPP_
-#define _TR_GRAPHICS_HPP_
-
 #include "Utils.hpp"
 #include "Perlin.hpp"
 
@@ -28,7 +26,5 @@ using namespace std;
 
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize);
 
-
-#endif 
 
 #include "TrGraphics-impl.hpp"

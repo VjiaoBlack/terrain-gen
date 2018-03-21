@@ -8,12 +8,18 @@ COMPILE=g++
 FLAGS=-std=gnu++11 -Winline -Wall -O3
 LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 
+# clang-format --style=LLVM --sort-includes src/Utils.hpp 
 
 # File names
 EXEC = athena
 SOURCES = $(shell find src/ -type f -name '*.cpp')
 OBJECTS = $(addprefix build/, $(notdir $(SOURCES:.cpp=.o)))
       
+default: build $(EXEC)
+
+build:
+	mkdir build
+
 # Main target
 $(EXEC): $(OBJECTS)
 	$(COMPILE) $(OBJECTS) $(LINK) $(FLAGS) -o $(EXEC)

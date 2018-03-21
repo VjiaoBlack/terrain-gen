@@ -18,6 +18,8 @@
 #include <math.h>
 
 #include "TrMap/TrMap.hpp"
+#include "TrRenderLoop/TrMainMenuLoop.hpp"
+#include "TrRenderLoop/TrGameLoop.hpp"
 
 class TrGame {
 public:
@@ -46,6 +48,8 @@ public:
     const int c_pixelSize = sz(K_DISPLAY_SIZE_X) / K_MAP_SIZE_X;
 
     int m_speed = 1;
+
+    TrRenderLoop* m_gameState;
 
     // initialize random number generator for rain
     std::random_device m_yrandDevice;

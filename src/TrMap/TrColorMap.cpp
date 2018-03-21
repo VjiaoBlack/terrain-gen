@@ -98,7 +98,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
   // Vec3 light(0.4, 0.2, 0.8);
   // Vec3 light(0.0, 1.0, 0.0);
-  Vec3 light(0.0, 0.0, 1.0);
+  Vec3 light(-0.25, -0.25, 0.9071);
   light.normalize();
 
   for (int i = 0; i < m_rows; i++) {
@@ -177,10 +177,11 @@ void TrColorMap::updateMoistureDemo(TrMap* map) {
   uint32_t c_grass = 0xFF67AC40;
   uint32_t c_forest = 0xFF58A327;
   uint32_t c_rainforest = 0xFF28771F;
+
   uint32_t c_rock = 0xFFAB9F91;
 
   // Vec3 light(0.4, 0.2, 0.8);
-  Vec3 light(0.0, 0.0, 1.0);
+  Vec3 light(-0.25, -0.25, 0.9071);
   light.normalize();
 
   for (int i = 0; i < m_rows; i++) {
