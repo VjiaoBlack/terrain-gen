@@ -1,7 +1,7 @@
 
-#include "Utils.hpp"
+#include "TrGraphics.hpp"
 
-// TODO: is this even useful anymore? 
+// TODO: is this even useful anymore?
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
                              int xOff, int yOff, int pixelSize) {
   SDL_Rect SrcR;

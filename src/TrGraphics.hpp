@@ -23,5 +23,3 @@ using namespace std;
 
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
                              int xOff, int yOff, int pixelSize);
-
-#include "TrGraphics-impl.hpp"
