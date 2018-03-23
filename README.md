@@ -1,5 +1,14 @@
-Type "make" to compile.
 
+![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/sample_athena.gif)
+
+athena
+=====
+
+athena is a civilization builder game in pre-alpha stage.
+
+Currently, it is mostly still a terrain generator.
+
+Type "make" to compile.
 To run, type "./athena".
 
 Controls:
@@ -19,8 +28,5 @@ s - attempt to save colormap and heightmap
 
 Refer to this document for some details about how this works:
 https://docs.google.com/document/d/1xySCdTcphTbBVFzzvw51X8ISexEsv2MM4zNanQW6Hbc/edit?usp=sharing
-
-Example:
-![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/sample_athena.gif)
 
 
