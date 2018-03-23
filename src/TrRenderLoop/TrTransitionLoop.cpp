@@ -8,7 +8,17 @@
 class TrMainMenuLoop;
 
 TrRenderLoop* TrTransitionLoop::update(const TrGame* game) {
+  if (m_waitTick && m_waitTick++ < m_maxWaitTick) {
+    return NULL;
+  }
+  if (m_waitTick >= m_maxWaitTick) {
+    m_waitTick = 0;
+  }
+
   if (m_curTick++ < m_maxTicks) {
+    if (m_curTick == m_maxTicks / 2) {
+      m_waitTick++;
+    }
     return NULL;
   }
   return m_target;
@@ -17,6 +27,10 @@ TrRenderLoop* TrTransitionLoop::update(const TrGame* game) {
 void TrTransitionLoop::render(const TrGame* game) {
   int mx;
   int my;
+
+  if (m_waitTick) {
+    return;
+  }
 
   // getting coarser
   if (m_curTick < m_maxTicks / 2) {
@@ -74,7 +88,7 @@ void TrTransitionLoop::render(const TrGame* game) {
 
   alpha = (float)alpha / (float)(m_maxTicks / 2);
 
-  alpha = (1.0 - alpha) * 0.8 + 0.2;
+  alpha = sqrt(1.0 - alpha) * 0.9 + 0.1;
 
   alpha *= 255.0;
 

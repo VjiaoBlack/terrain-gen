@@ -11,8 +11,10 @@ class TrTransitionLoop : public TrRenderLoop {
   TrRenderLoop* m_target;
   TrRenderLoop* m_source;
   // TODO: initialize here or in ctor?
-  int m_maxTicks = 100;
+  int m_maxTicks = 80;
   int m_curTick = 0;
+  int m_maxWaitTick = 20;
+  int m_waitTick = 0;
 
  public:
   TrTransitionLoop(const TrGame* game) : m_target(NULL), m_source(NULL) {}
