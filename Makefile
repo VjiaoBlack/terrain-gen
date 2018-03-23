@@ -14,7 +14,7 @@ LINK=-I/usr/local/include -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 EXEC = athena
 SOURCES = $(shell find src/ -type f -name '*.cpp')
 FILES = $(shell find src/ -type f -name '*pp')
-LINTED_SOURCES = $(addsuffix .clean, $(FILES))
+FORMATTED_SOURCES = $(addsuffix .clean, $(FILES))
 OBJECTS = $(addprefix build/, $(notdir $(SOURCES:.cpp=.o)))
       
 # Targets
@@ -23,7 +23,7 @@ default: build $(EXEC)
 build:
 	mkdir build
 
-lint: $(LINTED_SOURCES)
+format: $(FORMATTED_SOURCES)
 
 src/%pp.clean: src/%pp
 	clang-format --style=Google $< > $@
