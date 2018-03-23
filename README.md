@@ -21,6 +21,6 @@ Refer to this document for some details about how this works:
 https://docs.google.com/document/d/1xySCdTcphTbBVFzzvw51X8ISexEsv2MM4zNanQW6Hbc/edit?usp=sharing
 
 Example:
-![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/sample-big.png)
+![alt text](https://raw.githubusercontent.com/VjiaoBlack/terrain-gen/master/sample-athena.gif)
 
 
