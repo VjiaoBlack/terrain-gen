@@ -71,7 +71,7 @@ TrGame::TrGame() {
 }
 
 TrGame::~TrGame() {
-  // delete m_terrain;
+  delete m_map;
 
   TTF_Quit();
   SDL_DestroyTexture(m_mapTexture);
@@ -177,14 +177,14 @@ void TrGame::handleInput() {
     } else if (m_SDLEvent.type == SDL_MOUSEMOTION) {
       if (m_buttonsDown.count(SDL_BUTTON_LEFT) &&
           m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE_X)) {
-        int mouseX = m_SDLEvent.motion.x / c_pixelSize;
-        int mouseY = m_SDLEvent.motion.y / c_pixelSize;
+        m_mouseX = m_SDLEvent.motion.x / c_pixelSize;
+        m_mouseY = m_SDLEvent.motion.y / c_pixelSize;
       }
 
       if (m_buttonsDown.count(SDL_BUTTON_RIGHT) &&
           m_SDLEvent.motion.x < sz(K_DISPLAY_SIZE_Y)) {
-        int mouseX = m_SDLEvent.motion.x / c_pixelSize;
-        int mouseY = m_SDLEvent.motion.y / c_pixelSize;
+        m_mouseX = m_SDLEvent.motion.x / c_pixelSize;
+        m_mouseY = m_SDLEvent.motion.y / c_pixelSize;
       }
     }
   }

@@ -26,6 +26,7 @@ TrMainMenuLoop::TrMainMenuLoop(const TrGame* game) {
   SDL_FreeSurface(textSurface0);
   SDL_FreeSurface(textSurface1);
   SDL_FreeSurface(textSurface2);
+
 }
 
 TrRenderLoop* TrMainMenuLoop::update(const TrGame* game) {

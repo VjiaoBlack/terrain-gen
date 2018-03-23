@@ -33,6 +33,8 @@ class TrGame {
 
   set<int> m_keysDown;
   set<char> m_buttonsDown;
+  int m_mouseX;
+  int m_mouseY;
 
   // create texture for map
   SDL_Texture* m_mapTexture;
