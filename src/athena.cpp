@@ -6,20 +6,20 @@
  * a test file for testing driving.
  */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <iostream>
-#include <sys/time.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <iostream>
 #include <set>
 
-#include "TrMap/TrMap.hpp"
 #include "TrGame.hpp"
+#include "TrMap/TrMap.hpp"
 
 int main(int argv, char* argc[]) {
-    TrGame renderer;
-    renderer.run();
+  TrGame renderer;
+  renderer.run();
 
-    return 0;
+  return 0;
 }

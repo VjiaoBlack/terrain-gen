@@ -1,8 +1,9 @@
 
 #include "Utils.hpp"
 
-
-void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize) {
+// TODO: is this even useful anymore? 
+void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
+                             int xOff, int yOff, int pixelSize) {
   SDL_Rect SrcR;
   SDL_Rect DestR;
 
@@ -16,7 +17,6 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
   // DestR.w = sz(K_DISPLAY_SIZE_X) - xOff;
   // DestR.h = sz(K_DISPLAY_SIZE_Y) - yOff;
 
-
   SrcR.x = 0;
   SrcR.y = 0;
   SrcR.w = K_MAP_SIZE_X;
@@ -26,8 +26,6 @@ void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int x
   DestR.y = 0;
   DestR.w = sz(K_DISPLAY_SIZE_X);
   DestR.h = sz(K_DISPLAY_SIZE_Y);
-
-
 
   SDL_RenderCopy(renderer, texture, &SrcR, &DestR);
 }

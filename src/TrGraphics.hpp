@@ -11,20 +11,17 @@
 #include <SDL2/SDL_image.h>
 
 #include <stdlib.h>
-#include <iostream>
 #include <time.h>
-#include <vector>
+#include <iostream>
 #include <random>
+#include <vector>
 
-
-#include "Utils.hpp"
 #include "Perlin.hpp"
-
+#include "Utils.hpp"
 
 using namespace std;
 
-
-void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture, int xOff, int yOff, int pixelSize);
-
+void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
+                             int xOff, int yOff, int pixelSize);
 
 #include "TrGraphics-impl.hpp"

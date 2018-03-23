@@ -1,9 +1,4 @@
 
 #include "TrVegetationMap.hpp"
 
-
-
-
-void TrVegetationMap::update(TrMap* map) {
-	
-}
+void TrVegetationMap::update(TrMap* map) {}

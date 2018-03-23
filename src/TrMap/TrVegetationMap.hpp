@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "TrMapData.hpp"
 
@@ -7,12 +7,8 @@ class TrMap;
 // map
 // is this too much memory? make sure to check
 class TrVegetationMap : public TrMapData<double> {
-public:
+ public:
+  TrVegetationMap(int rows, int cols) : TrMapData<double>(rows, cols) {}
 
-	TrVegetationMap(int rows, int cols) 
-		: TrMapData<double>(rows, cols) {}
-
-	void update(TrMap* map); 
+  void update(TrMap* map);
 };
-
-

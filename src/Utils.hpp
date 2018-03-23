@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include <iostream>
-#include <random>
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
+#include <random>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -64,19 +64,13 @@ inline uint32_t lerpColor(uint32_t color1, uint32_t color2, double lerp) {
   int cg = cg1 + round((cg2 - cg1) * lerp);
   int cb = cb1 + round((cb2 - cb1) * lerp);
 
-  if (cr > 255)
-    cr = 255;
-  if (cg > 255)
-    cg = 255;
-  if (cb > 255)
-    cb = 255;
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
 
-  if (cr < 0)
-    cr = 0;
-  if (cg < 0)
-    cg = 0;
-  if (cb < 0)
-    cb = 0;
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
 
   uint32_t ret = K_A_MASK;
   ret |= cr << 16;
@@ -95,19 +89,13 @@ inline uint32_t multiplyColor(uint32_t color, double r, double g, double b) {
   cg = floor(cg * g);
   cb = floor(cb * b);
 
-  if (cr > 255)
-    cr = 255;
-  if (cg > 255)
-    cg = 255;
-  if (cb > 255)
-    cb = 255;
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
 
-  if (cr < 0)
-    cr = 0;
-  if (cg < 0)
-    cg = 0;
-  if (cb < 0)
-    cb = 0;
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
 
   uint32_t ret = K_A_MASK;
   ret |= cr << 16;
@@ -126,19 +114,13 @@ inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
   cg += g;
   cb += b;
 
-  if (cr > 255)
-    cr = 255;
-  if (cg > 255)
-    cg = 255;
-  if (cb > 255)
-    cb = 255;
+  if (cr > 255) cr = 255;
+  if (cg > 255) cg = 255;
+  if (cb > 255) cb = 255;
 
-  if (cr < 0)
-    cr = 0;
-  if (cg < 0)
-    cg = 0;
-  if (cb < 0)
-    cb = 0;
+  if (cr < 0) cr = 0;
+  if (cg < 0) cg = 0;
+  if (cb < 0) cb = 0;
 
   uint32_t ret = K_A_MASK;
   ret |= cr << 16;
@@ -150,7 +132,7 @@ inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
 
 // I heard that floats are much faster.
 class Vec3 {
-public:
+ public:
   float x;
   float y;
   float z;

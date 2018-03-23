@@ -66,7 +66,8 @@ TrGame::TrGame() {
   }
 
   // setup game loop
-  m_gameState = new TrGameLoop(this);
+  // m_gameState = new TrGameLoop(this);
+  m_gameState = new TrMainMenuLoop(this);
 }
 
 TrGame::~TrGame() {
@@ -105,19 +106,9 @@ void TrGame::handleKey(int SDLKey) {
   }
 }
 
-void TrGame::mainMenu() {
-
-
-}
-
 void TrGame::run() {
-  // create random map
-  // render menu loop
-  // render game loop
-
   while (!m_quit) {
     clock_t beginFrame = clock();
-
 
     // Update keysDown and buttonsDown
     handleInput();
@@ -131,19 +122,24 @@ void TrGame::run() {
                       K_MAP_SIZE_X * sizeof(uint32_t));
 
     // clear screen
-    SDL_SetRenderDrawColor(m_SDLRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(m_SDLRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(m_SDLRenderer);
 
+    // TODO: fix memory leak from not deleting old game states
+    // Alternatively, place them somewhere so you can more easily keep track of
+    // them
     if (m_gameState) {
-        m_gameState->update(this);
-        m_gameState->render(this);
+      TrRenderLoop* loop = m_gameState->update(this);
+      if (loop) {
+        m_gameState = loop;
+      }
+      m_gameState->render(this);
     }
 
     // update screen
     SDL_RenderPresent(m_SDLRenderer);
 
     // do render stuff
-
     clock_t endFrame = clock();
 
     m_deltaTime += endFrame - beginFrame;
@@ -154,7 +150,6 @@ void TrGame::run() {
       m_frameRate = (double)m_frames;                // more stable
       m_frames = 0;
       m_deltaTime -= CLOCKS_PER_SEC;
-      // averageFrameTimeMilliseconds  = 1000.0/(frameRate==0?0.001:frameRate);
 
       std::cout << "fps: " << m_frameRate << "        \r";
       std::flush(std::cout);
@@ -162,7 +157,6 @@ void TrGame::run() {
 
     float calcMs = clockToMilliseconds(endFrame - beginFrame);
     if (calcMs < 16.6) {
-      // limit to 60 FPS
       usleep(1000 * ((int)(16.6 - calcMs)));
     }
   }

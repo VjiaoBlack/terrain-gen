@@ -9,29 +9,29 @@
 #include <set>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
-#include <stdlib.h>
-#include <iostream>
-#include <time.h>
-#include <vector>
-#include <random>
-#include <sys/time.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <iostream>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
+#include <iostream>
+#include <iostream>
+#include <random>
+#include <vector>
 
 #include "../TrMap/TrMap.hpp"
 
 class TrGame;
 
 class TrRenderLoop {
-public:
-	TrRenderLoop() {};
-	virtual  ~TrRenderLoop() {};
+ public:
+  TrRenderLoop(){};
+  virtual ~TrRenderLoop(){};
 
-	virtual void update(const TrGame* game) {};
-	virtual void render(const TrGame* game) {};
+  virtual TrRenderLoop* update(const TrGame* game) { return NULL; };
+  virtual void render(const TrGame* game){};
 };
