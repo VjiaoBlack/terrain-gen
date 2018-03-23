@@ -17,11 +17,11 @@ class TrTransitionLoop : public TrRenderLoop {
   int m_waitTick = 0;
 
  public:
-  TrTransitionLoop(const TrGame* game) : m_target(NULL), m_source(NULL) {}
+  TrTransitionLoop(TrGame* game) : m_target(nullptr), m_source(nullptr) {}
   virtual ~TrTransitionLoop(){};
 
-  virtual TrRenderLoop* update(const TrGame* game);
-  virtual void render(const TrGame* game);
+  virtual TrRenderLoop* update(TrGame* game);
+  virtual void render(TrGame* game);
   void setTarget(TrRenderLoop* target) { m_target = target; }
 
   // TODO: setup setSource to store a texture with the source's data

@@ -7,7 +7,7 @@
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
 
-TrMainMenuLoop::TrMainMenuLoop(const TrGame* game) {
+TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
   int score = 10;
 
   SDL_Surface* textSurface0 =
@@ -27,10 +27,12 @@ TrMainMenuLoop::TrMainMenuLoop(const TrGame* game) {
   SDL_FreeSurface(textSurface1);
   SDL_FreeSurface(textSurface2);
 
+  // m_menu = new TrGUIMenu(game, (SDL_Rect) {0, 100, 100, 100}, 3);
 }
 
-TrRenderLoop* TrMainMenuLoop::update(const TrGame* game) {
+TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   game->m_map->update(game->m_keysDown);
+  // m_menu->update();
 
   // TODO: implement loading games
   for (auto key : game->m_keysDown) {
@@ -44,10 +46,10 @@ TrRenderLoop* TrMainMenuLoop::update(const TrGame* game) {
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
-void TrMainMenuLoop::render(const TrGame* game) {
+void TrMainMenuLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
                           game->m_yOff, game->c_pixelSize);
 
@@ -64,7 +66,7 @@ void TrMainMenuLoop::render(const TrGame* game) {
       text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
       text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
-  SDL_RenderCopy(game->m_SDLRenderer, text0, NULL, &renderQuad);
+  SDL_RenderCopy(game->m_SDLRenderer, text0, nullptr, &renderQuad);
 
   renderQuad = {
       sz(4 + K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2),
@@ -72,12 +74,14 @@ void TrMainMenuLoop::render(const TrGame* game) {
       text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
       text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
-  SDL_RenderCopy(game->m_SDLRenderer, text2, NULL, &renderQuad);
+  SDL_RenderCopy(game->m_SDLRenderer, text2, nullptr, &renderQuad);
 
   renderQuad = {sz(K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2),
                 sz(K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
                 text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
                 text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
-  SDL_RenderCopy(game->m_SDLRenderer, text1, NULL, &renderQuad);
+  SDL_RenderCopy(game->m_SDLRenderer, text1, nullptr, &renderQuad);
+
+  // m_menu->draw();
 }

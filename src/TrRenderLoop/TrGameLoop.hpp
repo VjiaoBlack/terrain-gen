@@ -8,9 +8,9 @@
 
 class TrGameLoop : public TrRenderLoop {
  public:
-  TrGameLoop(const TrGame* game);
+  TrGameLoop(TrGame* game);
   virtual ~TrGameLoop(){};
 
-  virtual TrRenderLoop* update(const TrGame* game);
-  virtual void render(const TrGame* game);
+  virtual TrRenderLoop* update(TrGame* game);
+  virtual void render(TrGame* game);
 };

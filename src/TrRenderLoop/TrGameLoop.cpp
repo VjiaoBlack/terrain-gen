@@ -8,9 +8,9 @@
 
 class TrMainMenuLoop;
 
-TrGameLoop::TrGameLoop(const TrGame* game) {}
+TrGameLoop::TrGameLoop(TrGame* game) {}
 
-TrRenderLoop* TrGameLoop::update(const TrGame* game) {
+TrRenderLoop* TrGameLoop::update(TrGame* game) {
   game->m_map->update(game->m_keysDown);
 
   for (auto key : game->m_keysDown) {
@@ -24,10 +24,10 @@ TrRenderLoop* TrGameLoop::update(const TrGame* game) {
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
-void TrGameLoop::render(const TrGame* game) {
+void TrGameLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
                           game->m_yOff, game->c_pixelSize);
 }

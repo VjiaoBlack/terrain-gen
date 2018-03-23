@@ -32,6 +32,6 @@ class TrRenderLoop {
   TrRenderLoop(){};
   virtual ~TrRenderLoop(){};
 
-  virtual TrRenderLoop* update(const TrGame* game) { return NULL; };
-  virtual void render(const TrGame* game){};
+  virtual TrRenderLoop* update(TrGame* game) { return nullptr; };
+  virtual void render(TrGame* game){};
 };

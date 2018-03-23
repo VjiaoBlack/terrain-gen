@@ -31,7 +31,7 @@ class TrMapData {
   int m_rows;
   int m_cols;
 
-  TrMapData(int rows, int cols) : m_data(NULL), m_rows(rows), m_cols(cols) {
+  TrMapData(int rows, int cols) : m_data(nullptr), m_rows(rows), m_cols(cols) {
     m_data = new T[rows * cols];
     memset(m_data, 0, rows * cols * sizeof(T));
   }

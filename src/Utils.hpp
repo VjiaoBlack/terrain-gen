@@ -14,10 +14,10 @@
 // set to 2 (or more) if it's a retina screen, 1 if not.
 #define K_RETINA 1
 #define sz(x) ((x)*K_RETINA)
-#define K_MAP_SIZE_X 280
-#define K_MAP_SIZE_Y 200
-#define K_DISPLAY_SIZE_X 1120
-#define K_DISPLAY_SIZE_Y 800
+#define K_MAP_SIZE_X 400
+#define K_MAP_SIZE_Y 250
+#define K_DISPLAY_SIZE_X 1600
+#define K_DISPLAY_SIZE_Y 1000
 
 #define K_DISPLAY_SCALE 4
 

@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "../TrGUI/TrGUIMenu.hpp"
 #include "TrRenderLoop.hpp"
 class TrGame;
 
@@ -23,10 +24,12 @@ class TrMainMenuLoop : public TrRenderLoop {
   SDL_Texture* text1;
   SDL_Texture* text2;
 
-  TrMainMenuLoop(const TrGame* game);
+  // TrGUIMenu* m_menu;
+
+  TrMainMenuLoop(TrGame* game);
 
   virtual ~TrMainMenuLoop(){};
 
-  virtual TrRenderLoop* update(const TrGame* game);
-  virtual void render(const TrGame* game);
+  virtual TrRenderLoop* update(TrGame* game);
+  virtual void render(TrGame* game);
 };
