@@ -1,6 +1,6 @@
 Type "make" to compile.
 
-To run, type "./trender".
+To run, type "./athena".
 
 Controls:
 q - quit
