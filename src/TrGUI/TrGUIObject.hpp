@@ -5,9 +5,8 @@
  * Generic class for all GUI objects
  */
 
+#include "../TrGame.hpp"
 #include "../TrGraphics.hpp"
-
-class TrGame;
 
 class TrGUIObject {
  private:

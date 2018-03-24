@@ -4,6 +4,7 @@
 
 #include "TrGameLoop.hpp"
 #include "../TrGame.hpp"
+#include "TrMainMenuLoop.hpp"
 #include "TrTransitionLoop.hpp"
 
 class TrMainMenuLoop;

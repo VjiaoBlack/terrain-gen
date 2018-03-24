@@ -23,9 +23,8 @@
 #include <random>
 #include <vector>
 
+#include "../TrGame.hpp"
 #include "../TrMap/TrMap.hpp"
-
-class TrGame;
 
 class TrRenderLoop {
  public:

@@ -18,8 +18,9 @@
 #include <vector>
 
 #include "TrMap/TrMap.hpp"
-#include "TrRenderLoop/TrGameLoop.hpp"
-#include "TrRenderLoop/TrMainMenuLoop.hpp"
+class TrGameLoop;
+class TrMainMenuLoop;
+class TrRenderLoop;
 
 class TrGame {
  public:
@@ -40,6 +41,7 @@ class TrGame {
   SDL_Texture* m_mapTexture;
 
   TTF_Font* m_font;
+  TTF_Font* m_menuFont;
 
   // TrMap* m_terrain;
 

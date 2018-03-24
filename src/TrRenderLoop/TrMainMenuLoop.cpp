@@ -27,23 +27,29 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
   SDL_FreeSurface(textSurface1);
   SDL_FreeSurface(textSurface2);
 
-  // m_menu = new TrGUIMenu(game, (SDL_Rect) {0, 100, 100, 100}, 3);
+  vector<string> labels = {"New Game", "Load Game", "Quit"};
+
+  m_menu = new TrGUIMenu(
+      game,
+      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 - 120 * K_DISPLAY_SCALE / 2),
+                 sz(K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
+                 sz(120 * K_DISPLAY_SCALE), sz(K_DISPLAY_SIZE_Y / 2)},
+      labels);
 }
 
 TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   game->m_map->update(game->m_keysDown);
-  // m_menu->update();
+  m_menu->update();
 
-  // TODO: implement loading games
-  for (auto key : game->m_keysDown) {
-    switch (key) {
-      case SDLK_v:
-        TrTransitionLoop* transition = new TrTransitionLoop(game);
-        transition->setTarget(new TrGameLoop(game));
-        transition->setSource(this);
-        return transition;
-        break;
-    }
+  if (m_menu->m_buttons[0]->m_releasedInside) {
+    TrTransitionLoop* transition = new TrTransitionLoop(game);
+    transition->setTarget(new TrGameLoop(game));
+    transition->setSource(this);
+    return transition;
+  }
+
+  if (m_menu->m_buttons[2]->m_releasedInside) {
+    game->m_quit = true;
   }
 
   return nullptr;
@@ -62,7 +68,7 @@ void TrMainMenuLoop::render(TrGame* game) {
   // text
   SDL_Rect renderQuad = {
       sz(-4 + K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2),
-      sz(-4 + K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
+      sz(-4 + K_DISPLAY_SIZE_Y / 4 - text_height * K_DISPLAY_SCALE / 2),
       text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
       text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
@@ -70,18 +76,18 @@ void TrMainMenuLoop::render(TrGame* game) {
 
   renderQuad = {
       sz(4 + K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2),
-      sz(4 + K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
+      sz(4 + K_DISPLAY_SIZE_Y / 4 - text_height * K_DISPLAY_SCALE / 2),
       text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
       text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
   SDL_RenderCopy(game->m_SDLRenderer, text2, nullptr, &renderQuad);
 
   renderQuad = {sz(K_DISPLAY_SIZE_X / 2 - text_width * K_DISPLAY_SCALE / 2),
-                sz(K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
+                sz(K_DISPLAY_SIZE_Y / 4 - text_height * K_DISPLAY_SCALE / 2),
                 text_width * sz(K_DISPLAY_SIZE_X / K_MAP_SIZE_X),
                 text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
   SDL_RenderCopy(game->m_SDLRenderer, text1, nullptr, &renderQuad);
 
-  // m_menu->draw();
+  m_menu->draw();
 }

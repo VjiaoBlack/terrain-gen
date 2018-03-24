@@ -1,5 +1,8 @@
 
 #include "TrGame.hpp"
+#include "TrRenderLoop/TrGameLoop.hpp";
+#include "TrRenderLoop/TrMainMenuLoop.hpp";
+#include "TrRenderLoop/TrRenderLoop.hpp";
 
 TrGame::TrGame() {
   // Initialize
@@ -61,6 +64,12 @@ TrGame::TrGame() {
 
   m_font = TTF_OpenFont("anirb.ttf", 26);
   if (!m_font) {
+    printf("TTF_OpenFont: %s\n", TTF_GetError());
+    // handle error
+  }
+
+  m_menuFont = TTF_OpenFont("anirb.ttf", 14);
+  if (!m_menuFont) {
     printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
   }
