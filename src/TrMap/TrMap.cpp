@@ -45,7 +45,7 @@ TrMap::TrMap(int rows, int cols)
       m_height->at(i, j) *= 1.2;
 
       m_height->at(i, j) =
-          m_height->at(i, j) * pow(fabs(m_height->at(i, j)), 0.6);
+          m_height->at(i, j) * pow(fabs(m_height->at(i, j)), 0.8);
 
       m_height->at(i, j) += 0.5;
 
