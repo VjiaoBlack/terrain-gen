@@ -13,7 +13,6 @@ class TrGUIMenu : public TrGUIObject {
   vector<TrGUIObject *> m_buttons;
 
   // TODO: how ot call parent constructor
-
   TrGUIMenu(TrGame *game, SDL_Rect rect, vector<string> labels) {
     m_rect = {rect.x / K_DISPLAY_SCALE, rect.y / K_DISPLAY_SCALE,
               rect.w / K_DISPLAY_SCALE, rect.h / K_DISPLAY_SCALE};

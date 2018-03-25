@@ -74,12 +74,14 @@ TrGame::TrGame() {
   if (!m_font) {
     printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
+    exit(2);
   }
 
   m_menuFont = TTF_OpenFont("anirb.ttf", 14);
   if (!m_menuFont) {
     printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
+    exit(2);
   }
 
   // setup game loop
@@ -89,10 +91,19 @@ TrGame::TrGame() {
 TrGame::~TrGame() {
   delete m_map;
 
-  TTF_Quit();
   SDL_DestroyTexture(m_mapTexture);
   SDL_DestroyRenderer(m_SDLRenderer);
   SDL_DestroyWindow(m_SDLWindow);
+
+  if (m_font) {
+    TTF_CloseFont(m_font);
+  }
+  if (m_menuFont) {
+    TTF_CloseFont(m_menuFont);
+  }
+  delete m_gameState;
+
+  TTF_Quit();
   SDL_Quit();
 }
 

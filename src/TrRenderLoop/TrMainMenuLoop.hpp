@@ -29,7 +29,7 @@ class TrMainMenuLoop : public TrRenderLoop {
 
   TrMainMenuLoop(TrGame* game);
 
-  virtual ~TrMainMenuLoop(){};
+  virtual ~TrMainMenuLoop();
 
   virtual TrRenderLoop* update(TrGame* game);
   virtual void render(TrGame* game);

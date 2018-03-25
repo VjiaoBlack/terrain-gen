@@ -37,6 +37,13 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
       labels);
 }
 
+TrMainMenuLoop::~TrMainMenuLoop() {
+  delete m_menu;
+  SDL_DestroyTexture(text0);
+  SDL_DestroyTexture(text1);
+  SDL_DestroyTexture(text2);
+}
+
 TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   game->m_map->update(game->m_keysDown);
   m_menu->update();

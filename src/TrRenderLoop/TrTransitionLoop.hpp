@@ -23,8 +23,7 @@ class TrTransitionLoop : public TrRenderLoop {
   virtual TrRenderLoop* update(TrGame* game);
   virtual void render(TrGame* game);
   void setTarget(TrRenderLoop* target) { m_target = target; }
-
-  // TODO: setup setSource to store a texture with the source's data
-  // 	   instead of the entire source itself.
   void setSource(TrRenderLoop* source) { m_source = source; }
+
+  // TODO: make a stack of TrRenderLoops inside of TrGame
 };
