@@ -14,10 +14,7 @@ class TrGameLoop : public TrRenderLoop {
   SDL_Texture* m_map;
 
   TrGameLoop(TrGame* game);
-  virtual ~TrGameLoop() {
-    SDL_DestroyTexture(m_map);
-    delete m_menu;
-  }
+  virtual ~TrGameLoop();
 
   virtual TrRenderLoop* update(TrGame* game);
   virtual void render(TrGame* game);

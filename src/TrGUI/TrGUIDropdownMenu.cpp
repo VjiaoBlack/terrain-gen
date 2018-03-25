@@ -5,6 +5,17 @@
 #include "TrGUIDropdownMenu.hpp"
 #include "../TrGame.hpp"
 
+TrGUIDropdownMenu::TrGUIDropdownMenu(TrGame* game, TrGUIButton* button,
+                                     TrGUIMenu* menu)
+    : m_button(button), m_menu(menu), m_isMenuOpen(false) {
+  this->m_game = game;
+};
+
+TrGUIDropdownMenu::~TrGUIDropdownMenu() {
+  delete m_button;
+  delete m_menu;
+}
+
 void TrGUIDropdownMenu::draw() {
   m_button->draw();
   if (m_isMenuOpen) {

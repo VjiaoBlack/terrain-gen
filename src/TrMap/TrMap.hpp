@@ -70,15 +70,7 @@ class TrMap {
 
   TrMap(int rows, int cols);
 
-  ~TrMap() {
-    delete m_color;
-    delete m_height;
-    delete m_moisture;
-    delete m_normal;
-    delete m_vegetation;
-    delete m_water;
-    delete m_wind;
-  }
+  ~TrMap();
 
   void update(set<int> keysDown);
   void printSimpleHeightMatrix();

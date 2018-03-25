@@ -88,6 +88,11 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   m_menu->m_destRect = m_menu->m_rect;
 }
 
+TrGameLoop::~TrGameLoop() {
+  SDL_DestroyTexture(m_map);
+  delete m_menu;
+}
+
 TrRenderLoop* TrGameLoop::update(TrGame* game) {
   m_menu->update();
 
