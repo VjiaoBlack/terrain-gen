@@ -41,14 +41,14 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   game->m_map->update(game->m_keysDown);
   m_menu->update();
 
-  if (m_menu->m_buttons[0]->m_releasedInside) {
+  if (m_menu->m_buttons[0]->m_activated) {
     TrTransitionLoop* transition = new TrTransitionLoop(game);
     transition->setTarget(new TrGameLoop(game));
     transition->setSource(this);
     return transition;
   }
 
-  if (m_menu->m_buttons[2]->m_releasedInside) {
+  if (m_menu->m_buttons[2]->m_activated) {
     game->m_quit = true;
   }
 

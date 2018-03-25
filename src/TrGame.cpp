@@ -34,6 +34,14 @@ TrGame::TrGame() {
     exit(2);
   }
 
+  // Initialize PNG loading
+  int imgFlags = IMG_INIT_PNG;
+  if (!(IMG_Init(imgFlags) & imgFlags)) {
+    printf("SDL_image could not initialize! SDL_image Error: %s\n",
+           IMG_GetError());
+    exit(2);
+  }
+
   // setup for rendering loop
   m_quit = false;
 

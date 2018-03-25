@@ -12,11 +12,16 @@ class TrGUIObject {
  private:
  public:
   TrGame* m_game;
+  bool m_activated;
+  SDL_Texture* m_labelTexture;
+  SDL_Rect m_srcRect;
+  SDL_Rect m_destRect;
+  SDL_Rect m_rect;
 
-  TrGUIObject() : m_game(nullptr){};
+  TrGUIObject() : m_game(nullptr), m_activated(false){};
   TrGUIObject(TrGame* game) : m_game(game){};
   virtual ~TrGUIObject(){};
 
-  void draw();
-  void update();
+  virtual void draw() = 0;
+  virtual void update() = 0;
 };

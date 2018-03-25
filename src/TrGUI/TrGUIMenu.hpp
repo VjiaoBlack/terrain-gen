@@ -9,9 +9,8 @@
 using namespace std;
 class TrGUIMenu : public TrGUIObject {
  public:
-  const int m_spacing = 10;
-  vector<TrGUIButton *> m_buttons;
-  SDL_Rect m_rect;
+  int m_spacing = 10;
+  vector<TrGUIObject *> m_buttons;
 
   // TODO: how ot call parent constructor
 
@@ -26,8 +25,8 @@ class TrGUIMenu : public TrGUIObject {
     for (int i = 0; i < numButtons; i++) {
       // TODO: make this spacing metric even over all of m_rect
       m_buttons[i] = new TrGUIButton(
-          game, {m_rect.x, m_rect.y + (m_rect.h * i / numButtons), m_rect.w,
-                 m_rect.h / numButtons - m_spacing},
+          game, {m_rect.x, m_rect.y + i * (m_rect.h + m_spacing) / (numButtons),
+                 m_rect.w, (m_rect.h + m_spacing) / (numButtons)-m_spacing},
           labels[i]);
     }
   }
