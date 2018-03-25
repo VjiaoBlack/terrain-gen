@@ -7,14 +7,16 @@
 
 void TrGUIButton::draw() {
   float sx, sy;
+
   SDL_RenderGetScale(m_game->m_SDLRenderer, &sx, &sy);
   SDL_RenderSetScale(m_game->m_SDLRenderer, sz(K_DISPLAY_SCALE),
                      sz(K_DISPLAY_SCALE));
   SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xAA, 0x88, 0x44, 0xFF);
   SDL_RenderFillRect(m_game->m_SDLRenderer, &m_rect);
 
-  SDL_RenderCopy(m_game->m_SDLRenderer, m_labelTexture, &m_srcRect,
-                 &m_destRect);
+  if (m_texture) {
+    SDL_RenderCopy(m_game->m_SDLRenderer, m_texture, &m_srcRect, &m_destRect);
+  }
 
   SDL_RenderSetScale(m_game->m_SDLRenderer, sx, sy);
 }

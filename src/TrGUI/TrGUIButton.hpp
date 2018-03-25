@@ -31,8 +31,7 @@ class TrGUIButton : public TrGUIObject {
     m_srcRect.x = 0;
     m_srcRect.y = 0;
 
-    m_labelTexture =
-        SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface);
+    m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface);
     SDL_FreeSurface(textSurface);
   }
 

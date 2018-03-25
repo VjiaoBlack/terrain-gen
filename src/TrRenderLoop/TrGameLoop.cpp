@@ -23,9 +23,11 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 
   m_menu->m_spacing = 8;
 
+  vector<TrGUIButton*> tempButtons(numButtons);
+
   for (int i = 0; i < numButtons; i++) {
     // TODO: make this spacing metric even over all of m_rect
-    m_menu->m_buttons[i] = new TrGUIButton(
+    tempButtons[i] = new TrGUIButton(
         game, {sz(8) + m_menu->m_rect.x +
                    (i * (m_menu->m_rect.w + m_menu->m_spacing - sz(16)) /
                     (numButtons)),
@@ -35,35 +37,54 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 
   SDL_Surface* image;
   image = IMG_Load("res/icons.png");
-  printf("ASDF\n");
   if (!image) {
     printf("IMG_Load: %s\n", IMG_GetError());
   }
 
   SDL_Texture* map = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
 
-  m_menu->m_labelTexture = map;
-  m_menu->m_buttons[0]->m_labelTexture = map;
-  m_menu->m_buttons[1]->m_labelTexture = map;
-  m_menu->m_buttons[2]->m_labelTexture = map;
-  m_menu->m_buttons[3]->m_labelTexture = map;
-  m_menu->m_buttons[4]->m_labelTexture = map;
-  m_menu->m_buttons[5]->m_labelTexture = map;
+  m_menu->m_texture = map;
+  tempButtons[0]->m_texture = map;
+  tempButtons[1]->m_texture = map;
+  tempButtons[2]->m_texture = map;
+  tempButtons[3]->m_texture = map;
+  tempButtons[4]->m_texture = map;
+  tempButtons[5]->m_texture = map;
 
-  m_menu->m_buttons[0]->m_srcRect = {0, 0, 8, 8};
-  m_menu->m_buttons[1]->m_srcRect = {0, 8, 8, 8};
-  m_menu->m_buttons[2]->m_srcRect = {0, 16, 8, 8};
-  m_menu->m_buttons[3]->m_srcRect = {0, 24, 8, 8};
-  m_menu->m_buttons[4]->m_srcRect = {8, 24, 8, 8};
-  m_menu->m_buttons[5]->m_srcRect = {24, 24, 8, 8};
+  tempButtons[0]->m_srcRect = {0, 0, 8, 8};
+  tempButtons[1]->m_srcRect = {0, 8, 8, 8};
+  tempButtons[2]->m_srcRect = {0, 16, 8, 8};
+  tempButtons[3]->m_srcRect = {0, 24, 8, 8};
+  tempButtons[4]->m_srcRect = {8, 24, 8, 8};
+  tempButtons[5]->m_srcRect = {24, 24, 8, 8};
   m_menu->m_srcRect = {8, 0, 24, 24};
 
-  m_menu->m_buttons[0]->m_destRect = m_menu->m_buttons[0]->m_rect;
-  m_menu->m_buttons[1]->m_destRect = m_menu->m_buttons[1]->m_rect;
-  m_menu->m_buttons[2]->m_destRect = m_menu->m_buttons[2]->m_rect;
-  m_menu->m_buttons[3]->m_destRect = m_menu->m_buttons[3]->m_rect;
-  m_menu->m_buttons[4]->m_destRect = m_menu->m_buttons[4]->m_rect;
-  m_menu->m_buttons[5]->m_destRect = m_menu->m_buttons[5]->m_rect;
+  tempButtons[0]->m_destRect = tempButtons[0]->m_rect;
+  tempButtons[1]->m_destRect = tempButtons[1]->m_rect;
+  tempButtons[2]->m_destRect = tempButtons[2]->m_rect;
+  tempButtons[3]->m_destRect = tempButtons[3]->m_rect;
+  tempButtons[4]->m_destRect = tempButtons[4]->m_rect;
+  tempButtons[5]->m_destRect = tempButtons[5]->m_rect;
+  m_menu->m_destRect = m_menu->m_rect;
+
+  m_menu->m_buttons[0] = new TrGUIDropdownMenu(
+      game, tempButtons[0],
+      new TrGUIMenu(game, tempButtons[0]->m_rect, vector<string>({"a", "b"})));
+  m_menu->m_buttons[1] = new TrGUIDropdownMenu(
+      game, tempButtons[1],
+      new TrGUIMenu(game, tempButtons[1]->m_rect, vector<string>({"a", "b"})));
+  m_menu->m_buttons[2] = new TrGUIDropdownMenu(
+      game, tempButtons[2],
+      new TrGUIMenu(game, tempButtons[2]->m_rect, vector<string>({"a", "b"})));
+  m_menu->m_buttons[3] = new TrGUIDropdownMenu(
+      game, tempButtons[3],
+      new TrGUIMenu(game, tempButtons[3]->m_rect, vector<string>({"a", "b"})));
+  m_menu->m_buttons[4] = new TrGUIDropdownMenu(
+      game, tempButtons[4],
+      new TrGUIMenu(game, tempButtons[4]->m_rect, vector<string>({"a", "b"})));
+  m_menu->m_buttons[5] = new TrGUIDropdownMenu(
+      game, tempButtons[5],
+      new TrGUIMenu(game, tempButtons[5]->m_rect, vector<string>({"a", "b"})));
   m_menu->m_destRect = m_menu->m_rect;
 }
 

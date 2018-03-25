@@ -1,8 +1,8 @@
 
 #include "TrGame.hpp"
-#include "TrRenderLoop/TrGameLoop.hpp";
-#include "TrRenderLoop/TrMainMenuLoop.hpp";
-#include "TrRenderLoop/TrRenderLoop.hpp";
+#include "TrRenderLoop/TrGameLoop.hpp"
+#include "TrRenderLoop/TrMainMenuLoop.hpp"
+#include "TrRenderLoop/TrRenderLoop.hpp"
 
 TrGame::TrGame() {
   // Initialize

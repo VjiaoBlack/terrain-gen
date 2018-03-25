@@ -17,8 +17,10 @@ class TrGUIDropdownMenu : public TrGUIObject {
 
   // TODO: how ot call parent constructor
 
-  TrGUIDropdownMenu(TrGUIButton* button, TrGUIMenu* menu)
-      : m_button(button), m_menu(menu), m_isMenuOpen(false){};
+  TrGUIDropdownMenu(TrGame* game, TrGUIButton* button, TrGUIMenu* menu)
+      : m_button(button), m_menu(menu), m_isMenuOpen(false) {
+    this->m_game = game;
+  };
 
   virtual ~TrGUIDropdownMenu() {
     delete m_button;

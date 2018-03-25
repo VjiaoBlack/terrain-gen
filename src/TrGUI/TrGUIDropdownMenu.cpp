@@ -8,7 +8,9 @@
 void TrGUIDropdownMenu::draw() {
   m_button->draw();
   if (m_isMenuOpen) {
+    printf("woah\n");
     m_menu->draw();
+    printf("done drawing dropdown\n");
   }
 }
 
