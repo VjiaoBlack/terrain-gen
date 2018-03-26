@@ -28,8 +28,8 @@ format: $(FORMATTED_SOURCES)
 
 src/%pp.clean: src/%pp
 	clang-format --style=Google $< > $@
-	mv $@ $<
-	
+	diff $@ $<; if [ $$? -eq 1 ]; then mv $@ $<; fi;
+	rm $@
 
 # Main target
 $(EXEC): $(OBJECTS)
