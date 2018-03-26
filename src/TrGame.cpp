@@ -85,7 +85,7 @@ TrGame::TrGame() {
   }
 
   // setup game loop
-  m_gameState = new TrMainMenuLoop(this);
+  m_gameStateStack.push_back(new TrMainMenuLoop(this));
 }
 
 TrGame::~TrGame() {
@@ -101,7 +101,10 @@ TrGame::~TrGame() {
   if (m_menuFont) {
     TTF_CloseFont(m_menuFont);
   }
-  delete m_gameState;
+  while (m_gameStateStack.size()) {
+    delete m_gameStateStack.back();
+    m_gameStateStack.pop_back();
+  }
 
   TTF_Quit();
   SDL_Quit();
@@ -155,13 +158,16 @@ void TrGame::run() {
     // TODO: fix memory leak from not deleting old game states
     // Alternatively, place them somewhere so you can more easily keep track of
     // them
-    if (m_gameState) {
-      TrRenderLoop* loop = m_gameState->update(this);
-      if (loop) {
-        m_gameState = loop;
-      }
-      m_gameState->render(this);
+    TrRenderLoop* prevBack = m_gameStateStack.back();
+    TrRenderLoop* loop = m_gameStateStack.back()->update(this);
+    // if (loop != m_gameStateStack.back()) {
+    //   printf("Pushed back\n");
+    //   m_gameStateStack.push_back(loop);
+    // }
+    if (loop == prevBack) {
+      delete loop;
     }
+    m_gameStateStack.back()->render(this);
 
     // update screen
     SDL_RenderPresent(m_SDLRenderer);

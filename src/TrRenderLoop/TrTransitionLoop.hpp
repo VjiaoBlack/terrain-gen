@@ -17,7 +17,7 @@ class TrTransitionLoop : public TrRenderLoop {
   int m_waitTick = 0;
 
  public:
-  TrTransitionLoop(TrGame* game) : m_target(nullptr), m_source(nullptr) {}
+  TrTransitionLoop(TrGame* game, TrRenderLoop* source, TrRenderLoop* target);
   virtual ~TrTransitionLoop(){};
 
   virtual TrRenderLoop* update(TrGame* game);

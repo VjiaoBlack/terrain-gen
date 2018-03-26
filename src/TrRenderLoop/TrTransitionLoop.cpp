@@ -7,6 +7,17 @@
 
 class TrMainMenuLoop;
 
+TrTransitionLoop::TrTransitionLoop(TrGame* game, TrRenderLoop* source,
+                                   TrRenderLoop* target)
+    : m_target(target), m_source(source) {
+  printf("Pushed back.\n");
+  printf("Pushed back.\n");
+  game->m_gameStateStack.push_back(target);
+  game->m_gameStateStack.push_back(this);
+
+  printf("Size... %zu\n", game->m_gameStateStack.size());
+}
+
 TrRenderLoop* TrTransitionLoop::update(TrGame* game) {
   if (m_waitTick && m_waitTick++ < m_maxWaitTick) {
     return nullptr;
@@ -21,7 +32,12 @@ TrRenderLoop* TrTransitionLoop::update(TrGame* game) {
     }
     return nullptr;
   }
-  return m_target;
+
+  printf("Popped back\n");
+  game->m_gameStateStack.pop_back();
+  printf("%zu\n", game->m_gameStateStack.size());
+
+  return this;
 }
 
 void TrTransitionLoop::render(TrGame* game) {

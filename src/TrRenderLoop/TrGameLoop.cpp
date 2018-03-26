@@ -26,6 +26,7 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   vector<TrGUIButton*> tempButtons(numButtons);
 
   for (int i = 0; i < numButtons; i++) {
+    delete m_menu->m_buttons[i];
     // TODO: make this spacing metric even over all of m_rect
     tempButtons[i] = new TrGUIButton(
         game, {sz(8) + m_menu->m_rect.x +
@@ -41,15 +42,15 @@ TrGameLoop::TrGameLoop(TrGame* game) {
     printf("IMG_Load: %s\n", IMG_GetError());
   }
 
-  SDL_Texture* map = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
+  m_map = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
 
-  m_menu->m_texture = map;
-  tempButtons[0]->m_texture = map;
-  tempButtons[1]->m_texture = map;
-  tempButtons[2]->m_texture = map;
-  tempButtons[3]->m_texture = map;
-  tempButtons[4]->m_texture = map;
-  tempButtons[5]->m_texture = map;
+  m_menu->m_texture = m_map;
+  tempButtons[0]->m_texture = m_map;
+  tempButtons[1]->m_texture = m_map;
+  tempButtons[2]->m_texture = m_map;
+  tempButtons[3]->m_texture = m_map;
+  tempButtons[4]->m_texture = m_map;
+  tempButtons[5]->m_texture = m_map;
 
   tempButtons[0]->m_srcRect = {0, 0, 8, 8};
   tempButtons[1]->m_srcRect = {0, 8, 8, 8};
@@ -89,7 +90,7 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 }
 
 TrGameLoop::~TrGameLoop() {
-  SDL_DestroyTexture(m_map);
+  // SDL_DestroyTexture(m_map);
   delete m_menu;
 }
 
@@ -101,10 +102,13 @@ TrRenderLoop* TrGameLoop::update(TrGame* game) {
   for (auto key : game->m_keysDown) {
     switch (key) {
       case SDLK_v:
-        TrTransitionLoop* transition = new TrTransitionLoop(game);
-        transition->setTarget(new TrMainMenuLoop(game));
-        transition->setSource(this);
-        return transition;
+        auto loopIt = *(std::next(game->m_gameStateStack.begin(),
+                                  game->m_gameStateStack.size() - 2));
+        // delete game->m_gameStateStack.back();
+        game->m_gameStateStack.pop_back();
+        game->m_gameStateStack.pop_back();
+        TrTransitionLoop* transition = new TrTransitionLoop(game, this, loopIt);
+        // game->m_gameStateStack.push_back(transition);
         break;
     }
   }

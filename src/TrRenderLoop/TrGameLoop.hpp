@@ -8,6 +8,8 @@
 #include "../TrGame.hpp"
 #include "TrRenderLoop.hpp"
 
+using namespace std;
+
 class TrGameLoop : public TrRenderLoop {
  public:
   TrGUIMenu* m_menu;

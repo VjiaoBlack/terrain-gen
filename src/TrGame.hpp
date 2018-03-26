@@ -14,10 +14,15 @@
 #include <unistd.h>
 #include <iostream>
 #include <iostream>
+#include <iterator>
+#include <list>
 #include <random>
 #include <vector>
 
 #include "TrMap/TrMap.hpp"
+
+using namespace std;
+
 class TrGameLoop;
 class TrMainMenuLoop;
 class TrRenderLoop;
@@ -53,7 +58,8 @@ class TrGame {
 
   int m_speed = 1;
 
-  TrRenderLoop* m_gameState;
+  // TrRenderLoop* m_gameState;
+  list<TrRenderLoop*> m_gameStateStack;
 
   // initialize random number generator for rain
   std::random_device m_yrandDevice;
