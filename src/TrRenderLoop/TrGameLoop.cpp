@@ -43,8 +43,16 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   }
 
   m_map = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
+  SDL_FreeSurface(image);
 
-  m_menu->m_texture = m_map;
+  image = IMG_Load("res/game_toolbar.png");
+  if (!image) {
+    printf("IMG_Load: %s\n", IMG_GetError());
+  }
+
+  m_menu->m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
+  m_menu->m_srcRect = {0, 0, 104, 24};
+
   tempButtons[0]->m_texture = m_map;
   tempButtons[1]->m_texture = m_map;
   tempButtons[2]->m_texture = m_map;
@@ -58,7 +66,6 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   tempButtons[3]->m_srcRect = {0, 24, 8, 8};
   tempButtons[4]->m_srcRect = {8, 24, 8, 8};
   tempButtons[5]->m_srcRect = {24, 24, 8, 8};
-  m_menu->m_srcRect = {8, 0, 24, 24};
 
   tempButtons[0]->m_destRect = tempButtons[0]->m_rect;
   tempButtons[1]->m_destRect = tempButtons[1]->m_rect;
@@ -102,18 +109,14 @@ TrRenderLoop* TrGameLoop::update(TrGame* game) {
   for (auto key : game->m_keysDown) {
     switch (key) {
       case SDLK_v:
-        auto loopIt = *(std::next(game->m_gameStateStack.begin(),
-                                  game->m_gameStateStack.size() - 2));
-        // delete game->m_gameStateStack.back();
         game->m_gameStateStack.pop_back();
-        game->m_gameStateStack.pop_back();
-        TrTransitionLoop* transition = new TrTransitionLoop(game, this, loopIt);
-        // game->m_gameStateStack.push_back(transition);
+        game->m_gameStateTransition = TrTransitionLoop::makePopLoop(game, this, game->m_gameStateStack.back());
+
         break;
     }
   }
 
-  return nullptr;
+  return this;
 }
 
 void TrGameLoop::render(TrGame* game) {

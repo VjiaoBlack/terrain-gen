@@ -155,19 +155,16 @@ void TrGame::run() {
     SDL_SetRenderDrawColor(m_SDLRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(m_SDLRenderer);
 
-    // TODO: fix memory leak from not deleting old game states
-    // Alternatively, place them somewhere so you can more easily keep track of
-    // them
-    TrRenderLoop* prevBack = m_gameStateStack.back();
-    TrRenderLoop* loop = m_gameStateStack.back()->update(this);
-    // if (loop != m_gameStateStack.back()) {
-    //   printf("Pushed back\n");
-    //   m_gameStateStack.push_back(loop);
-    // }
-    if (loop == prevBack) {
-      delete loop;
+    if (m_gameStateTransition) {
+      m_gameStateTransition->render(this);
+      TrRenderLoop* loop = m_gameStateTransition->update(this);
+      if (!loop) {
+        m_gameStateTransition = nullptr;
+      }
+    } else {
+      m_gameStateStack.back()->render(this);
+      TrRenderLoop* loop = m_gameStateStack.back()->update(this);
     }
-    m_gameStateStack.back()->render(this);
 
     // update screen
     SDL_RenderPresent(m_SDLRenderer);

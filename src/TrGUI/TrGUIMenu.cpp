@@ -26,6 +26,10 @@ TrGUIMenu::~TrGUIMenu() {
   for (int i = 0; i < m_buttons.size(); i++) {
     delete m_buttons[i];
   }
+
+  if (m_texture) {
+    SDL_DestroyTexture(m_texture);
+  }
 }
 
 void TrGUIMenu::draw() {

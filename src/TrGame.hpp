@@ -58,7 +58,7 @@ class TrGame {
 
   int m_speed = 1;
 
-  // TrRenderLoop* m_gameState;
+  TrRenderLoop* m_gameStateTransition;
   list<TrRenderLoop*> m_gameStateStack;
 
   // initialize random number generator for rain

@@ -15,10 +15,25 @@ class TrTransitionLoop : public TrRenderLoop {
   int m_curTick = 0;
   int m_maxWaitTick = 20;
   int m_waitTick = 0;
+  bool m_deleteSource;
+  TrTransitionLoop(TrGame* game, TrRenderLoop* source, TrRenderLoop* target,
+                   bool deleteSource)
+      : m_target(target), m_source(source), m_deleteSource(deleteSource){};
 
  public:
-  TrTransitionLoop(TrGame* game, TrRenderLoop* source, TrRenderLoop* target);
-  virtual ~TrTransitionLoop(){};
+  virtual ~TrTransitionLoop() {
+    if (m_deleteSource) delete m_source;
+  };
+
+  static TrTransitionLoop* makePushLoop(TrGame* game, TrRenderLoop* source,
+                                        TrRenderLoop* target) {
+    return new TrTransitionLoop(game, source, target, false);
+  }
+
+  static TrTransitionLoop* makePopLoop(TrGame* game, TrRenderLoop* source,
+                                       TrRenderLoop* target) {
+    return new TrTransitionLoop(game, source, target, true);
+  }
 
   virtual TrRenderLoop* update(TrGame* game);
   virtual void render(TrGame* game);
