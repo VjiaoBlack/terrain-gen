@@ -14,7 +14,6 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
       TTF_RenderText_Solid(game->m_font, score_text.c_str(), textColor0);
   SDL_Surface* textSurface1 =
       TTF_RenderText_Solid(game->m_font, score_text.c_str(), textColor1);
-
   SDL_Surface* textSurface2 =
       TTF_RenderText_Solid(game->m_font, score_text.c_str(), textColor2);
 
@@ -59,7 +58,7 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   }
 
   return nullptr;
-}
+} 
 
 void TrMainMenuLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,

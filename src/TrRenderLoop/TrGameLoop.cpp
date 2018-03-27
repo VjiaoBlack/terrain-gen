@@ -52,7 +52,7 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 
   m_menu->m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
   m_menu->m_srcRect = {0, 0, 104, 24};
-
+  SDL_FreeSurface(image);
   tempButtons[0]->m_texture = m_map;
   tempButtons[1]->m_texture = m_map;
   tempButtons[2]->m_texture = m_map;

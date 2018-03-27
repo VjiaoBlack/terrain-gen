@@ -106,6 +106,10 @@ TrGame::~TrGame() {
     m_gameStateStack.pop_back();
   }
 
+  if (m_gameStateTransition) {
+    delete m_gameStateTransition;
+  }
+
   TTF_Quit();
   SDL_Quit();
 }
