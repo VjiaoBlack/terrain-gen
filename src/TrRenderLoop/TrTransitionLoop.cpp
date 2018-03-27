@@ -7,7 +7,6 @@
 
 class TrMainMenuLoop;
 
-
 TrRenderLoop* TrTransitionLoop::update(TrGame* game) {
   if (m_waitTick && m_waitTick++ < m_maxWaitTick) {
     return this;

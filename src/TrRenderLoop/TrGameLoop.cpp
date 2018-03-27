@@ -110,7 +110,8 @@ TrRenderLoop* TrGameLoop::update(TrGame* game) {
     switch (key) {
       case SDLK_v:
         game->m_gameStateStack.pop_back();
-        game->m_gameStateTransition = TrTransitionLoop::makePopLoop(game, this, game->m_gameStateStack.back());
+        game->m_gameStateTransition = TrTransitionLoop::makePopLoop(
+            game, this, game->m_gameStateStack.back());
 
         break;
     }

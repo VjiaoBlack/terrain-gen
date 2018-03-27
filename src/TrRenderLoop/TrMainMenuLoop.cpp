@@ -49,8 +49,8 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
 
   if (m_menu->m_buttons[0]->m_activated) {
     game->m_gameStateStack.push_back(new TrGameLoop(game));
-    game->m_gameStateTransition =
-        TrTransitionLoop::makePushLoop(game, this, game->m_gameStateStack.back());
+    game->m_gameStateTransition = TrTransitionLoop::makePushLoop(
+        game, this, game->m_gameStateStack.back());
   }
 
   if (m_menu->m_buttons[2]->m_activated) {
@@ -58,7 +58,7 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   }
 
   return nullptr;
-} 
+}
 
 void TrMainMenuLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
