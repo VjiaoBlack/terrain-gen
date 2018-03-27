@@ -57,6 +57,8 @@ TrMap::TrMap(int rows, int cols)
     }
   }
 
+  m_height->update(this);
+  m_normal->update(this);
   m_color->update(this);
 }
 
