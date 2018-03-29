@@ -6,8 +6,9 @@
 
 #include <set>
 
-#include "../Game.hpp"
-#include "TrComponents.hpp"
+// #include "TrEntities.hpp"
+#include "../TrGame.hpp"
+class TrEntity;
 
 using namespace std;
 
@@ -18,13 +19,13 @@ using namespace std;
 class TrComponent {
  public:
   virtual ~TrComponent(){};
-  virtual void update(TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity) = 0;
 };
 
 /**
  * @brief interface for all graphics components
  */
-class TrGraphicsComponent : TrComponent {
+class TrGraphicsComponent : public TrComponent {
  public:
   SDL_Texture* m_texture;
 
@@ -36,13 +37,13 @@ class TrGraphicsComponent : TrComponent {
   /**
    * @brief draws the given entity
    */
-  virtual void update(TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity) = 0;
 };
 
 /**
  * @brief interface for all physics components
  */
-class TrPhysicsComponent : TrComponent {
+class TrPhysicsComponent : public TrComponent {
  public:
   float m_x, m_y;
   float m_vx, m_vy;
@@ -54,20 +55,7 @@ class TrPhysicsComponent : TrComponent {
   /**
    * @brief calculates the physics stuffs
    */
-  virtual void update(TrEntity* entity) = 0;
-};
-
-/**
- * @brief Buildings have variable footprints, this keeps track of them
- */
-class TrBuildingFootprintComponent : TrComponent {
- public:
-  int m_w;
-  int m_h;
-  bool* m_footprint;
-
-  TrBuildingFootprintComponent(int w, int h, bool* footprint)
-      : m_w(w), m_h(h), m_footprint(footprint){};
+  virtual void update(TrGame* game, TrEntity* entity) = 0;
 };
 
 /**
@@ -82,7 +70,7 @@ struct tr_target_t {
 /**
  * @brief interface for all planning components
  */
-class TrPlanningComponent : TrComponent {
+class TrPlanningComponent : public TrComponent {
  public:
   set<tr_target_t> m_targets;
 
@@ -92,5 +80,5 @@ class TrPlanningComponent : TrComponent {
   /**
    * @brief based on the game and entity state, figure out something to do
    */
-  virtual void update(TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity) = 0;
 };

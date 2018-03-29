@@ -197,6 +197,16 @@ void TrGame::run() {
 }
 
 void TrGame::handleInput() {
+  m_keysDownPrev.empty();
+  m_buttonsDownPrev.empty();
+  m_keysDownPrev = m_keysDown;
+  m_buttonsDownPrev = m_buttonsDown;
+  // for (auto it = m_keysDown.begin(); it != m_keysDown.end(); it++) {
+  //   m_keysDownPrev.insert(*it);
+  // }
+  // for (auto it = m_buttonsDown.begin(); it != m_buttonsDown.end(); it++) {
+  //   m_buttonsDownPrev.insert(*it);
+  // }
   while (SDL_PollEvent(&m_SDLEvent) != 0) {
     if (m_SDLEvent.type == SDL_QUIT) {
       m_quit = true;

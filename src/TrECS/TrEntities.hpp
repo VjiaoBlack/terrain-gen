@@ -4,7 +4,7 @@
  * TrEntities.hpp
  */
 
-#include "../Game.hpp"
+#include "../TrGame.hpp"
 #include "TrComponents.hpp"
 
 /**
@@ -21,26 +21,18 @@ class TrEntity {
   TrEntity(TrGame* game, SDL_Rect rect, TrGraphicsComponent* graphics)
       : m_game(game), m_rect(rect), m_graphics(graphics) {}
   virtual ~TrEntity() = 0;
-  
-};
-
-/**
- * @brief Anything that is a building
- */
-class TrBuildingEntity : TrEntity {
- public:
-  TrBuildingFootprintComponent* m_footprint;
-
-  TrBuildingEntity(){};
-  ~TrBuildingEntity() { free m_footprint; }
 };
 
 /**
  * @brief Anything that moves and is living
  */
-class TrActorEntity : TrEntity {
+class TrActorEntity : public TrEntity {
  public:
   TrPhysicsComponent* m_physics;
   TrPlanningComponent* m_planning;
-  TrActorEntity(){};
-}
+  TrActorEntity(TrGame* game, SDL_Rect rect, TrGraphicsComponent* graphics,
+                TrPhysicsComponent* physics, TrPlanningComponent* planning)
+      : TrEntity(game, rect, graphics),
+        m_physics(physics),
+        m_planning(planning){};
+};

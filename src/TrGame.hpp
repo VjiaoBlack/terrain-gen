@@ -38,7 +38,9 @@ class TrGame {
   bool m_quit = false;
 
   set<int> m_keysDown;
+  set<int> m_keysDownPrev;
   set<char> m_buttonsDown;
+  set<char> m_buttonsDownPrev;
   int m_mouseX;
   int m_mouseY;
 

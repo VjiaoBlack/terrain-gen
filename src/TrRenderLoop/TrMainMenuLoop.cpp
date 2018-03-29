@@ -28,11 +28,11 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
 
   vector<string> labels = {"New Game", "Load Game", "Quit"};
 
-  m_menu = new TrGUIMenu(
+  m_menu = TrGUIMenu::MakeVerticalMenu(
       game,
-      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 - 120 * K_DISPLAY_SCALE / 2),
-                 sz(K_DISPLAY_SIZE_Y / 2 - text_height * K_DISPLAY_SCALE / 2),
-                 sz(120 * K_DISPLAY_SCALE), sz(K_DISPLAY_SIZE_Y / 2)},
+      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 120 / 2),
+                 sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE - text_height / 2),
+                 sz(120), sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE)},
       labels);
 }
 

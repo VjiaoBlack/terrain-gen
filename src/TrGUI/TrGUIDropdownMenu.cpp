@@ -29,13 +29,10 @@ void TrGUIDropdownMenu::update() {
 
   SDL_Point mousePos = {m_game->m_mouseX, m_game->m_mouseY};
 
-  if (m_isMenuOpen) {
-    if (!SDL_PointInRect(&mousePos, &m_menu->m_rect)) {
-      m_isMenuOpen = false;
-    }
-  } else {
-    if (m_button->m_activated) {
-      m_isMenuOpen = true;
-    }
+  if (m_button->m_activated) {
+    m_isMenuOpen = !m_isMenuOpen;
+  } else if (m_isMenuOpen && !m_game->m_buttonsDown.count(SDL_BUTTON_LEFT) &&
+             m_game->m_buttonsDownPrev.count(SDL_BUTTON_LEFT)) {
+    m_isMenuOpen = false;
   }
 }

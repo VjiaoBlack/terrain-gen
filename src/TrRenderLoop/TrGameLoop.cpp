@@ -11,14 +11,15 @@ class TrMainMenuLoop;
 
 TrGameLoop::TrGameLoop(TrGame* game) {
   vector<string> labels = {" ", " ", " ", " ", " ", " "};
+  vector<string> sublabels = {"A", "B", "C", "D", "E", "F"};
   int numButtons = labels.size();
 
   // lots of this is hardcoded
   // TODO: somehow fix the hardcoding
-  m_menu = new TrGUIMenu(
-      game, (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 - 104 * K_DISPLAY_SCALE / 2),
-                       sz(K_DISPLAY_SIZE_Y - 32 * K_DISPLAY_SCALE),
-                       sz(104 * K_DISPLAY_SCALE), sz(24 * K_DISPLAY_SCALE)},
+  m_menu = TrGUIMenu::MakeHorizontalMenu(
+      game,
+      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 104 / 2),
+                 sz(K_DISPLAY_SIZE_Y / K_DISPLAY_SCALE - 32), sz(104), sz(24)},
       labels);
 
   m_menu->m_spacing = 8;
@@ -52,13 +53,9 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 
   m_menu->m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
   m_menu->m_srcRect = {0, 0, 104, 24};
+  m_menu->m_destRect = m_menu->m_rect;
+
   SDL_FreeSurface(image);
-  tempButtons[0]->m_texture = m_map;
-  tempButtons[1]->m_texture = m_map;
-  tempButtons[2]->m_texture = m_map;
-  tempButtons[3]->m_texture = m_map;
-  tempButtons[4]->m_texture = m_map;
-  tempButtons[5]->m_texture = m_map;
 
   tempButtons[0]->m_srcRect = {0, 0, 8, 8};
   tempButtons[1]->m_srcRect = {0, 8, 8, 8};
@@ -67,33 +64,33 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   tempButtons[4]->m_srcRect = {8, 24, 8, 8};
   tempButtons[5]->m_srcRect = {24, 24, 8, 8};
 
-  tempButtons[0]->m_destRect = tempButtons[0]->m_rect;
-  tempButtons[1]->m_destRect = tempButtons[1]->m_rect;
-  tempButtons[2]->m_destRect = tempButtons[2]->m_rect;
-  tempButtons[3]->m_destRect = tempButtons[3]->m_rect;
-  tempButtons[4]->m_destRect = tempButtons[4]->m_rect;
-  tempButtons[5]->m_destRect = tempButtons[5]->m_rect;
+  SDL_Rect rect = m_menu->m_rect;
+  rect.y -= 32;
+
   m_menu->m_destRect = m_menu->m_rect;
 
-  m_menu->m_buttons[0] = new TrGUIDropdownMenu(
-      game, tempButtons[0],
-      new TrGUIMenu(game, tempButtons[0]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_buttons[1] = new TrGUIDropdownMenu(
-      game, tempButtons[1],
-      new TrGUIMenu(game, tempButtons[1]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_buttons[2] = new TrGUIDropdownMenu(
-      game, tempButtons[2],
-      new TrGUIMenu(game, tempButtons[2]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_buttons[3] = new TrGUIDropdownMenu(
-      game, tempButtons[3],
-      new TrGUIMenu(game, tempButtons[3]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_buttons[4] = new TrGUIDropdownMenu(
-      game, tempButtons[4],
-      new TrGUIMenu(game, tempButtons[4]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_buttons[5] = new TrGUIDropdownMenu(
-      game, tempButtons[5],
-      new TrGUIMenu(game, tempButtons[5]->m_rect, vector<string>({"a", "b"})));
-  m_menu->m_destRect = m_menu->m_rect;
+
+  for (int i = 0; i < 6; i++) {
+    tempButtons[i]->m_texture = m_map;
+    tempButtons[i]->m_destRect = tempButtons[i]->m_rect;
+
+    TrGUIDropdownMenu* tempMenu = new TrGUIDropdownMenu(
+        game, tempButtons[i], TrGUIMenu::MakeHorizontalMenu(game, rect, sublabels));
+    
+    tempMenu->m_menu->m_texture = m_menu->m_texture;
+    tempMenu->m_menu->m_destRect = rect;
+    tempMenu->m_menu->m_srcRect = {0, 0, 104, 24};
+
+    for (int j = 0; j < 6; j++) {
+      tempMenu->m_menu->m_buttons[j]->m_rect = {sz(8) + tempMenu->m_menu->m_rect.x +
+                   (j * (rect.w + tempMenu->m_menu->m_spacing - sz(16)) /
+                    (numButtons)),
+               sz(8) + rect.y, sz(8), sz(8)};
+      tempMenu->m_menu->m_buttons[j]->m_destRect = tempMenu->m_menu->m_buttons[j]->m_rect;
+      m_menu->m_buttons[i] = tempMenu;
+    }
+  }
+  
 }
 
 TrGameLoop::~TrGameLoop() {
