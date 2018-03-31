@@ -69,28 +69,29 @@ TrGameLoop::TrGameLoop(TrGame* game) {
 
   m_menu->m_destRect = m_menu->m_rect;
 
-
   for (int i = 0; i < 6; i++) {
     tempButtons[i]->m_texture = m_map;
     tempButtons[i]->m_destRect = tempButtons[i]->m_rect;
 
     TrGUIDropdownMenu* tempMenu = new TrGUIDropdownMenu(
-        game, tempButtons[i], TrGUIMenu::MakeHorizontalMenu(game, rect, sublabels));
-    
+        game, tempButtons[i],
+        TrGUIMenu::MakeHorizontalMenu(game, rect, sublabels));
+
     tempMenu->m_menu->m_texture = m_menu->m_texture;
     tempMenu->m_menu->m_destRect = rect;
     tempMenu->m_menu->m_srcRect = {0, 0, 104, 24};
 
     for (int j = 0; j < 6; j++) {
-      tempMenu->m_menu->m_buttons[j]->m_rect = {sz(8) + tempMenu->m_menu->m_rect.x +
-                   (j * (rect.w + tempMenu->m_menu->m_spacing - sz(16)) /
-                    (numButtons)),
-               sz(8) + rect.y, sz(8), sz(8)};
-      tempMenu->m_menu->m_buttons[j]->m_destRect = tempMenu->m_menu->m_buttons[j]->m_rect;
+      tempMenu->m_menu->m_buttons[j]->m_rect = {
+          sz(8) + tempMenu->m_menu->m_rect.x +
+              (j * (rect.w + tempMenu->m_menu->m_spacing - sz(16)) /
+               (numButtons)),
+          sz(8) + rect.y, sz(8), sz(8)};
+      tempMenu->m_menu->m_buttons[j]->m_destRect =
+          tempMenu->m_menu->m_buttons[j]->m_rect;
       m_menu->m_buttons[i] = tempMenu;
     }
   }
-  
 }
 
 TrGameLoop::~TrGameLoop() {

@@ -1,0 +1,5 @@
+name,tags,attributes
+firewood,flammable; fuel,4 fuel; 5 size
+thatch,flammable; kindling,0.5 fuel; 2 size
+basket,flammable; container,10 storage; 3 size
+roast grains,edible,1 size; 2 food

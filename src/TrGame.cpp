@@ -1,10 +1,14 @@
 
 #include "TrGame.hpp"
+#include "TrData/TrData.hpp"
 #include "TrRenderLoop/TrGameLoop.hpp"
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
 #include "TrRenderLoop/TrRenderLoop.hpp"
 
 TrGame::TrGame() {
+  TrData data = TrData::getInstance();
+  // exit(0);
+
   // Initialize
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize - SDL Error: %s\n", SDL_GetError());
