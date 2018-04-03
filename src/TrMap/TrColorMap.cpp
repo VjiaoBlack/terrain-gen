@@ -85,7 +85,8 @@ void TrColorMap::updateDisplay(TrMap* map) {
   threshold[8] = 0.80 * 256;
   // 1: snow
 
-  uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
+  // uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
+  uint32_t colors[9] = {0xFFBB8866, 0xFFBB8866, 0xFFBB8866, 
                         0xFFEEDDBB, 0xFF77BC49, 0xFF58A327,
                         0xFF28771F, 0xFF210E04, 0xFF5B3F31};
 
@@ -144,29 +145,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
       Vec3 norm = map->m_normal->at(i,j);
 
 
-      // render water
-      if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
-        float height =
-            map->m_water->m_water_avg->at(i, j) + map->m_height->at(i, j);
-        this->at(i, j) = colors[2];
 
-        // norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
-        // norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
-
-        for (int k = 0; k < 2; k++) {
-          norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + calcMs / 600.0));
-          norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + calcMs / 600.0));
-        }
-
-
-        norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
-
-        norm.normalize();
-
-
-        // int rip = floor(height * 160.0) - 64;
-        // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
-      } 
       double doot = m_light.dot(norm);
       // printf("%f\n", m_light.z);
       if (m_light.z > 0 && doot >= 0) {
@@ -182,6 +161,65 @@ void TrColorMap::updateDisplay(TrMap* map) {
         this->at(i, j) = multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4,
                                        wat * 2 + 0.4);
       }
+
+
+            // render water
+      if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
+        float height =
+            map->m_water->m_water_avg->at(i, j) + map->m_height->at(i, j);
+        // this->at(i, j) = 0xFF3A5BAA;
+
+        double alpha = 0.7 + 3 * map->m_water->m_water_avg->at(i,j);
+        if (alpha > 1.0) {
+          alpha = 1.0;
+        }
+        Vec3 wcolor(0x25, 0x3C, 0x78);
+        Vec3 ocolor;
+        ocolor.x = (this->at(i,j) & 0x00FF0000) >> 16;
+        ocolor.y = (this->at(i,j) & 0x0000FF00) >> 8;
+        ocolor.z = this->at(i,j) & 0x000000FF;
+
+        wcolor = wcolor * alpha;
+        wcolor.x = ((int) wcolor.x) & 0xFF;
+        wcolor.y = ((int) wcolor.y) & 0xFF;
+        wcolor.z = ((int) wcolor.z) & 0xFF;
+
+
+        ocolor = ocolor * (1.0 - alpha);
+
+
+        ocolor.x = ((int) ocolor.x) & 0xFF;
+        ocolor.y = ((int) ocolor.y) & 0xFF;
+        ocolor.z = ((int) ocolor.z) & 0xFF;
+
+        ocolor = wcolor + ocolor;
+
+        ocolor.x = ((int) ocolor.x) & 0xFF;
+        ocolor.y = ((int) ocolor.y) & 0xFF;
+        ocolor.z = ((int) ocolor.z) & 0xFF;
+
+
+        this->at(i,j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y << 8 | (int) ocolor.z;
+
+        // printf("%x, %x\n", this->at(i,j));
+        // norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
+        // norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
+
+        for (int k = 0; k < 2; k++) {
+          norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
+          norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
+        }
+
+        norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
+        
+        norm.normalize();
+
+
+        // int rip = floor(height * 160.0) - 64;
+        // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
+      } 
+
+
 
           // do render stuff
 
