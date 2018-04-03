@@ -210,9 +210,16 @@ void TrColorMap::updateDisplay(TrMap* map) {
           norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
         }
 
+
         norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
         
         norm.normalize();
+
+        double doot = m_light.dot(norm) * 0.4;
+
+
+        this->at(i, j) = this->at(i,j) + 
+            multiplyColor(0xFFFFFFFF, doot, doot, doot);
 
 
         // int rip = floor(height * 160.0) - 64;
