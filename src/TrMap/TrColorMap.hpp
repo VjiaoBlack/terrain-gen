@@ -25,8 +25,8 @@ extern double daysAtMonth[];
 #define TR_SPH_TO_CART(a, e, r, x, y, z) \
   {                                      \
     z = r * sin(e);                      \
-    x = cos(e) * sin(a);                      \
-    y = cos(e) * cos(a);                      \
+    x = cos(e) * sin(a);                 \
+    y = cos(e) * cos(a);                 \
   }
 
 // map

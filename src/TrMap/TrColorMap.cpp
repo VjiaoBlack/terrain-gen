@@ -153,21 +153,20 @@ void TrColorMap::updateDisplay(TrMap* map) {
         if (m_light.z > 0 && doot >= 0) {
           wat *= doot;
           // wat *= doot * m_elevation;
+          this->at(i, j) =
+              multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
         } else {
-
           double doot2 = m_moonlight.dot(map->m_normal->at(i, j));
 
           wat *= doot * 0.2;
 
-
+          this->at(i, j) = multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4,
+                                         wat * 2 + 0.4);
         }
 
         // if (map->m_height->at(i,j) * 255  < threshold[2]) {
         //   wat = 0.6;
         // }
-
-        this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
       }
     }
   }
@@ -367,13 +366,7 @@ void TrColorMap::updateLightAngle() {
   m_light.x = cos(el) * sin(az);
   m_light.y = cos(el) * cos(az);
 
-
-
-
   m_elevation = el;
-
-
-
 
   // https://www.mathworks.com/matlabcentral/fileexchange/22992-lunar-azimuth-and-altitude-estimation-algorithm?focused=5160125&tab=function&s_tid=gn_loc_drop
   // Lunar Azimuth and Altitude Estimation Algorithm
@@ -551,18 +544,11 @@ void TrColorMap::updateLightAngle() {
              (180.0 / M_PI);
   h = h - p;
 
-
-
   m_moonlight.z = sin(h);
   m_moonlight.x = cos(h) * sin(Az);
   m_moonlight.y = cos(h) * cos(Az);
 
-
-
-
   m_elevation = el;
-
-
 
   // function jd = juliandate(varargin)//  This sub function is provided in case
   // juliandate does not come with your //  distribution of Matlab
