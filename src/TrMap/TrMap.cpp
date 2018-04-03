@@ -155,7 +155,7 @@ void TrMap::update(set<int> keysDown) {
         this->saveMap();
         break;
       case SDLK_t:
-        m_color->m_hour += 0.2;
+        m_color->m_hour += 0.02;
         if (m_color->m_hour > 24) {
           m_color->m_hour -= 24;
           m_color->m_month += 1;
