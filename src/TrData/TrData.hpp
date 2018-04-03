@@ -12,8 +12,8 @@
 
 #include "../../include/fast-cpp-csv-parser/csv.h"
 
-#include "../TrECS/TrEntities.hpp"
 #include "../TrECS/TrBuildingEntity.hpp"
+#include "../TrECS/TrEntities.hpp"
 using namespace std;
 
 class TrData {

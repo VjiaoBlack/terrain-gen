@@ -35,7 +35,7 @@ void renderTextureWithOffset(SDL_Renderer *renderer, SDL_Texture *texture,
 // https://en.wikipedia.org/wiki/Fast_inverse_square_root
 // TODO: fast square root
 // TODO: macro
-inline float Q_rsqrt(float number) { return 1.0f / sqrt(number); }
+inline double Q_rsqrt(double number) { return 1.0 / sqrt(number); }
 
 inline double lerp5(double omin, double omax, double imin, double xx,
                     double imax) {
@@ -130,29 +130,28 @@ inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
   return ret;
 }
 
-// I heard that floats are much faster.
 class Vec3 {
  public:
-  float x;
-  float y;
-  float z;
+  double x;
+  double y;
+  double z;
 
   Vec3(double _x, double _y, double _z) : x(_x), y(_y), z(_z){};
 
   Vec3() : Vec3(0.0, 0.0, 0.0){};
 
-  Vec3 operator*(float mult) { return Vec3(x * mult, y * mult, z * mult); }
+  Vec3 operator*(double mult) { return Vec3(x * mult, y * mult, z * mult); }
 
   Vec3 operator-(Vec3 v) { return Vec3(x -= v.x, y - v.y, z - v.z); }
 
   inline void normalize() {
-    float invsq = Q_rsqrt(x * x + y * y + z * z);
+    double invsq = Q_rsqrt(x * x + y * y + z * z);
     x *= invsq;
     y *= invsq;
     z *= invsq;
   }
 
-  inline float dot(Vec3 v) { return x * v.x + y * v.y + z * v.z; }
+  inline double dot(Vec3 v) { return x * v.x + y * v.y + z * v.z; }
 
   inline static Vec3 cross(Vec3 a, Vec3 b) {
     Vec3 ans;

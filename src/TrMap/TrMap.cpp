@@ -154,6 +154,19 @@ void TrMap::update(set<int> keysDown) {
         // Save the map: color and heightmap
         this->saveMap();
         break;
+      case SDLK_t:
+        m_color->m_hour += 0.2;
+        if (m_color->m_hour > 24) {
+          m_color->m_hour -= 24;
+          m_color->m_month += 1;
+        }
+        if (m_color->m_month > 12) {
+          m_color->m_month -= 12;
+        }
+
+        // printf("%f, %d\n", m_color->m_hour, m_color->m_month);
+        m_color->updateLightAngle();
+        m_color->update(this);
     }
   }
 }
