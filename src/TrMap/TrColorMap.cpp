@@ -89,6 +89,9 @@ void TrColorMap::updateDisplay(TrMap* map) {
                         0xFFEEDDBB, 0xFF77BC49, 0xFF58A327,
                         0xFF28771F, 0xFF210E04, 0xFF5B3F31};
 
+  clock_t endFrame = clock();
+  double calcMs = clockToMilliseconds(endFrame);
+
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       // render land
@@ -138,38 +141,56 @@ void TrColorMap::updateDisplay(TrMap* map) {
       //   wat = 0.4;
       // }
 
+      Vec3 norm = map->m_normal->at(i,j);
+
+
       // render water
-      if (map->m_water->m_water_avg->at(i, j) > 0.001 &&
-          map->m_height->at(i, j) * 255 > threshold[2]) {
+      if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
         float height =
             map->m_water->m_water_avg->at(i, j) + map->m_height->at(i, j);
-        this->at(i, j) = 0xFF305090;
+        this->at(i, j) = colors[2];
 
-        int rip = floor(height * 160.0) - 64;
-        this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
-      } else {
-        double doot = m_light.dot(map->m_normal->at(i, j));
-        // printf("%f\n", m_light.z);
-        if (m_light.z > 0 && doot >= 0) {
-          wat *= doot;
-          // wat *= doot * m_elevation;
-          this->at(i, j) =
-              multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
-        } else {
-          double doot2 = m_moonlight.dot(map->m_normal->at(i, j));
+        // norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
+        // norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
 
-          wat *= doot * 0.2;
-
-          this->at(i, j) = multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4,
-                                         wat * 2 + 0.4);
+        for (int k = 0; k < 2; k++) {
+          norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + calcMs / 600.0));
+          norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + calcMs / 600.0));
         }
 
-        // if (map->m_height->at(i,j) * 255  < threshold[2]) {
-        //   wat = 0.6;
-        // }
+
+        norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
+
+        norm.normalize();
+
+
+        // int rip = floor(height * 160.0) - 64;
+        // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
+      } 
+      double doot = m_light.dot(norm);
+      // printf("%f\n", m_light.z);
+      if (m_light.z > 0 && doot >= 0) {
+        wat *= doot;
+        // wat *= doot * m_elevation;
+        this->at(i, j) =
+            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
+      } else {
+        double doot2 = m_moonlight.dot(map->m_normal->at(i, j));
+
+        wat *= doot * 0.2;
+
+        this->at(i, j) = multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4,
+                                       wat * 2 + 0.4);
       }
+
+          // do render stuff
+
+      // if (map->m_height->at(i,j) * 255  < threshold[2]) {
+      //   wat = 0.6;
+      // }
     }
   }
+
 }
 
 void TrColorMap::updateMoistureDemo(TrMap* map) {

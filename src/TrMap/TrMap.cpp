@@ -58,6 +58,16 @@ TrMap::TrMap(int rows, int cols)
   }
 
   m_height->update(this);
+
+  float water_height = 0.45;
+  for (int i = 0; i < m_rows; i++) {
+    for (int j = 0; j < m_cols; j++) {
+      if (m_height->at(i, j) <= water_height) {
+        m_water->at(i, j) = water_height - m_height->at(i, j) + 0.001;
+      }
+    }
+  }
+
   m_normal->update(this);
   m_color->update(this);
 }
@@ -155,7 +165,7 @@ void TrMap::update(set<int> keysDown) {
         this->saveMap();
         break;
       case SDLK_t:
-        m_color->m_hour += 0.02;
+        m_color->m_hour += 0.06;
         if (m_color->m_hour > 24) {
           m_color->m_hour -= 24;
           m_color->m_month += 1;

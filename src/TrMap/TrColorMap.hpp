@@ -2,6 +2,7 @@
 #pragma once
 
 #include "TrMapData.hpp"
+#include "../Perlin.hpp"
 
 class TrMap;
 
@@ -41,6 +42,9 @@ class TrColorMap : public TrMapData<uint32_t> {
   int m_month;
   double m_elevation;
 
+  PerlinNoise* m_perlinx;
+  PerlinNoise* m_perliny;
+
   TrColorMap(int rows, int cols)
       : TrMapData<uint32_t>(rows, cols), m_renderState(0) {
     m_light = Vec3(0, 0, 1);
@@ -48,9 +52,16 @@ class TrColorMap : public TrMapData<uint32_t> {
     m_hour = 6;
     m_day = 1;
     m_month = 6;
+    m_perlinx = new PerlinNoise(0);
+    m_perliny = new PerlinNoise(1);
+
+    printf("make\n");
   }
 
-  ~TrColorMap() {}
+  ~TrColorMap() {
+    delete m_perlinx;
+    delete m_perliny;
+  }
 
   void update(TrMap* map);
 
