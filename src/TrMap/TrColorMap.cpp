@@ -173,11 +173,56 @@ void TrColorMap::updateDisplay(TrMap* map) {
         if (alpha > 1.0) {
           alpha = 1.0;
         }
+
+
         Vec3 wcolor(0x25, 0x3C, 0x78);
         Vec3 ocolor;
         ocolor.x = (this->at(i,j) & 0x00FF0000) >> 16;
         ocolor.y = (this->at(i,j) & 0x0000FF00) >> 8;
         ocolor.z = this->at(i,j) & 0x000000FF;
+
+        if (m_light.z > 0) {
+          for (int k = 0; k < 2; k++) {
+            norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
+            norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
+          }
+
+
+          norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
+          
+          norm.normalize();
+
+          double doot = m_light.dot(norm) * 0.4;
+
+          // this->at(i, j) = this->at(i,j) + 
+          //     multiplyColor( 0xFF3A5BAA, doot, doot, doot);
+
+
+          Vec3 eyeVec((double)j / m_cols - 0.5, (double)i / m_rows - 0.5,0.5);
+          // printf("%f\n", eyeVec.x);
+          eyeVec.x *=- (double) m_cols / m_rows;
+          eyeVec.y *= -1;
+          eyeVec.normalize();
+
+          Vec3 half = eyeVec + m_light;
+          // norm.x = 0;
+          // norm.y = 0;
+          // norm.z = 1;
+
+          norm.normalize();
+          half.normalize();
+          double boop = half.dot(norm);
+          boop = pow(boop, 10);
+
+          // this->at(i, j) = lerpColor(this->at(i, j),  0xFF3A5BAA, boop);
+          // this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
+          wcolor.x += (0x5A - wcolor.x) * boop;
+          wcolor.y += (0x8B - wcolor.y) * boop;
+          wcolor.z += (0xCA - wcolor.z) * boop;
+
+          // int rip = floor(height * 160.0) - 64;
+          // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
+        }
 
         wcolor = wcolor * alpha;
         wcolor.x = ((int) wcolor.x) & 0xFF;
@@ -205,25 +250,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
         // norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
         // norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
 
-        for (int k = 0; k < 2; k++) {
-          norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
-          norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
-        }
 
-
-        norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
-        
-        norm.normalize();
-
-        double doot = m_light.dot(norm) * 0.4;
-
-
-        this->at(i, j) = this->at(i,j) + 
-            multiplyColor(0xFFFFFFFF, doot, doot, doot);
-
-
-        // int rip = floor(height * 160.0) - 64;
-        // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
       } 
 
 
