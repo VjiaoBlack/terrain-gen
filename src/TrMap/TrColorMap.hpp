@@ -3,6 +3,7 @@
 
 #include "../Perlin.hpp"
 #include "TrMapData.hpp"
+#include "../../include/fft/fft.h"
 
 class TrMap;
 
@@ -30,6 +31,7 @@ extern double daysAtMonth[];
     y = cos(e) * cos(a);                 \
   }
 
+
 // map
 // is this too much memory? make sure to check
 class TrColorMap : public TrMapData<uint32_t> {
@@ -42,24 +44,16 @@ class TrColorMap : public TrMapData<uint32_t> {
   int m_month;
   double m_elevation;
 
+  cOcean* ocean;
+
   PerlinNoise* m_perlinx;
   PerlinNoise* m_perliny;
 
-  TrColorMap(int rows, int cols)
-      : TrMapData<uint32_t>(rows, cols), m_renderState(0) {
-    m_light = Vec3<double>(0, 0, 1);
-    m_light.normalize();
-    m_hour = 6;
-    m_day = 1;
-    m_month = 6;
-    m_perlinx = new PerlinNoise(0);
-    m_perliny = new PerlinNoise(1);
-
-    printf("make\n");
-  }
+  TrColorMap(int rows, int cols);
 
   ~TrColorMap() {
     delete m_perlinx;
+    delete ocean;
     delete m_perliny;
   }
 

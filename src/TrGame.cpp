@@ -4,6 +4,7 @@
 #include "TrRenderLoop/TrGameLoop.hpp"
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
 #include "TrRenderLoop/TrRenderLoop.hpp"
+#include "../include/fft/fft.h"
 
 TrGame::TrGame() {
   TrData data = TrData::getInstance();
@@ -31,6 +32,7 @@ TrGame::TrGame() {
 
   // printf("%f\n", lol.x);
   printf("%f\n", lol[0]);
+
 
   
 

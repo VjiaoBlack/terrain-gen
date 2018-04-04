@@ -4,6 +4,19 @@
 
 double daysAtMonth[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
+int LENGTH = 400;
+TrColorMap::TrColorMap(int rows, int cols)
+      : TrMapData<uint32_t>(rows, cols), m_renderState(0)
+      , ocean(new cOcean(64, 0.0005, vector2(3, 3), LENGTH, true)) {
+    m_light = Vec3<double>(0, 0, 1);
+    m_light.normalize();
+    m_hour = 6;
+    m_day = 1;
+    m_month = 6;
+    m_perlinx = new PerlinNoise(0);
+    m_perliny = new PerlinNoise(1);
+
+}
 void TrColorMap::update(TrMap* map) {
   switch (map->m_renderState) {
     case 0:
@@ -93,9 +106,25 @@ void TrColorMap::updateDisplay(TrMap* map) {
   clock_t endFrame = clock();
   double calcMs = clockToMilliseconds(endFrame);
 
-  for (int i = 0; i < m_rows; i++) {
-    for (int j = 0; j < m_cols; j++) {
+      ocean->render(calcMs / 1000, true);
+
+
+  for (int i = 1; i < m_rows - 1; i++) {
+    for (int j = 1; j < m_cols - 1; j++) {
       // render land
+
+      int index = (j % ocean->N) + (i % ocean->N) * ocean->N;
+      int indexl = ((j-1) % ocean->N) + (i % ocean->N) * ocean->N;
+      int indexr = ((j+1) % ocean->N) + (i % ocean->N) * ocean->N;
+      int indext = (j % ocean->N) + ((i-1) % ocean->N) * ocean->N;
+      int indexb = (j % ocean->N) + ((i+1) % ocean->N) * ocean->N;
+
+      double ht =  0.5 +  (200.0 / LENGTH) * ocean->vertices[index].nz;
+      double htl =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexl].nz;
+      double htr =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexr].nz;
+      double htt =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indext].nz;
+      double htb =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexb].nz;
+
 
       for (int c = 0; c < 9; c++) {
         if (map->m_height->get(i, j) * 255 < threshold[c]) {
@@ -183,28 +212,35 @@ void TrColorMap::updateDisplay(TrMap* map) {
         ocolor.z = this->at(i, j) & 0x000000FF;
 
         if (m_light.z > 0) {
-          for (int k = 0; k < 2; k++) {
-            norm.x = 2.0 * pow(0.5, k) *
-                     (-0.1 +
-                      0.2 *
-                          m_perlinx->noise(
-                              i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
-                              k)),
-                              1000 * k + pow(0.5, k) * calcMs / 400.0));
-            norm.y = 2.0 * pow(0.5, k) *
-                     (-0.1 +
-                      0.2 *
-                          m_perliny->noise(
-                              i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
-                              k)),
-                              1000 * k + pow(0.5, k) * calcMs / 400.0));
-          }
+          // for (int k = 0; k < 2; k++) {
+          //   norm.x = 2.0 * pow(0.5, k) *
+          //            (-0.1 +
+          //             0.2 *
+          //                 m_perlinx->noise(
+          //                     i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
+          //                     k)),
+          //                     1000 * k + pow(0.5, k) * calcMs / 400.0));
+          //   norm.y = 2.0 * pow(0.5, k) *
+          //            (-0.1 +
+          //             0.2 *
+          //                 m_perliny->noise(
+          //                     i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
+          //                     k)),
+          //                     1000 * k + pow(0.5, k) * calcMs / 400.0));
+          // }
 
-          norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
+          // norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
+
+          norm.x = htr - htl;
+          norm.y = htb - htt;
+          norm.z = 1.0;
+
+          norm.x *= sqrt(map->m_water->m_water_avg->at(i,j));
+          norm.y *= sqrt(map->m_water->m_water_avg->at(i,j));
 
           norm.normalize();
 
-          double doot = m_light.dot(norm) * 0.4;
+          // double doot = m_light.dot(norm) * 0.4;
 
           // this->at(i, j) = this->at(i,j) +
           //     multiplyColor( 0xFF3A5BAA, doot, doot, doot);
@@ -223,10 +259,10 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
           half.normalize();
           double boop = half.dot(norm);
-          boop = pow(boop, 10);
+          boop = pow(boop, 3);
 
           this->at(i, j) = lerpColor(this->at(i, j),  0xFF3A5BAA, boop);
-          this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
+          // this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
           wcolor.x += (0x5A - wcolor.x) * boop;
           wcolor.y += (0x8B - wcolor.y) * boop;
           wcolor.z += (0xCA - wcolor.z) * boop;
