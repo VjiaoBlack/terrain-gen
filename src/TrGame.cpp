@@ -7,6 +7,7 @@
 
 TrGame::TrGame() {
   TrData data = TrData::getInstance();
+  m_gameStateTransition = nullptr;
   // exit(0);
 
   // Initialize
