@@ -9,6 +9,42 @@ TrGame::TrGame() {
   TrData data = TrData::getInstance();
   // exit(0);
 
+  // Vec<int, 3> lol(0, 1, 2);
+  Vec3<double> lol;
+  lol.x = 0;
+  lol.y = 1;
+  lol.z = 2;
+
+  // lol.r = 4;
+
+  // lol = lol * 2;
+
+  // Vec<int, 3> asdf;
+  lol = lol * 3;
+  // lol *= 2;
+
+  printf("%f, %f, %f\n", lol[0], lol[1], lol[2]);
+  printf("%f\n", lol[3]);
+
+  lol[0] = 2;
+
+  // printf("%f\n", lol.x);
+  printf("%f\n", lol[0]);
+
+  
+
+  // vector<Vec3<double> > vec(10);
+
+  // vec[3].x = 3;
+  // printf("%f\n", vec[3].x);
+
+  // TrNormalMap boop(3, 3);
+
+  // printf("%f\n", boop.get(1, 1).x);
+
+  // exit(0);
+
+  //
   // Initialize
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize - SDL Error: %s\n", SDL_GetError());

@@ -86,7 +86,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
   // 1: snow
 
   // uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
-  uint32_t colors[9] = {0xFFBB8866, 0xFFBB8866, 0xFFBB8866, 
+  uint32_t colors[9] = {0xFFBB8866, 0xFFBB8866, 0xFFBB8866,
                         0xFFEEDDBB, 0xFF77BC49, 0xFF58A327,
                         0xFF28771F, 0xFF210E04, 0xFF5B3F31};
 
@@ -120,7 +120,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
       // }
       float wat = 0.6;
 
-      uint32_t cur = map->m_height->m_terrace.get(i, j);
+      // uint32_t cur = map->m_height->m_terrace.get(i, j);
       // if (map->m_height->m_terrace.get(i - 1, j) < cur ||
       //     map->m_height->m_terrace.get(i, j - 1) < cur) {
       //   wat = 0.8;
@@ -138,13 +138,15 @@ void TrColorMap::updateDisplay(TrMap* map) {
       //     map->m_height->m_terrace.get(i, j - 1) > cur) {
       //   wat = 0.15;
       // }
-      // if (map->m_height->m_terrace.get(i,j-1) > cur) {
+      // if (map->m_height->m_terrace.get(i, j - 1) > cur) {
       //   wat = 0.4;
       // }
 
-      Vec3 norm = map->m_normal->at(i,j);
-
-
+      // printf("ASFDS\n");
+      // TODO: why can't I just assign it in one go???s
+      Vec3<double> norm;
+      norm = map->m_normal->at(i,j);
+      // exit(0);
 
       double doot = m_light.dot(norm);
       // printf("%f\n", m_light.z);
@@ -158,111 +160,117 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
         wat *= doot * 0.2;
 
-        this->at(i, j) = multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4,
-                                       wat * 2 + 0.4);
+        this->at(i, j) =
+            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat * 2 +
+            0.4);
       }
 
-
-            // render water
+      // render water
       if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
         float height =
             map->m_water->m_water_avg->at(i, j) + map->m_height->at(i, j);
         // this->at(i, j) = 0xFF3A5BAA;
 
-        double alpha = 0.7 + 3 * map->m_water->m_water_avg->at(i,j);
+        double alpha = 0.7 + 3 * map->m_water->m_water_avg->at(i, j);
         if (alpha > 1.0) {
           alpha = 1.0;
         }
 
-
-        Vec3 wcolor(0x25, 0x3C, 0x78);
-        Vec3 ocolor;
-        ocolor.x = (this->at(i,j) & 0x00FF0000) >> 16;
-        ocolor.y = (this->at(i,j) & 0x0000FF00) >> 8;
-        ocolor.z = this->at(i,j) & 0x000000FF;
+        Vec3<double> wcolor(0x25, 0x3C, 0x78);
+        Vec3<double> ocolor;
+        ocolor.x = (this->at(i, j) & 0x00FF0000) >> 16;
+        ocolor.y = (this->at(i, j) & 0x0000FF00) >> 8;
+        ocolor.z = this->at(i, j) & 0x000000FF;
 
         if (m_light.z > 0) {
           for (int k = 0; k < 2; k++) {
-            norm.x = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perlinx->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
-            norm.y = 2.0 * pow(0.5, k) * (-0.1 + 0.2 * m_perliny->noise(i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5, k)), 1000 * k + pow(0.5, k) * calcMs / 400.0));
+            norm.x = 2.0 * pow(0.5, k) *
+                     (-0.1 +
+                      0.2 *
+                          m_perlinx->noise(
+                              i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
+                              k)),
+                              1000 * k + pow(0.5, k) * calcMs / 400.0));
+            norm.y = 2.0 * pow(0.5, k) *
+                     (-0.1 +
+                      0.2 *
+                          m_perliny->noise(
+                              i / (4.0 * pow(0.5, k)), j / (4.0 * pow(0.5,
+                              k)),
+                              1000 * k + pow(0.5, k) * calcMs / 400.0));
           }
 
-
           norm.z = sqrt(1 - norm.x * norm.x - norm.y * norm.y);
-          
+
           norm.normalize();
 
           double doot = m_light.dot(norm) * 0.4;
 
-          // this->at(i, j) = this->at(i,j) + 
+          // this->at(i, j) = this->at(i,j) +
           //     multiplyColor( 0xFF3A5BAA, doot, doot, doot);
 
-
-          Vec3 eyeVec((double)j / m_cols - 0.5, (double)i / m_rows - 0.5,0.5);
+          Vec3<double> eyeVec((double)j / m_cols - 0.5,
+                              (double)i / m_rows - 0.5, 0.5);
           // printf("%f\n", eyeVec.x);
-          eyeVec.x *=- (double) m_cols / m_rows;
+          eyeVec.x *= -(double)m_cols / m_rows;
           eyeVec.y *= -1;
           eyeVec.normalize();
 
-          Vec3 half = eyeVec + m_light;
+          Vec3<double> half = eyeVec + m_light;
           // norm.x = 0;
           // norm.y = 0;
           // norm.z = 1;
 
-          norm.normalize();
           half.normalize();
           double boop = half.dot(norm);
           boop = pow(boop, 10);
 
-          // this->at(i, j) = lerpColor(this->at(i, j),  0xFF3A5BAA, boop);
-          // this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
+          this->at(i, j) = lerpColor(this->at(i, j),  0xFF3A5BAA, boop);
+          this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
           wcolor.x += (0x5A - wcolor.x) * boop;
           wcolor.y += (0x8B - wcolor.y) * boop;
           wcolor.z += (0xCA - wcolor.z) * boop;
 
-          // int rip = floor(height * 160.0) - 64;
-          // this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
         }
 
         wcolor = wcolor * alpha;
-        wcolor.x = ((int) wcolor.x) & 0xFF;
-        wcolor.y = ((int) wcolor.y) & 0xFF;
-        wcolor.z = ((int) wcolor.z) & 0xFF;
-
+        wcolor.x = ((int)wcolor.x) & 0xFF;
+        wcolor.y = ((int)wcolor.y) & 0xFF;
+        wcolor.z = ((int)wcolor.z) & 0xFF;
 
         ocolor = ocolor * (1.0 - alpha);
 
-
-        ocolor.x = ((int) ocolor.x) & 0xFF;
-        ocolor.y = ((int) ocolor.y) & 0xFF;
-        ocolor.z = ((int) ocolor.z) & 0xFF;
+        ocolor.x = ((int)ocolor.x) & 0xFF;
+        ocolor.y = ((int)ocolor.y) & 0xFF;
+        ocolor.z = ((int)ocolor.z) & 0xFF;
 
         ocolor = wcolor + ocolor;
 
-        ocolor.x = ((int) ocolor.x) & 0xFF;
-        ocolor.y = ((int) ocolor.y) & 0xFF;
-        ocolor.z = ((int) ocolor.z) & 0xFF;
+        ocolor.x = ((int)ocolor.x) & 0xFF;
+        ocolor.y = ((int)ocolor.y) & 0xFF;
+        ocolor.z = ((int)ocolor.z) & 0xFF;
 
+        this->at(i, j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y <<
+        8 |
+                         (int)ocolor.z;
 
-        this->at(i,j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y << 8 | (int) ocolor.z;
+        norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
+        norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
 
-        // printf("%x, %x\n", this->at(i,j));
-        // norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
-        // norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
+  
+      }
 
+      norm.x = 0;
+      norm.y = 0;
+      norm.z = 0;
 
-      } 
+      // do render stuff
 
-
-
-          // do render stuff
-
-      // if (map->m_height->at(i,j) * 255  < threshold[2]) {
-      //   wat = 0.6;
-      // }
+      if (map->m_height->at(i,j) * 255  < threshold[2]) {
+        wat = 0.6;
+      }
     }
   }
-
 }
 
 void TrColorMap::updateMoistureDemo(TrMap* map) {
@@ -567,26 +575,27 @@ void TrColorMap::updateLightAngle() {
       23.439291 - 0.0130042 * T - 0.00000016 * T * T + 0.000000504 * T * T * T;
   Obl = Obl * deg2rad;
   // double RotM = [1 0 0; 0 cos(Obl) sin(Obl); 0 -sin(Obl) cos(Obl)];
-  Vec3 RotM1(1, 0, 0);
-  Vec3 RotM2(0, cos(Obl), sin(Obl));
-  Vec3 RotM3(0, -sin(Obl), cos(Obl));
+  Vec3<double> RotM1(1, 0, 0);
+  Vec3<double> RotM2(0, cos(Obl), sin(Obl));
+  Vec3<double> RotM3(0, -sin(Obl), cos(Obl));
   // Apply the rotational matrix to the ecliptic rectangular coordinates// Also,
   // convert units to km instead of earth equatorial radii
 
-  Vec3 xyzeclip(xeclip, yeclip, zeclip);
+  Vec3<double> xyzeclip(xeclip, yeclip, zeclip);
 
-  Vec3 sol(RotM1.dot(xyzeclip), RotM2.dot(xyzeclip), RotM3.dot(xyzeclip));
+  Vec3<double> sol(RotM1.dot(xyzeclip), RotM2.dot(xyzeclip),
+                   RotM3.dot(xyzeclip));
 
   sol = sol * EarthRadEq;
 
   // double xel, yel, zel;
-  Vec3 xyzsl;
+  Vec3<double> xyzsl;
   // Find the equatorial rectangular coordinates of the location @ sea level
   // [xsl ysl zsl] = sph2cart(Lon*deg2rad,Lat*deg2rad,EarthRadEq);
 
   TR_SPH_TO_CART(lon, lat, EarthRadEq, xyzsl.x, xyzsl.y, xyzsl.z);
 
-  // Vec3 solmsl = sol - xyzsl;
+  // Vec3<double>solmsl = sol - xyzsl;
 
   // Find the Angle Between sea level coordinate vector and the moon vector
   // double theta1 = 180.0 -

@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "TrMapData.hpp"
 #include "../Perlin.hpp"
+#include "TrMapData.hpp"
 
 class TrMap;
 
@@ -35,8 +35,8 @@ extern double daysAtMonth[];
 class TrColorMap : public TrMapData<uint32_t> {
  public:
   int m_renderState;
-  Vec3 m_light;
-  Vec3 m_moonlight;
+  Vec3<double> m_light;
+  Vec3<double> m_moonlight;
   double m_hour;
   int m_day;
   int m_month;
@@ -47,7 +47,7 @@ class TrColorMap : public TrMapData<uint32_t> {
 
   TrColorMap(int rows, int cols)
       : TrMapData<uint32_t>(rows, cols), m_renderState(0) {
-    m_light = Vec3(0, 0, 1);
+    m_light = Vec3<double>(0, 0, 1);
     m_light.normalize();
     m_hour = 6;
     m_day = 1;
