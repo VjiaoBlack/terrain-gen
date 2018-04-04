@@ -1,9 +1,9 @@
 
 #pragma once
 
+#include "../../include/fft/fft.h"
 #include "../Perlin.hpp"
 #include "TrMapData.hpp"
-#include "../../include/fft/fft.h"
 
 class TrMap;
 
@@ -30,7 +30,6 @@ extern double daysAtMonth[];
     x = cos(e) * sin(a);                 \
     y = cos(e) * cos(a);                 \
   }
-
 
 // map
 // is this too much memory? make sure to check

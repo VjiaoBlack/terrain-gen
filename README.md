@@ -6,7 +6,9 @@ athena
 
 athena is a civilization builder game in pre-alpha stage.
 
-Currently it is mostly still a terrain generator.
+Currently it is mostly still a terrain generator and visualizer.
+
+I use other bits of code to help with some tricky math stuff - I cite them in comments where I use them.
 
 Compilation
 -----------
@@ -36,3 +38,4 @@ Documentation
 -------------
 Refer to this document for some details about how this works:
 https://docs.google.com/document/d/1xySCdTcphTbBVFzzvw51X8ISexEsv2MM4zNanQW6Hbc/edit?usp=sharing
+

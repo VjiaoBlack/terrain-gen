@@ -6,16 +6,16 @@ double daysAtMonth[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
 int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)
-      : TrMapData<uint32_t>(rows, cols), m_renderState(0)
-      , ocean(new cOcean(64, 0.0005, vector2(3, 3), LENGTH, true)) {
-    m_light = Vec3<double>(0, 0, 1);
-    m_light.normalize();
-    m_hour = 6;
-    m_day = 1;
-    m_month = 6;
-    m_perlinx = new PerlinNoise(0);
-    m_perliny = new PerlinNoise(1);
-
+    : TrMapData<uint32_t>(rows, cols),
+      m_renderState(0),
+      ocean(new cOcean(64, 0.0005, vector2(3, 3), LENGTH, true)) {
+  m_light = Vec3<double>(0, 0, 1);
+  m_light.normalize();
+  m_hour = 6;
+  m_day = 1;
+  m_month = 6;
+  m_perlinx = new PerlinNoise(0);
+  m_perliny = new PerlinNoise(1);
 }
 void TrColorMap::update(TrMap* map) {
   switch (map->m_renderState) {
@@ -106,25 +106,23 @@ void TrColorMap::updateDisplay(TrMap* map) {
   clock_t endFrame = clock();
   double calcMs = clockToMilliseconds(endFrame);
 
-      ocean->render(calcMs / 1000, true);
-
+  ocean->render(calcMs / 1000, true);
 
   for (int i = 1; i < m_rows - 1; i++) {
     for (int j = 1; j < m_cols - 1; j++) {
       // render land
 
       int index = (j % ocean->N) + (i % ocean->N) * ocean->N;
-      int indexl = ((j-1) % ocean->N) + (i % ocean->N) * ocean->N;
-      int indexr = ((j+1) % ocean->N) + (i % ocean->N) * ocean->N;
-      int indext = (j % ocean->N) + ((i-1) % ocean->N) * ocean->N;
-      int indexb = (j % ocean->N) + ((i+1) % ocean->N) * ocean->N;
+      int indexl = ((j - 1) % ocean->N) + (i % ocean->N) * ocean->N;
+      int indexr = ((j + 1) % ocean->N) + (i % ocean->N) * ocean->N;
+      int indext = (j % ocean->N) + ((i - 1) % ocean->N) * ocean->N;
+      int indexb = (j % ocean->N) + ((i + 1) % ocean->N) * ocean->N;
 
-      double ht =  0.5 +  (200.0 / LENGTH) * ocean->vertices[index].nz;
-      double htl =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexl].nz;
-      double htr =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexr].nz;
-      double htt =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indext].nz;
-      double htb =  0.5 +  (200.0 / LENGTH) * ocean->vertices[indexb].nz;
-
+      double ht = 0.5 + (200.0 / LENGTH) * ocean->vertices[index].nz;
+      double htl = 0.5 + (200.0 / LENGTH) * ocean->vertices[indexl].nz;
+      double htr = 0.5 + (200.0 / LENGTH) * ocean->vertices[indexr].nz;
+      double htt = 0.5 + (200.0 / LENGTH) * ocean->vertices[indext].nz;
+      double htb = 0.5 + (200.0 / LENGTH) * ocean->vertices[indexb].nz;
 
       for (int c = 0; c < 9; c++) {
         if (map->m_height->get(i, j) * 255 < threshold[c]) {
@@ -148,25 +146,52 @@ void TrColorMap::updateDisplay(TrMap* map) {
       //                    * 10.0);
       // }
       float wat = 0.6;
+     //  Vec3<double> boopnorm(0,0,1);
 
-      // uint32_t cur = map->m_height->m_terrace.get(i, j);
-      // if (map->m_height->m_terrace.get(i - 1, j) < cur ||
-      //     map->m_height->m_terrace.get(i, j - 1) < cur) {
-      //   wat = 0.8;
-      // }
+     //  float cur = map->m_height->m_terrace.get(i, j);
+     //  if (map->m_height->m_terrace.get(i - 1, j) < cur) {
+     //    // wat = 0.8;
+     //    boopnorm.y = -1;
+     //  }
+     //  if (map->m_height->m_terrace.get(i + 1, j) < cur) {
+     //    // wat = 0.8;
+     //    boopnorm.y = -1;
+     //  }
 
-      // if (map->m_height->m_terrace.get(i - 2, j) > cur ||
-      //     map->m_height->m_terrace.get(i, j - 2) > cur ||
-      //     map->m_height->m_terrace.get(i - 1, j - 1) > cur ||
-      //     map->m_height->m_terrace.get(i - 2, j - 1) > cur ||
-      //     map->m_height->m_terrace.get(i - 1, j - 2) > cur) {
-      //   wat = 0.45;
-      // }
+     //  if (map->m_height->m_terrace.get(i, j - 1) < cur) {
+     //    // wat = 0.8;
+     //    boopnorm.x = -1;
+     //  }
 
-      // if (map->m_height->m_terrace.get(i - 1, j) > cur ||
-      //     map->m_height->m_terrace.get(i, j - 1) > cur) {
-      //   wat = 0.15;
-      // }
+     //  // if (map->m_height->m_terrace.get(i - 2, j) > cur ||
+     //  //     map->m_height->m_terrace.get(i, j - 2) > cur ||
+     //  //     map->m_height->m_terrace.get(i - 1, j - 1) > cur ||
+     //  //     map->m_height->m_terrace.get(i - 2, j - 1) > cur ||
+     //  //     map->m_height->m_terrace.get(i - 1, j - 2) > cur) {
+     //  //   // wat = 0.45;
+     //  // }
+
+     //  if (map->m_height->m_terrace.get(i - 1, j) > cur) {
+     //    // wat = 0.15;
+     //    boopnorm.y = 1;
+
+     //  }
+     // if (map->m_height->m_terrace.get(i + 1, j) > cur) {
+     //    // wat = 0.8;
+     //    boopnorm.y = 1;
+     //  }
+
+
+
+     //  if (map->m_height->m_terrace.get(i, j - 1) > cur) {
+     //    // wat = 0.15;
+     //    boopnorm.x = 1;
+
+     //  }
+
+     //  boopnorm.normalize();
+
+     //  wat = m_light.dot(boopnorm);
       // if (map->m_height->m_terrace.get(i, j - 1) > cur) {
       //   wat = 0.4;
       // }
@@ -174,10 +199,13 @@ void TrColorMap::updateDisplay(TrMap* map) {
       // printf("ASFDS\n");
       // TODO: why can't I just assign it in one go???s
       Vec3<double> norm;
-      norm = map->m_normal->at(i,j);
+      norm = map->m_normal->at(i, j);
+      norm.z *= 4;
+      norm.normalize();
       // exit(0);
 
       double doot = m_light.dot(norm);
+      // doot = 1.0;
       // printf("%f\n", m_light.z);
       if (m_light.z > 0 && doot >= 0) {
         wat *= doot;
@@ -190,8 +218,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
         wat *= doot * 0.2;
 
         this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat * 2 +
-            0.4);
+            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat * 2 + 0.4);
       }
 
       // render water
@@ -235,8 +262,8 @@ void TrColorMap::updateDisplay(TrMap* map) {
           norm.y = htb - htt;
           norm.z = 1.0;
 
-          norm.x *= sqrt(map->m_water->m_water_avg->at(i,j));
-          norm.y *= sqrt(map->m_water->m_water_avg->at(i,j));
+          norm.x *= sqrt(map->m_water->m_water_avg->at(i, j));
+          norm.y *= sqrt(map->m_water->m_water_avg->at(i, j));
 
           norm.normalize();
 
@@ -261,12 +288,18 @@ void TrColorMap::updateDisplay(TrMap* map) {
           double boop = half.dot(norm);
           boop = pow(boop, 3);
 
-          this->at(i, j) = lerpColor(this->at(i, j),  0xFF3A5BAA, boop);
+          this->at(i, j) = lerpColor(this->at(i, j), 0xFF3A5BAA, boop);
           // this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
           wcolor.x += (0x5A - wcolor.x) * boop;
           wcolor.y += (0x8B - wcolor.y) * boop;
           wcolor.z += (0xCA - wcolor.z) * boop;
 
+          boop = pow(boop, 50);
+
+          this->at(i, j) = lerpColor(this->at(i, j), 0xFFFFFFFF, boop);
+          wcolor.x += (0xFF - wcolor.x) * boop;
+          wcolor.y += (0xFF - wcolor.y) * boop;
+          wcolor.z += (0xFF - wcolor.z) * boop;
         }
 
         wcolor = wcolor * alpha;
@@ -286,14 +319,11 @@ void TrColorMap::updateDisplay(TrMap* map) {
         ocolor.y = ((int)ocolor.y) & 0xFF;
         ocolor.z = ((int)ocolor.z) & 0xFF;
 
-        this->at(i, j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y <<
-        8 |
+        this->at(i, j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y << 8 |
                          (int)ocolor.z;
 
         norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
         norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
-
-  
       }
 
       norm.x = 0;
@@ -302,7 +332,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
       // do render stuff
 
-      if (map->m_height->at(i,j) * 255  < threshold[2]) {
+      if (map->m_height->at(i, j) * 255 < threshold[2]) {
         wat = 0.6;
       }
     }
@@ -382,7 +412,7 @@ void TrColorMap::updateLightAngle() {
   double hour = m_hour;
   double min = 0;
   double sec = 0;
-  double lat = 46.5;
+  double lat = 56.5;
   double lon = 6.5;
 
   double twopi = 2.0 * M_PI;

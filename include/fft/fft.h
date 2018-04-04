@@ -4,6 +4,7 @@
 #include "complex.h"
 
 
+// from https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
 
 struct vertex_ocean {
 	float   x,   y,   z; // vertex
@@ -123,7 +124,7 @@ class cOcean {
   public:
 	int N, Nplus1;				// dimension -- N should be a power of 2
 	float length;				// length parameter
-  
+
 	vertex_ocean *vertices;			// vertices for vertex buffer object
 
 	cOcean(const int N, const float A, const vector2 w, const float length, bool geometry);

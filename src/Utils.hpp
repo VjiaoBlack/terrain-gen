@@ -261,8 +261,9 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-          // printf("asdf1\n");
-         this->m_len = 3; }
+    // printf("asdf1\n");
+    this->m_len = 3;
+  }
   Vec3(Vec<T, 3> v)
       : Vec<T, 3>(),
         r(this->m_dat[0]),
@@ -271,7 +272,7 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-          // printf("asdf2\n");
+    // printf("asdf2\n");
     memcpy(this->m_dat, v.m_dat, sizeof(T) * 3);
     this->r = this->m_dat[0];
     this->g = this->m_dat[1];
@@ -280,7 +281,7 @@ class Vec3 : public Vec<T, 3> {
     this->x = this->m_dat[0];
     this->y = this->m_dat[1];
     this->z = this->m_dat[2];
-     this->m_len = 3; 
+    this->m_len = 3;
   }
 
   Vec3(T x, T y, T z)
@@ -291,11 +292,11 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-          // printf("asdf3\n");
+    // printf("asdf3\n");
     this->m_dat[0] = x;
     this->m_dat[1] = y;
     this->m_dat[2] = z;
-     this->m_len = 3; 
+    this->m_len = 3;
   }
 
   T& r;
@@ -345,7 +346,7 @@ class Vec3 : public Vec<T, 3> {
 //    this->m_len = 4; }
 //   Vec4(Vec<T, 4> v) : Vec<T, 4>() {
 //     memcpy(this->m_dat, v.m_dat, sizeof(T) * 4);
-//      this->m_len = 4; 
+//      this->m_len = 4;
 //   }
 
 //   Vec4(T r, T g, T b, T a) : Vec<T, 4>() {
@@ -353,7 +354,7 @@ class Vec3 : public Vec<T, 3> {
 //     this->m_dat[1] = g;
 //     this->m_dat[2] = b;
 //     this->m_dat[3] = a;
-//      this->m_len = 4; 
+//      this->m_len = 4;
 //   }
 
 //   T& r = this->m_dat[0];
