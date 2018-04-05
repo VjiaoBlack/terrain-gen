@@ -627,7 +627,8 @@ void cOcean::render(float t, bool use_fft) {
   // 		Model = glm::translate(Model, glm::vec3(length * i, 0, length *
   // -j));
   // 		glUniformMatrix4fv(model, 1, GL_FALSE, glm::value_ptr(Model));
-  // 		glDrawElements(geometry ? GL_LINES : GL_TRIANGLES, indices_count,
+  // 		glDrawElements(geometry ? GL_LINES : GL_TRIANGLES,
+  // indices_count,
   // GL_UNSIGNED_INT, 0);
   // 	}
   // }

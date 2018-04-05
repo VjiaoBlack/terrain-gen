@@ -146,68 +146,33 @@ void TrColorMap::updateDisplay(TrMap* map) {
       //                    * 10.0);
       // }
       float wat = 0.6;
-     //  Vec3<double> boopnorm(0,0,1);
 
-     //  float cur = map->m_height->m_terrace.get(i, j);
-     //  if (map->m_height->m_terrace.get(i - 1, j) < cur) {
-     //    // wat = 0.8;
-     //    boopnorm.y = -1;
-     //  }
-     //  if (map->m_height->m_terrace.get(i + 1, j) < cur) {
-     //    // wat = 0.8;
-     //    boopnorm.y = -1;
-     //  }
-
-     //  if (map->m_height->m_terrace.get(i, j - 1) < cur) {
-     //    // wat = 0.8;
-     //    boopnorm.x = -1;
-     //  }
-
-     //  // if (map->m_height->m_terrace.get(i - 2, j) > cur ||
-     //  //     map->m_height->m_terrace.get(i, j - 2) > cur ||
-     //  //     map->m_height->m_terrace.get(i - 1, j - 1) > cur ||
-     //  //     map->m_height->m_terrace.get(i - 2, j - 1) > cur ||
-     //  //     map->m_height->m_terrace.get(i - 1, j - 2) > cur) {
-     //  //   // wat = 0.45;
-     //  // }
-
-     //  if (map->m_height->m_terrace.get(i - 1, j) > cur) {
-     //    // wat = 0.15;
-     //    boopnorm.y = 1;
-
-     //  }
-     // if (map->m_height->m_terrace.get(i + 1, j) > cur) {
-     //    // wat = 0.8;
-     //    boopnorm.y = 1;
-     //  }
-
-
-
-     //  if (map->m_height->m_terrace.get(i, j - 1) > cur) {
-     //    // wat = 0.15;
-     //    boopnorm.x = 1;
-
-     //  }
-
-     //  boopnorm.normalize();
-
-     //  wat = m_light.dot(boopnorm);
-      // if (map->m_height->m_terrace.get(i, j - 1) > cur) {
-      //   wat = 0.4;
-      // }
-
-      // printf("ASFDS\n");
       // TODO: why can't I just assign it in one go???s
       Vec3<double> norm;
       norm = map->m_normal->at(i, j);
-      norm.z *= 4;
+      norm.z *= 2;
       norm.normalize();
       // exit(0);
 
       double doot = m_light.dot(norm);
       // doot = 1.0;
       // printf("%f\n", m_light.z);
-      if (m_light.z > 0 && doot >= 0) {
+
+      if (doot < 0) {
+        doot = 0;
+      }
+
+      if (m_light.z > -0.1 && m_light.z <= 0) {
+
+        double a = 1.0 - m_light.z * 10;
+
+          wat += wat * 0.8 * a;
+
+      }
+
+
+
+      if (m_light.z > 0) {
         wat *= doot;
         // wat *= doot * m_elevation;
         this->at(i, j) =
@@ -218,8 +183,9 @@ void TrColorMap::updateDisplay(TrMap* map) {
         wat *= doot * 0.2;
 
         this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat * 2 + 0.4);
+            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
       }
+
 
       // render water
       if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
@@ -272,14 +238,23 @@ void TrColorMap::updateDisplay(TrMap* map) {
           // this->at(i, j) = this->at(i,j) +
           //     multiplyColor( 0xFF3A5BAA, doot, doot, doot);
 
-          Vec3<double> eyeVec((double)j / m_cols - 0.5,
-                              (double)i / m_rows - 0.5, 0.5);
+          Vec3<double> sunlight = m_light;
+
+
+          // Vec3<double> eyeVec((double)j / m_cols - 0.5,
+          //                     (double)i / m_rows - 0.5, 0.5);
+
+        Vec3<double> eyeVec(0, 0, 1);
+
+
+          sunlight.normalize();
+
           // printf("%f\n", eyeVec.x);
           eyeVec.x *= -(double)m_cols / m_rows;
           eyeVec.y *= -1;
           eyeVec.normalize();
 
-          Vec3<double> half = eyeVec + m_light;
+          Vec3<double> half = eyeVec + sunlight;
           // norm.x = 0;
           // norm.y = 0;
           // norm.z = 1;
@@ -294,7 +269,13 @@ void TrColorMap::updateDisplay(TrMap* map) {
           wcolor.y += (0x8B - wcolor.y) * boop;
           wcolor.z += (0xCA - wcolor.z) * boop;
 
-          boop = pow(boop, 50);
+
+          half.x = (double) j / m_rows - 0.5 - m_light.x * 2.0;
+          half.y = (double) i / m_rows - 0.5 - m_light.y * 2.0;
+          half.z = 0.5 ;
+          half.normalize();
+          boop = half.dot(norm);
+          boop = pow(boop, 16);
 
           this->at(i, j) = lerpColor(this->at(i, j), 0xFFFFFFFF, boop);
           wcolor.x += (0xFF - wcolor.x) * boop;
@@ -412,7 +393,8 @@ void TrColorMap::updateLightAngle() {
   double hour = m_hour;
   double min = 0;
   double sec = 0;
-  double lat = 56.5;
+  // double lat = 56.5;
+  double lat = 40;
   double lon = 6.5;
 
   double twopi = 2.0 * M_PI;

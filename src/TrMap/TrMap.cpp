@@ -60,7 +60,7 @@ TrMap::TrMap(int rows, int cols)
 
   m_height->update(this);
 
-  float water_height = 0.45;
+  float water_height = 0.48;
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       if (m_height->at(i, j) <= water_height) {
