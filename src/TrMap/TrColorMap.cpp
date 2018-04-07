@@ -1,8 +1,8 @@
 
 #include "TrColorMap.hpp"
-#include "TrMap.hpp"
-#include "../TrUtils/TrSimulation.hpp"
 #include "../TrUtils/TrMath.hpp"
+#include "../TrUtils/TrSimulation.hpp"
+#include "TrMap.hpp"
 
 int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)
@@ -358,7 +358,6 @@ void TrColorMap::updateMoistureDemo(TrMap* map) {
 }
 
 void TrColorMap::updateLightAngle() {
-
   Vec2<double> bleh = getSunPos(m_month, m_day, m_hour);
 
   m_light.z = sin(bleh[1]);
@@ -366,7 +365,6 @@ void TrColorMap::updateLightAngle() {
   m_light.y = cos(bleh[1]) * cos(bleh[0]);
 
   m_elevation = bleh[1];
-
 
   Vec2<double> melhe = getMoonPos(m_month, m_day, m_hour);
 

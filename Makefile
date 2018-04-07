@@ -6,7 +6,7 @@
 
 COMPILE=clang++ 
 # FLAGS=-g -fno-omit-frame-pointer -fsanitize=address -std=gnu++11 -Winline -Wall -O1
-FLAGS=-std=gnu++11 -Winline -Wall -O3
+FLAGS=-std=gnu++11 -Winline -Wall -Wextra -O3
 LINK=-I/usr/local/include -L/usr/local/lib -lpthread -lSDL2 -lSDL2_image -lSDL2_ttf
 
 # clang-format --style=LLVM --sort-includes src/Utils.hpp 

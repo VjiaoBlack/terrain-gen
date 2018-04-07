@@ -6,10 +6,7 @@
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
 #include "TrRenderLoop/TrRenderLoop.hpp"
 
-TrGame::TrGame() {
-  TrData data = TrData::getInstance();
-  m_gameStateTransition = nullptr;
-
+void TrGame::setupSDL() {
   // Initialize
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize - SDL Error: %s\n", SDL_GetError());
@@ -46,9 +43,20 @@ TrGame::TrGame() {
            IMG_GetError());
     exit(2);
   }
+}
 
-  // setup for rendering loop
-  m_quit = false;
+TrGame::TrGame()
+    : m_quit(false),
+      m_gameStateTransition(nullptr),
+      m_deltaTime(0),
+      m_frames(0),
+      m_frameRate(30),
+      m_xOff(0),
+      m_yOff(0),
+      m_speed(1) {
+  TrData data = TrData::getInstance();
+
+  this->setupSDL();
 
   // create texture for map
   m_mapTexture =
@@ -59,7 +67,6 @@ TrGame::TrGame() {
 
   m_xOff = 0;
   m_yOff = 0;
-
   m_speed = 1;
 
   // initialize random number generator for rain
@@ -73,7 +80,6 @@ TrGame::TrGame() {
   m_deltaTime = 0;
   m_frames = 0;
   m_frameRate = 30;
-  // double  averageFrameTimeMilliseconds = 33.333;
 
   m_font = TTF_OpenFont("anirb.ttf", 26);
   if (!m_font) {
