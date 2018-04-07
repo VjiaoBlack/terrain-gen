@@ -17,7 +17,7 @@ TrGame::TrGame() {
   }
 
   // Create window
-  m_SDLWindow = SDL_CreateWindow("test_driving", SDL_WINDOWPOS_UNDEFINED,
+  m_SDLWindow = SDL_CreateWindow("athena", SDL_WINDOWPOS_UNDEFINED,
                                  SDL_WINDOWPOS_UNDEFINED, sz(K_DISPLAY_SIZE_X),
                                  sz(K_DISPLAY_SIZE_Y), SDL_WINDOW_SHOWN);
   if (m_SDLWindow == nullptr) {
