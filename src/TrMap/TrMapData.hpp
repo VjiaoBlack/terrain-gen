@@ -183,7 +183,6 @@ void TrMapData<T>::perlinNoise(unsigned int s, int level, double size,
   // noise
   // for (unsigned int i = 0; i < s; ++i) {      // y
   //     for (unsigned int j = 0; j < s; ++j) {  // x
-  printf("%d, %d\n", m_rows, m_cols);
   for (unsigned int i = 0; i < m_rows; ++i) {    // y
     for (unsigned int j = 0; j < m_cols; ++j) {  // x
       double x = (double)j / ((double)(s));

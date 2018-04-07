@@ -54,10 +54,6 @@ class TrGame {
 
   int m_xOff = 0;
   int m_yOff = 0;
-
-  // TODO: help
-  const int c_pixelSize = sz(K_DISPLAY_SIZE_X) / K_MAP_SIZE_X;
-
   int m_speed = 1;
 
   TrRenderLoop* m_gameStateTransition;

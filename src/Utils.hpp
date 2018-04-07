@@ -225,30 +225,30 @@ class Vec {
   }
 };
 
-// template <typename T>
-// class Vec2 : public Vec<T, 2> {
-//  public:
-//   Vec2() : Vec<T, 2>() { this->m_len = 2; }
-//   Vec2(Vec<T, 2> v) : Vec<T, 2>() {
-//     memcpy(this->m_dat, v.m_dat, sizeof(T) * 2);
-//     this->m_len = 2;
-//   }
+template <typename T>
+class Vec2 : public Vec<T, 2> {
+ public:
+  Vec2() : Vec<T, 2>() { this->m_len = 2; }
+  Vec2(Vec<T, 2> v) : Vec<T, 2>() {
+    memcpy(this->m_dat, v.m_dat, sizeof(T) * 2);
+    this->m_len = 2;
+  }
 
-//   Vec2(T x, T y) : Vec<T, 2>() {
-//     this->m_dat[0] = x;
-//     this->m_dat[1] = y;
-//     this->m_len = 2;
-//   }
+  Vec2(T x, T y) : Vec<T, 2>() {
+    this->m_dat[0] = x;
+    this->m_dat[1] = y;
+    this->m_len = 2;
+  }
 
-//   T& x = this->m_dat[0];
-//   T& y = this->m_dat[1];
+  T& x = this->m_dat[0];
+  T& y = this->m_dat[1];
 
-//   // Vec2<T>& operator=(const Vec2<T>& v) { return Vec<T, 2>::operator=(v); }
-//   // Vec2<T>& operator=(const Vec<T, 2>& v) {
-//   //   memcpy(this->m_dat, v.m_dat, sizeof(T) * 2);
-//   //   return *this;
-//   // }
-// };
+  // Vec2<T>& operator=(const Vec2<T>& v) { return Vec<T, 2>::operator=(v); }
+  // Vec2<T>& operator=(const Vec<T, 2>& v) {
+  //   memcpy(this->m_dat, v.m_dat, sizeof(T) * 2);
+  //   return *this;
+  // }
+};
 
 template <typename T>
 class Vec3 : public Vec<T, 3> {
@@ -261,7 +261,6 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-    // printf("asdf1\n");
     this->m_len = 3;
   }
   Vec3(Vec<T, 3> v)
@@ -272,7 +271,6 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-    // printf("asdf2\n");
     memcpy(this->m_dat, v.m_dat, sizeof(T) * 3);
     this->r = this->m_dat[0];
     this->g = this->m_dat[1];
@@ -292,7 +290,6 @@ class Vec3 : public Vec<T, 3> {
         x(this->m_dat[0]),
         y(this->m_dat[1]),
         z(this->m_dat[2]) {
-    // printf("asdf3\n");
     this->m_dat[0] = x;
     this->m_dat[1] = y;
     this->m_dat[2] = z;
@@ -308,8 +305,6 @@ class Vec3 : public Vec<T, 3> {
   T& z;
 
   inline Vec3<T>& operator=(const Vec3<T>& v) {
-    // printf("oh\n");
-
     this->m_dat[0] = v.m_dat[0];
     this->m_dat[1] = v.m_dat[1];
     this->m_dat[2] = v.m_dat[2];
@@ -318,7 +313,6 @@ class Vec3 : public Vec<T, 3> {
     return *this;
   }
   // Vec3<T>& operator=(const Vec<T, 3> v) {
-  //   // printf("wat\n");
 
   //   memcpy(this->m_dat, v.m_dat, sizeof(T) * 3);
   //   return *this;
@@ -339,35 +333,34 @@ class Vec3 : public Vec<T, 3> {
   }
 };
 
-// template <typename T>
-// class Vec4 : public Vec<T, 4> {
-//  public:
-//   Vec4() : Vec<T, 4>() {
-//    this->m_len = 4; }
-//   Vec4(Vec<T, 4> v) : Vec<T, 4>() {
-//     memcpy(this->m_dat, v.m_dat, sizeof(T) * 4);
-//      this->m_len = 4;
-//   }
+template <typename T>
+class Vec4 : public Vec<T, 4> {
+ public:
+  Vec4() : Vec<T, 4>() { this->m_len = 4; }
+  Vec4(Vec<T, 4> v) : Vec<T, 4>() {
+    memcpy(this->m_dat, v.m_dat, sizeof(T) * 4);
+    this->m_len = 4;
+  }
 
-//   Vec4(T r, T g, T b, T a) : Vec<T, 4>() {
-//     this->m_dat[0] = r;
-//     this->m_dat[1] = g;
-//     this->m_dat[2] = b;
-//     this->m_dat[3] = a;
-//      this->m_len = 4;
-//   }
+  Vec4(T r, T g, T b, T a) : Vec<T, 4>() {
+    this->m_dat[0] = r;
+    this->m_dat[1] = g;
+    this->m_dat[2] = b;
+    this->m_dat[3] = a;
+    this->m_len = 4;
+  }
 
-//   T& r = this->m_dat[0];
-//   T& g = this->m_dat[1];
-//   T& b = this->m_dat[2];
-//   T& a = this->m_dat[3];
+  T& r = this->m_dat[0];
+  T& g = this->m_dat[1];
+  T& b = this->m_dat[2];
+  T& a = this->m_dat[3];
 
-//   // Vec4<T>& operator=(const Vec4<T>& v) { return Vec<T, 4>::operator=(v); }
-//   // Vec4<T>& operator=(const Vec<T, 4>& v) {
-//   //   memcpy(this->m_dat, v.m_dat, sizeof(T) * 4);
-//   //   return *this;
-//   // }
-// };
+  // Vec4<T>& operator=(const Vec4<T>& v) { return Vec<T, 4>::operator=(v); }
+  // Vec4<T>& operator=(const Vec<T, 4>& v) {
+  //   memcpy(this->m_dat, v.m_dat, sizeof(T) * 4);
+  //   return *this;
+  // }
+};
 
 // class Vec3 {
 //  public:

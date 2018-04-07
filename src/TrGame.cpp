@@ -9,42 +9,7 @@
 TrGame::TrGame() {
   TrData data = TrData::getInstance();
   m_gameStateTransition = nullptr;
-  // exit(0);
 
-  // Vec<int, 3> lol(0, 1, 2);
-  Vec3<double> lol;
-  lol.x = 0;
-  lol.y = 1;
-  lol.z = 2;
-
-  // lol.r = 4;
-
-  // lol = lol * 2;
-
-  // Vec<int, 3> asdf;
-  lol = lol * 3;
-  // lol *= 2;
-
-  printf("%f, %f, %f\n", lol[0], lol[1], lol[2]);
-  printf("%f\n", lol[3]);
-
-  lol[0] = 2;
-
-  // printf("%f\n", lol.x);
-  printf("%f\n", lol[0]);
-
-  // vector<Vec3<double> > vec(10);
-
-  // vec[3].x = 3;
-  // printf("%f\n", vec[3].x);
-
-  // TrNormalMap boop(3, 3);
-
-  // printf("%f\n", boop.get(1, 1).x);
-
-  // exit(0);
-
-  //
   // Initialize
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize - SDL Error: %s\n", SDL_GetError());
@@ -166,16 +131,16 @@ void TrGame::handleKey(int SDLKey) {
       m_speed = 1;
       break;
     case SDLK_UP:
-      m_yOff -= c_pixelSize * m_speed;
+      m_yOff -= K_DISPLAY_SCALE * m_speed;
       break;
     case SDLK_DOWN:
-      m_yOff += c_pixelSize * m_speed;
+      m_yOff += K_DISPLAY_SCALE * m_speed;
       break;
     case SDLK_LEFT:
-      m_xOff -= c_pixelSize * m_speed;
+      m_xOff -= K_DISPLAY_SCALE * m_speed;
       break;
     case SDLK_RIGHT:
-      m_xOff += c_pixelSize * m_speed;
+      m_xOff += K_DISPLAY_SCALE * m_speed;
       break;
   }
 }
@@ -220,12 +185,13 @@ void TrGame::run() {
     m_frames++;
 
     // display FPS
+    // TODO: fix (make this update faster)
     if (clockToMilliseconds(m_deltaTime) > 100.0) {  // every second
       m_frameRate = (double)m_frames;                // more stable
       m_frames = 0;
       m_deltaTime -= CLOCKS_PER_SEC;
 
-      std::cout << "fps: " << m_frameRate << "        \r";
+      std::cout << "fps: " << m_frameRate << "        \n";
       std::flush(std::cout);
     }
 
@@ -241,12 +207,7 @@ void TrGame::handleInput() {
   m_buttonsDownPrev.empty();
   m_keysDownPrev = m_keysDown;
   m_buttonsDownPrev = m_buttonsDown;
-  // for (auto it = m_keysDown.begin(); it != m_keysDown.end(); it++) {
-  //   m_keysDownPrev.insert(*it);
-  // }
-  // for (auto it = m_buttonsDown.begin(); it != m_buttonsDown.end(); it++) {
-  //   m_buttonsDownPrev.insert(*it);
-  // }
+
   while (SDL_PollEvent(&m_SDLEvent) != 0) {
     if (m_SDLEvent.type == SDL_QUIT) {
       m_quit = true;
@@ -259,8 +220,8 @@ void TrGame::handleInput() {
     } else if (m_SDLEvent.type == SDL_MOUSEBUTTONUP) {
       m_buttonsDown.erase(m_SDLEvent.button.button);
     } else if (m_SDLEvent.type == SDL_MOUSEMOTION) {
-      m_mouseX = m_SDLEvent.motion.x / c_pixelSize;
-      m_mouseY = m_SDLEvent.motion.y / c_pixelSize;
+      m_mouseX = m_SDLEvent.motion.x / K_DISPLAY_SCALE;
+      m_mouseY = m_SDLEvent.motion.y / K_DISPLAY_SCALE;
     }
   }
 }

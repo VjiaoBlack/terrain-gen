@@ -30,7 +30,6 @@ TrMap::TrMap(int rows, int cols)
   m_yrandDist = std::uniform_int_distribution<int>(0, K_MAP_SIZE_Y);
   m_yfrandDist = std::uniform_real_distribution<double>(0, K_MAP_SIZE_Y);
 
-  printf("START\n");
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       m_normal->at(i, j).z = 1.0f;
