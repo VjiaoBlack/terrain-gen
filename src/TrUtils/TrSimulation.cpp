@@ -7,7 +7,7 @@
 
 double daysAtMonth[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-Vec2<double> getSunPos(int month, int day, double hour) {
+dvec2 getSunPos(int month, int day, double hour) {
   double year = 2000;
   double min = 0;
   double sec = 0;
@@ -137,10 +137,10 @@ Vec2<double> getSunPos(int month, int day, double hour) {
     m_elevation = el;
   */
 
-  return Vec2<double>(az, el);
+  return dvec2(az, el);
 }
 
-Vec2<double> getMoonPos(int month, int day, double hour) {
+dvec2 getMoonPos(int month, int day, double hour) {
   double year = 2000;
   // int month = m_month;
   // double day = m_day;
@@ -277,27 +277,28 @@ Vec2<double> getMoonPos(int month, int day, double hour) {
       23.439291 - 0.0130042 * T - 0.00000016 * T * T + 0.000000504 * T * T * T;
   Obl = Obl * deg2rad;
   // double RotM = [1 0 0; 0 cos(Obl) sin(Obl); 0 -sin(Obl) cos(Obl)];
-  Vec3<double> RotM1(1, 0, 0);
-  Vec3<double> RotM2(0, cos(Obl), sin(Obl));
-  Vec3<double> RotM3(0, -sin(Obl), cos(Obl));
+  dvec3 RotM1(1, 0, 0);
+  dvec3 RotM2(0, cos(Obl), sin(Obl));
+  dvec3 RotM3(0, -sin(Obl), cos(Obl));
   // Apply the rotational matrix to the ecliptic rectangular coordinates// Also,
   // convert units to km instead of earth equatorial radii
 
-  Vec3<double> xyzeclip(xeclip, yeclip, zeclip);
+  dvec3 xyzeclip(xeclip, yeclip, zeclip);
 
-  Vec3<double> sol(RotM1.dot(xyzeclip), RotM2.dot(xyzeclip),
-                   RotM3.dot(xyzeclip));
+  dvec3 sol(dot(RotM1, xyzeclip), 
+            dot(RotM2, xyzeclip),
+            dot(RotM3, xyzeclip));
 
   sol = sol * EarthRadEq;
 
   // double xel, yel, zel;
-  Vec3<double> xyzsl;
+  dvec3 xyzsl;
   // Find the equatorial rectangular coordinates of the location @ sea level
   // [xsl ysl zsl] = sph2cart(Lon*deg2rad,Lat*deg2rad,EarthRadEq);
 
   TR_SPH_TO_CART(lon, lat, EarthRadEq, xyzsl.x, xyzsl.y, xyzsl.z);
 
-  // Vec3<double>solmsl = sol - xyzsl;
+  // dvec3solmsl = sol - xyzsl;
 
   // Find the Angle Between sea level coordinate vector and the moon vector
   // double theta1 = 180.0 -
@@ -356,5 +357,5 @@ Vec2<double> getMoonPos(int month, int day, double hour) {
     m_elevation = el;
   */
 
-  return Vec2<double>(Az, h);
+  return dvec2(Az, h);
 }

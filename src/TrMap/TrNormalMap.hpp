@@ -6,9 +6,9 @@ class TrMap;
 
 // map
 // is this too much memory? make sure to check
-class TrNormalMap : public TrMapData<Vec3<double> > {
+class TrNormalMap : public TrMapData<dvec3 > {
  public:
-  TrNormalMap(int rows, int cols) : TrMapData<Vec3<double> >(rows, cols) {}
+  TrNormalMap(int rows, int cols) : TrMapData<dvec3 >(rows, cols) {}
 
   void update(TrMap* map);
 };

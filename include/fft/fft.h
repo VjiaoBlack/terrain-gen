@@ -1,8 +1,9 @@
+
 #pragma once 
 
 #include <math.h>
-#include "complex.h"
 
+#include <glm/glm.hpp>
 
 // from https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
 

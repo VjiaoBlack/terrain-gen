@@ -7,6 +7,7 @@
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
 
+
 TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
   int score = 10;
 
@@ -62,7 +63,7 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
 
 void TrMainMenuLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
-                          game->m_yOff, game->c_pixelSize);
+                          game->m_yOff, K_DISPLAY_SCALE);
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};
 

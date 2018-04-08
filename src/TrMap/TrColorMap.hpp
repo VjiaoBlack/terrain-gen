@@ -7,6 +7,9 @@
 #include "../TrUtils/TrSimulation.hpp"
 #include "TrMapData.hpp"
 
+
+
+
 class TrMap;
 
 // map
@@ -14,8 +17,8 @@ class TrMap;
 class TrColorMap : public TrMapData<uint32_t> {
  public:
   int m_renderState;
-  Vec3<double> m_light;
-  Vec3<double> m_moonlight;
+  dvec3 m_light;
+  dvec3 m_moonlight;
   double m_hour;
   int m_day;
   int m_month;

@@ -120,6 +120,6 @@ TrRenderLoop* TrGameLoop::update(TrGame* game) {
 
 void TrGameLoop::render(TrGame* game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
-                          game->m_yOff, game->c_pixelSize);
+                          game->m_yOff, K_DISPLAY_SCALE);
   m_menu->draw();
 }

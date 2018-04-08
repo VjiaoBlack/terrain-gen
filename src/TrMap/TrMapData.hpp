@@ -17,8 +17,12 @@
 #include <set>
 #include <vector>
 
+#include <glm/glm.hpp>
+
 #include "../Perlin.hpp"
 #include "../Utils.hpp"
+
+using namespace glm;
 
 class TrMap;
 
