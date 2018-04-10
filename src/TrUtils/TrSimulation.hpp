@@ -3,8 +3,8 @@
 /**
  * TrSimulation.hpp
  */
-#include "../Utils.hpp"
 #include <glm/glm.hpp>
+#include "../Utils.hpp"
 
 using namespace glm;
 

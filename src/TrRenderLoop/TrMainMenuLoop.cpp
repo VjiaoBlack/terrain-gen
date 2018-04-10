@@ -7,7 +7,6 @@
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
 
-
 TrMainMenuLoop::TrMainMenuLoop(TrGame* game) {
   int score = 10;
 

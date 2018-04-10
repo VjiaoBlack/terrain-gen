@@ -148,7 +148,7 @@ dvec2 getMoonPos(int month, int day, double hour) {
   double min = 0;
   double sec = 0;
   // double lat = 56.5;
-  double lat = 40;
+  double lat = 20;
   double lon = 6.5;
 
   double twopi = 2.0 * M_PI;
@@ -164,6 +164,7 @@ dvec2 getMoonPos(int month, int day, double hour) {
   hour = hour + min / 60.0 + sec / 3600.0;  // hour plus fraction
   double delta = year - 1949;
   double leap = trunc(delta / 4);  // former leapyears
+
   double jd = 32916.5 + delta * 365.0 + leap + day + hour / 24.0;
 
   // The input to the Atronomer's almanach is the difference between
@@ -285,9 +286,7 @@ dvec2 getMoonPos(int month, int day, double hour) {
 
   dvec3 xyzeclip(xeclip, yeclip, zeclip);
 
-  dvec3 sol(dot(RotM1, xyzeclip), 
-            dot(RotM2, xyzeclip),
-            dot(RotM3, xyzeclip));
+  dvec3 sol(dot(RotM1, xyzeclip), dot(RotM2, xyzeclip), dot(RotM3, xyzeclip));
 
   sol = sol * EarthRadEq;
 
@@ -344,10 +343,10 @@ dvec2 getMoonPos(int month, int day, double hour) {
     Az = 360 - Az;
   }
   // Apply Paralax Correction if we are still on earth
-  double horParal = 8.794 / (r * 6379.14 / 149.59787e6);
-  double p = asin(cos(h * deg2rad) * sin((horParal / 3600) * deg2rad)) *
-             (180.0 / M_PI);
-  h = h - p;
+  // double horParal = 8.794 / (r * 6379.14 / 149.59787e6);
+  // double p = asin(cos(h * deg2rad) * sin((horParal / 3600) * deg2rad)) *
+  //            (180.0 / M_PI);
+  // h = h - p;
 
   /*
     m_moonlight.z = sin(h);
@@ -357,5 +356,5 @@ dvec2 getMoonPos(int month, int day, double hour) {
     m_elevation = el;
   */
 
-  return dvec2(Az, h);
+  return dvec2(Az * deg2rad, h * deg2rad);
 }

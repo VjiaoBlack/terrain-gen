@@ -7,10 +7,11 @@
 #include <random>
 #include <vector>
 
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+
+#include <glm/glm.hpp>
 
 // set to 2 (or more) if it's a retina screen, 1 if not.
 #define K_RETINA 1
@@ -30,6 +31,7 @@
 #define K_RGBA_BYTES 32
 
 using namespace std;
+using namespace glm;
 
 void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
                              int xOff, int yOff, int pixelSize);
@@ -48,6 +50,20 @@ inline double lerp5(double omin, double omax, double imin, double xx,
 
 inline double lerp3(double omin, double omax, double xx) {
   return omin + xx * (omax - omin);
+}
+
+inline dvec3 colorToVec(uint32_t color) {
+  //   ocolor.x = (this->at(i, j) & 0x00FF0000) >> 16;
+  // ocolor.y = (this->at(i, j) & 0x0000FF00) >> 8;
+  // ocolor.z = this->at(i, j) & 0x000000FF;
+
+  return dvec3((color & 0x00FF0000) >> 16, (color & 0x0000FF00) >> 8,
+               color & 0x000000FF);
+}
+
+inline uint32_t vecToColor(dvec3 color) {
+  return 0xFF000000 | ((int)color.x & 0xFF) << 16 | ((int)color.y & 0xFF) << 8 |
+         ((int)color.z & 0xFF);
 }
 
 inline double clockToMilliseconds(clock_t ticks) {

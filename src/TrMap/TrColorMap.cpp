@@ -4,13 +4,11 @@
 #include "../TrUtils/TrSimulation.hpp"
 #include "TrMap.hpp"
 
-
-
-// int 400 = 400;
+int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)
     : TrMapData<uint32_t>(rows, cols),
       m_renderState(0),
-      ocean(new cOcean(64, 0.0005, vector2(3, 3), 400, true)) {
+      ocean(new cOcean(64, 0.0005, vector2(3, 3), LENGTH, true)) {
   m_light = dvec3(0, 0, 1);
   m_light = normalize(m_light);
   m_hour = 6;
@@ -108,21 +106,10 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
   ocean->render(calcMs / 1000, true);
 
+  double deriv = 200.0 / LENGTH;
   for (int i = 1; i < m_rows - 1; i++) {
     for (int j = 1; j < m_cols - 1; j++) {
       // render land
-
-      int index = (j % ocean->N) + (i % ocean->N) * ocean->N;
-      int indexl = ((j - 1) % ocean->N) + (i % ocean->N) * ocean->N;
-      int indexr = ((j + 1) % ocean->N) + (i % ocean->N) * ocean->N;
-      int indext = (j % ocean->N) + ((i - 1) % ocean->N) * ocean->N;
-      int indexb = (j % ocean->N) + ((i + 1) % ocean->N) * ocean->N;
-
-      double ht = 0.5 + (200.0 / 400) * ocean->vertices[index].nz;
-      double htl = 0.5 + (200.0 / 400) * ocean->vertices[indexl].nz;
-      double htr = 0.5 + (200.0 / 400) * ocean->vertices[indexr].nz;
-      double htt = 0.5 + (200.0 / 400) * ocean->vertices[indext].nz;
-      double htb = 0.5 + (200.0 / 400) * ocean->vertices[indexb].nz;
 
       for (int c = 0; c < 9; c++) {
         if (map->m_height->get(i, j) * 255 < threshold[c]) {
@@ -136,160 +123,78 @@ void TrColorMap::updateDisplay(TrMap* map) {
         }
       }
 
-      // // moisture lerping
-      // if (map->m_height->at(i,j)  * 255 > threshold[2] &&
-      // map->m_moisture->at(i,j) < 0.1) {
-      //   this->at(i,j) = lerpColor(
-      //               lerpColor(0xFFEEDDBB, 0xFF5B3F31, (map->m_height->at(i,j)
-      //               - 0.458) * 0.8),
-      //                    this->at(i,j), 0.2 + 0.8 * map->m_moisture->at(i,j)
-      //                    * 10.0);
-      // }
-      float wat = 0.6;
+      double ambient = 0.4;
+      double directional = 0.6;
 
-      // TODO: why can't I just assign it in one go???s
-      dvec3 norm;
-      norm = map->m_normal->at(i, j);
-      norm.z *= 2;
-      norm = normalize(norm);
-      // exit(0);
-
-      double doot = dot(m_light, norm);
-      // doot = 1.0;
-      // printf("%f\n", m_light.z);
-
-      if (doot < 0) {
-        doot = 0;
-      }
+      dvec3 norm = map->m_normal->at(i, j);
+      double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
 
       if (m_light.z > -0.1 && m_light.z <= 0) {
-        double a = 1.0 + m_light.z * 10;
+        directional *= lerp5(0.0, 1.0, -0.1, m_light.z, 0.0);
+        directional *= LdotN;
+      } else if (m_light.z > 0) {
+        directional *= LdotN;
 
-        wat += wat * 0.8 * a;
-      }
-
-      if (m_light.z > 0) {
-        wat *= doot;
-        // wat *= doot * m_elevation;
-        this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
       } else {
-        double doot2 = dot(m_moonlight, map->m_normal->at(i, j));
-
-        wat *= doot * 0.2;
-
-        this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
+        double MdotN = dot(m_moonlight, map->m_normal->at(i, j));
+        directional *= MdotN * 0.2;
       }
+
+      this->at(i, j) =
+          multiplyColor(this->at(i, j), directional + ambient,
+                        directional + ambient, directional + ambient);
 
       // render water
       if (map->m_water->m_water_avg->at(i, j) >= 0.001) {
         float height =
             map->m_water->m_water_avg->at(i, j) + map->m_height->at(i, j);
-        // this->at(i, j) = 0xFF3A5BAA;
 
-        double alpha = 0.7 + 3 * map->m_water->m_water_avg->at(i, j);
-        if (alpha > 1.0) {
-          alpha = 1.0;
-        }
+        double alpha =
+            lerp5(0.6, 1.0, 0.001, map->m_water->m_water_avg->at(i, j), 0.10);
+        alpha = clamp(0.6, alpha, 1.0);
 
-        // 0xFF1A2B56, 0xFF253C78
-
-        dvec3 wcolor(0x1A, 0x2B, 0x56);
-        dvec3 ocolor;
-        ocolor.x = (this->at(i, j) & 0x00FF0000) >> 16;
-        ocolor.y = (this->at(i, j) & 0x0000FF00) >> 8;
-        ocolor.z = this->at(i, j) & 0x000000FF;
+        dvec3 ocolor = colorToVec(this->at(i, j));
+        dvec3 wcolor = m_deepWater;
 
         if (m_light.z > 0) {
-          norm.x = htr - htl;
-          norm.y = htb - htt;
+          // construct fake "normal" of the water surface
+          norm.x = deriv * ocean->vertices->gaussDx(i % ocean->N, j % ocean->N).nz;
+          norm.y = deriv * ocean->vertices->gaussDy(i % ocean->N, j % ocean->N).nz;
           norm.z = 1.0;
 
+          // modulate wave intensity by water depth
           norm.x *= sqrt(map->m_water->m_water_avg->at(i, j));
           norm.y *= sqrt(map->m_water->m_water_avg->at(i, j));
 
           norm = normalize(norm);
 
-          // double doot = dot(m_light, norm) * 0.4;
+          // using orthographic (0, 0, 1) eye vector
+          dvec3 sunlight = normalize(m_light);
+          dvec3 half = normalize(sunlight + dvec3(0, 0, 1));
 
-          // this->at(i, j) = this->at(i,j) +
-          //     multiplyColor( 0xFF3A5BAA, doot, doot, doot);
+          double HdotN = dot(half, norm);
+          HdotN = pow(HdotN, 8) * 0.5;
 
-          dvec3 sunlight = m_light;
-
-          // dvec3 eyeVec((double)j / m_cols - 0.5,
-          //                     (double)i / m_rows - 0.5, 0.5);
-
-          dvec3 eyeVec(0, 0, 1);
-
-          sunlight = normalize(sunlight);
-
-          // printf("%f\n", eyeVec.x);
-          eyeVec.x *= -(double)m_cols / m_rows;
-          eyeVec.y *= -1;
-          eyeVec = normalize(eyeVec);
-
-          dvec3 half = eyeVec + sunlight;
-          // norm.x = 0;
-          // norm.y = 0;
-          // norm.z = 1;
-
-          half = normalize(half);
-          double boop = dot(half, norm);
-          boop = pow(boop, 8) * 0.5;
-
-          this->at(i, j) = lerpColor(this->at(i, j), 0xFF3A5BAA, boop);
-          // this->at(i, j) = lerpColor(this->at(i, j),  0xFFFFFFFF, boop);
-          wcolor.x += (0x5A - wcolor.x) * boop;
-          wcolor.y += (0x8B - wcolor.y) * boop;
-          wcolor.z += (0xCA - wcolor.z) * boop;
+          this->at(i, j) =
+              lerpColor(this->at(i, j), vecToColor(m_shallowWater), HdotN);
+          wcolor += (m_mediumWater - wcolor) * HdotN;
 
           half.x = (double)j / m_rows - 0.5 - m_light.x * 2.0;
           half.y = (double)i / m_rows - 0.5 - m_light.y * 2.0;
           half.z = 0.5;
           half = normalize(half);
-          boop = dot(half, norm);
-          boop = pow(boop, 16) * 0.8;
+          HdotN = dot(half, norm);
+          HdotN = pow(HdotN, 16) * 0.8;
 
-          this->at(i, j) = lerpColor(this->at(i, j), 0xFFFFFFFF, boop);
-          wcolor.x += (0xFF - wcolor.x) * boop;
-          wcolor.y += (0xFF - wcolor.y) * boop;
-          wcolor.z += (0xFF - wcolor.z) * boop;
+          this->at(i, j) = lerpColor(this->at(i, j), 0xFFFFFFFF, HdotN);
+          wcolor += (dvec3(0xFF) - wcolor) * HdotN;
         }
 
-        wcolor = wcolor * alpha;
-        wcolor.x = ((int)wcolor.x) & 0xFF;
-        wcolor.y = ((int)wcolor.y) & 0xFF;
-        wcolor.z = ((int)wcolor.z) & 0xFF;
+        wcolor = clamp(wcolor * alpha, 0.0, 256.0);
+        ocolor = clamp(ocolor * (1.0 - alpha), 0.0, 256.0);
+        ocolor = clamp(wcolor + ocolor, 0.0, 256.0);
 
-        ocolor = ocolor * (1.0 - alpha);
-
-        ocolor.x = ((int)ocolor.x) & 0xFF;
-        ocolor.y = ((int)ocolor.y) & 0xFF;
-        ocolor.z = ((int)ocolor.z) & 0xFF;
-
-        ocolor = wcolor + ocolor;
-
-        ocolor.x = ((int)ocolor.x) & 0xFF;
-        ocolor.y = ((int)ocolor.y) & 0xFF;
-        ocolor.z = ((int)ocolor.z) & 0xFF;
-
-        this->at(i, j) = 0xFF000000 | (int)ocolor.x << 16 | (int)ocolor.y << 8 |
-                         (int)ocolor.z;
-
-        norm.x = 0 + 0.1 * sin(calcMs / 10.0 + i);
-        norm.y = 0 + 0.1 * cos(calcMs / 10.0 + j);
-      }
-
-      norm.x = 0;
-      norm.y = 0;
-      norm.z = 0;
-
-      // do render stuff
-
-      if (map->m_height->at(i, j) * 255 < threshold[2]) {
-        wat = 0.6;
+        this->at(i, j) = vecToColor(ocolor);
       }
     }
   }
@@ -345,15 +250,15 @@ void TrColorMap::updateMoistureDemo(TrMap* map) {
         int rip = floor(height * 128.0) - 32;
         this->at(i, j) = shiftColor(this->at(i, j), rip, rip, rip);
       } else {
-        float doot = dot(m_light, map->m_normal->at(i, j));
-        float wat = 0;
-        if (m_light.z > 0 && doot >= 0) {
-          wat *= 0.6 * doot;
+        float LdotN = dot(m_light, map->m_normal->at(i, j));
+        float directional = 0;
+        if (m_light.z > 0 && LdotN >= 0) {
+          directional *= 0.6 * LdotN;
         } else {
-          wat *= 0.4;
+          directional *= 0.4;
         }
-        this->at(i, j) =
-            multiplyColor(this->at(i, j), wat + 0.4, wat + 0.4, wat + 0.4);
+        this->at(i, j) = multiplyColor(this->at(i, j), directional + 0.4,
+                                       directional + 0.4, directional + 0.4);
       }
     }
   }

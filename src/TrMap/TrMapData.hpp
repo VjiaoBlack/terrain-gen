@@ -48,6 +48,10 @@ class TrMapData {
   inline void set(int r, int c, T p);
   inline T& at(int r, int c);
 
+  inline T gauss(int r, int c);
+  inline T gaussDx(int r, int c);
+  inline T gaussDy(int r, int c);
+
   virtual void update(TrMap* map){};
 
   void diamondSquare(int s, double level);
@@ -88,6 +92,29 @@ inline T& TrMapData<T>::at(int r, int c) {
   if (c >= m_cols) c -= m_cols;
 
   return m_data[r * m_cols + c];
+}
+
+template <class T>
+inline T TrMapData<T>::gauss(int r, int c) {
+  return 0.0625 * (4 * (this->at(r, c)) +
+                   2 * (this->at(r + 1, c) + this->at(r, c + 1) +
+                        this->at(r - 1, c) + this->at(r, c - 1)) +
+                   (this->at(r + 1, c + 1) + this->at(r + 1, c - 1) +
+                    this->at(r - 1 + 1) + this->at(r - 1, c - 1)));
+}
+
+template <class T>
+inline T TrMapData<T>::gaussDx(int r, int c) {
+  return 0.25 * (2 * (this->at(r, c + 1) - this->at(r, c - 1)) +
+                 (this->at(r + 1, c + 1) - this->at(r + 1, c - 1)) +
+                 (this->at(r - 1, c + 1) - this->at(r - 1, c - 1)));
+}
+
+template <class T>
+inline T TrMapData<T>::gaussDy(int r, int c) {
+  return 0.25 * (2 * (this->at(r + 1, c) - this->at(r - 1, c)) +
+                 (this->at(r + 1, c + 1) - this->at(r - 1, c + 1)) +
+                 (this->at(r + 1, c - 1) - this->at(r - 1, c - 1)));
 }
 
 template <class T>

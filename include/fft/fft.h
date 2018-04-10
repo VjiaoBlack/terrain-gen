@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "../../src/TrMap/TrMapData.hpp"
+
 // from https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
 
 struct vertex_ocean {
@@ -13,10 +15,50 @@ struct vertex_ocean {
 	float   a,   b,   c; // htilde0
 	float  _a,  _b,  _c; // htilde0mk conjugate
 	float  ox,  oy,  oz; // original position
+
+  vertex_ocean operator-(vertex_ocean v) {
+    return (vertex_ocean){
+       x -  v.x,  y - v.y,  z -   v.z, // vertex
+       nx - v.nx, ny - v.ny, nz -   v.nz, // normal
+       a -  v.a,  b - v.b,  c -   v.c, // htilde0
+       _a - v._a, _b - v._b, _c -   v._c, // htilde0mk conjugate
+       ox - v.ox, oy - v.oy, oz -   v.oz
+    };
+  }
+
+  vertex_ocean operator+(vertex_ocean v) {
+    return (vertex_ocean){
+       x +  v.x,  y + v.y,  z +   v.z, // vertex
+       nx + v.nx, ny + v.ny, nz +   v.nz, // normal
+       a +  v.a,  b + v.b,  c +   v.c, // htilde0
+       _a + v._a, _b + v._b, _c +   v._c, // htilde0mk conjugate
+       ox + v.ox, oy + v.oy, oz +   v.oz
+    };
+  }
+
+
+
 };
 
+inline vertex_ocean operator*(vertex_ocean v, float m) {
+  return (vertex_ocean){
+     v.x * m,  v.y * m,  v.z * m, // vertex
+     v.nx * m, v.ny * m, v.nz * m, // normal
+     v.a * m,  v.b * m,  v.c * m, // htilde0
+     v._a * m, v._b * m, v._c * m, // htilde0mk conjugate
+     v.ox * m, v.oy * m, v.oz * m
+  };
+}
 
-
+inline vertex_ocean operator*(float m, vertex_ocean v) {
+  return (vertex_ocean){
+     v.x * m,  v.y * m,  v.z * m, // vertex
+     v.nx * m, v.ny * m, v.nz * m, // normal
+     v.a * m,  v.b * m,  v.c * m, // htilde0
+     v._a * m, v._b * m, v._c * m, // htilde0mk conjugate
+     v.ox * m, v.oy * m, v.oz * m
+  };
+}
 
 class vector3 {
   private:
@@ -126,7 +168,8 @@ class cOcean {
 	int N, Nplus1;				// dimension -- N should be a power of 2
 	float length;				// length parameter
 
-	vertex_ocean *vertices;			// vertices for vertex buffer object
+	// vertex_ocean *vertices;			// vertices for vertex buffer object
+  TrMapData<vertex_ocean>* vertices;
 
 	cOcean(const int N, const float A, const vector2 w, const float length, bool geometry);
 	~cOcean();

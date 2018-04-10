@@ -1,6 +1,8 @@
 
 #include "../include/fft/fft.h"
 
+
+
 // from
 // https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
 vector3::vector3() : x(0.0f), y(0.0f), z(0.0f) {}
@@ -175,7 +177,9 @@ cOcean::cOcean(const int N, const float A, const vector2 w, const float length,
   h_tilde_dx = new complex_t[N * N];
   h_tilde_dz = new complex_t[N * N];
   fft = new cFFT(N);
-  vertices = new vertex_ocean[Nplus1 * Nplus1];
+  vertices = new TrMapData<vertex_ocean>(Nplus1, Nplus1);
+  vertices->m_rows = N;
+  vertices->m_cols = N;
   indices = new unsigned int[Nplus1 * Nplus1 * 10];
 
   int index;
@@ -188,20 +192,20 @@ cOcean::cOcean(const int N, const float A, const vector2 w, const float length,
       htilde0 = hTilde_0(n_prime, m_prime);
       htilde0mk_conj = hTilde_0(-n_prime, -m_prime).conj();
 
-      vertices[index].a = htilde0.a;
-      vertices[index].b = htilde0.b;
-      vertices[index]._a = htilde0mk_conj.a;
-      vertices[index]._b = htilde0mk_conj.b;
+      vertices->m_data[index].a = htilde0.a;
+      vertices->m_data[index].b = htilde0.b;
+      vertices->m_data[index]._a = htilde0mk_conj.a;
+      vertices->m_data[index]._b = htilde0mk_conj.b;
 
-      vertices[index].ox = vertices[index].x =
+      vertices->m_data[index].ox = vertices->m_data[index].x =
           (n_prime - N / 2.0f) * length / N;
-      vertices[index].oy = vertices[index].y = 0.0f;
-      vertices[index].oz = vertices[index].z =
+      vertices->m_data[index].oy = vertices->m_data[index].y = 0.0f;
+      vertices->m_data[index].oz = vertices->m_data[index].z =
           (m_prime - N / 2.0f) * length / N;
 
-      vertices[index].nx = 0.0f;
-      vertices[index].ny = 1.0f;
-      vertices[index].nz = 0.0f;
+      vertices->m_data[index].nx = 0.0f;
+      vertices->m_data[index].ny = 1.0f;
+      vertices->m_data[index].nz = 0.0f;
     }
   }
 
@@ -264,7 +268,7 @@ cOcean::~cOcean() {
   if (h_tilde_dx) delete[] h_tilde_dx;
   if (h_tilde_dz) delete[] h_tilde_dz;
   if (fft) delete fft;
-  if (vertices) delete[] vertices;
+  if (vertices) delete vertices;
   if (indices) delete[] indices;
 }
 
@@ -365,8 +369,8 @@ complex_t cOcean::hTilde_0(int n_prime, int m_prime) {
 complex_t cOcean::hTilde(float t, int n_prime, int m_prime) {
   int index = m_prime * Nplus1 + n_prime;
 
-  complex_t htilde0(vertices[index].a, vertices[index].b);
-  complex_t htilde0mkconj(vertices[index]._a, vertices[index]._b);
+  complex_t htilde0(vertices->m_data[index].a, vertices->m_data[index].b);
+  complex_t htilde0mkconj(vertices->m_data[index]._a, vertices->m_data[index]._b);
 
   float omegat = dispersion(n_prime, m_prime) * t;
 
@@ -430,52 +434,52 @@ void cOcean::evaluateWaves(float t) {
     for (int n_prime = 0; n_prime < N; n_prime++) {
       index = m_prime * Nplus1 + n_prime;
 
-      x = vector2(vertices[index].x, vertices[index].z);
+      x = vector2(vertices->m_data[index].x, vertices->m_data[index].z);
 
       h_d_and_n = h_D_and_n(x, t);
 
-      vertices[index].y = h_d_and_n.h.a;
+      vertices->m_data[index].y = h_d_and_n.h.a;
 
-      vertices[index].x = vertices[index].ox + lambda * h_d_and_n.D.x;
-      vertices[index].z = vertices[index].oz + lambda * h_d_and_n.D.y;
+      vertices->m_data[index].x = vertices->m_data[index].ox + lambda * h_d_and_n.D.x;
+      vertices->m_data[index].z = vertices->m_data[index].oz + lambda * h_d_and_n.D.y;
 
-      vertices[index].nx = h_d_and_n.n.x;
-      vertices[index].ny = h_d_and_n.n.y;
-      vertices[index].nz = h_d_and_n.n.z;
+      vertices->m_data[index].nx = h_d_and_n.n.x;
+      vertices->m_data[index].ny = h_d_and_n.n.y;
+      vertices->m_data[index].nz = h_d_and_n.n.z;
 
       if (n_prime == 0 && m_prime == 0) {
-        vertices[index + N + Nplus1 * N].y = h_d_and_n.h.a;
+        vertices->m_data[index + N + Nplus1 * N].y = h_d_and_n.h.a;
 
-        vertices[index + N + Nplus1 * N].x =
-            vertices[index + N + Nplus1 * N].ox + lambda * h_d_and_n.D.x;
-        vertices[index + N + Nplus1 * N].z =
-            vertices[index + N + Nplus1 * N].oz + lambda * h_d_and_n.D.y;
+        vertices->m_data[index + N + Nplus1 * N].x =
+            vertices->m_data[index + N + Nplus1 * N].ox + lambda * h_d_and_n.D.x;
+        vertices->m_data[index + N + Nplus1 * N].z =
+            vertices->m_data[index + N + Nplus1 * N].oz + lambda * h_d_and_n.D.y;
 
-        vertices[index + N + Nplus1 * N].nx = h_d_and_n.n.x;
-        vertices[index + N + Nplus1 * N].ny = h_d_and_n.n.y;
-        vertices[index + N + Nplus1 * N].nz = h_d_and_n.n.z;
+        vertices->m_data[index + N + Nplus1 * N].nx = h_d_and_n.n.x;
+        vertices->m_data[index + N + Nplus1 * N].ny = h_d_and_n.n.y;
+        vertices->m_data[index + N + Nplus1 * N].nz = h_d_and_n.n.z;
       }
       if (n_prime == 0) {
-        vertices[index + N].y = h_d_and_n.h.a;
+        vertices->m_data[index + N].y = h_d_and_n.h.a;
 
-        vertices[index + N].x = vertices[index + N].ox + lambda * h_d_and_n.D.x;
-        vertices[index + N].z = vertices[index + N].oz + lambda * h_d_and_n.D.y;
+        vertices->m_data[index + N].x = vertices->m_data[index + N].ox + lambda * h_d_and_n.D.x;
+        vertices->m_data[index + N].z = vertices->m_data[index + N].oz + lambda * h_d_and_n.D.y;
 
-        vertices[index + N].nx = h_d_and_n.n.x;
-        vertices[index + N].ny = h_d_and_n.n.y;
-        vertices[index + N].nz = h_d_and_n.n.z;
+        vertices->m_data[index + N].nx = h_d_and_n.n.x;
+        vertices->m_data[index + N].ny = h_d_and_n.n.y;
+        vertices->m_data[index + N].nz = h_d_and_n.n.z;
       }
       if (m_prime == 0) {
-        vertices[index + Nplus1 * N].y = h_d_and_n.h.a;
+        vertices->m_data[index + Nplus1 * N].y = h_d_and_n.h.a;
 
-        vertices[index + Nplus1 * N].x =
-            vertices[index + Nplus1 * N].ox + lambda * h_d_and_n.D.x;
-        vertices[index + Nplus1 * N].z =
-            vertices[index + Nplus1 * N].oz + lambda * h_d_and_n.D.y;
+        vertices->m_data[index + Nplus1 * N].x =
+            vertices->m_data[index + Nplus1 * N].ox + lambda * h_d_and_n.D.x;
+        vertices->m_data[index + Nplus1 * N].z =
+            vertices->m_data[index + Nplus1 * N].oz + lambda * h_d_and_n.D.y;
 
-        vertices[index + Nplus1 * N].nx = h_d_and_n.n.x;
-        vertices[index + Nplus1 * N].ny = h_d_and_n.n.y;
-        vertices[index + Nplus1 * N].nz = h_d_and_n.n.z;
+        vertices->m_data[index + Nplus1 * N].nx = h_d_and_n.n.x;
+        vertices->m_data[index + Nplus1 * N].ny = h_d_and_n.n.y;
+        vertices->m_data[index + Nplus1 * N].nz = h_d_and_n.n.z;
       }
     }
   }
@@ -533,13 +537,13 @@ void cOcean::evaluateWavesFFT(float t) {
       h_tilde[index] = h_tilde[index] * sign;
 
       // height
-      vertices[index1].y = h_tilde[index].a;
+      vertices->m_data[index1].y = h_tilde[index].a;
 
       // displacement
       h_tilde_dx[index] = h_tilde_dx[index] * sign;
       h_tilde_dz[index] = h_tilde_dz[index] * sign;
-      vertices[index1].x = vertices[index1].ox + h_tilde_dx[index].a * lambda;
-      vertices[index1].z = vertices[index1].oz + h_tilde_dz[index].a * lambda;
+      vertices->m_data[index1].x = vertices->m_data[index1].ox + h_tilde_dx[index].a * lambda;
+      vertices->m_data[index1].z = vertices->m_data[index1].oz + h_tilde_dz[index].a * lambda;
 
       // normal
       h_tilde_slopex[index] = h_tilde_slopex[index] * sign;
@@ -547,46 +551,46 @@ void cOcean::evaluateWavesFFT(float t) {
       n = vector3(0.0f - h_tilde_slopex[index].a, 1.0f,
                   0.0f - h_tilde_slopez[index].a)
               .unit();
-      vertices[index1].nx = n.x;
-      vertices[index1].ny = n.y;
-      vertices[index1].nz = n.z;
+      vertices->m_data[index1].nx = n.x;
+      vertices->m_data[index1].ny = n.y;
+      vertices->m_data[index1].nz = n.z;
 
       // for tiling
       if (n_prime == 0 && m_prime == 0) {
-        vertices[index1 + N + Nplus1 * N].y = h_tilde[index].a;
+        vertices->m_data[index1 + N + Nplus1 * N].y = h_tilde[index].a;
 
-        vertices[index1 + N + Nplus1 * N].x =
-            vertices[index1 + N + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
-        vertices[index1 + N + Nplus1 * N].z =
-            vertices[index1 + N + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
+        vertices->m_data[index1 + N + Nplus1 * N].x =
+            vertices->m_data[index1 + N + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
+        vertices->m_data[index1 + N + Nplus1 * N].z =
+            vertices->m_data[index1 + N + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
 
-        vertices[index1 + N + Nplus1 * N].nx = n.x;
-        vertices[index1 + N + Nplus1 * N].ny = n.y;
-        vertices[index1 + N + Nplus1 * N].nz = n.z;
+        vertices->m_data[index1 + N + Nplus1 * N].nx = n.x;
+        vertices->m_data[index1 + N + Nplus1 * N].ny = n.y;
+        vertices->m_data[index1 + N + Nplus1 * N].nz = n.z;
       }
       if (n_prime == 0) {
-        vertices[index1 + N].y = h_tilde[index].a;
+        vertices->m_data[index1 + N].y = h_tilde[index].a;
 
-        vertices[index1 + N].x =
-            vertices[index1 + N].ox + h_tilde_dx[index].a * lambda;
-        vertices[index1 + N].z =
-            vertices[index1 + N].oz + h_tilde_dz[index].a * lambda;
+        vertices->m_data[index1 + N].x =
+            vertices->m_data[index1 + N].ox + h_tilde_dx[index].a * lambda;
+        vertices->m_data[index1 + N].z =
+            vertices->m_data[index1 + N].oz + h_tilde_dz[index].a * lambda;
 
-        vertices[index1 + N].nx = n.x;
-        vertices[index1 + N].ny = n.y;
-        vertices[index1 + N].nz = n.z;
+        vertices->m_data[index1 + N].nx = n.x;
+        vertices->m_data[index1 + N].ny = n.y;
+        vertices->m_data[index1 + N].nz = n.z;
       }
       if (m_prime == 0) {
-        vertices[index1 + Nplus1 * N].y = h_tilde[index].a;
+        vertices->m_data[index1 + Nplus1 * N].y = h_tilde[index].a;
 
-        vertices[index1 + Nplus1 * N].x =
-            vertices[index1 + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
-        vertices[index1 + Nplus1 * N].z =
-            vertices[index1 + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
+        vertices->m_data[index1 + Nplus1 * N].x =
+            vertices->m_data[index1 + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
+        vertices->m_data[index1 + Nplus1 * N].z =
+            vertices->m_data[index1 + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
 
-        vertices[index1 + Nplus1 * N].nx = n.x;
-        vertices[index1 + Nplus1 * N].ny = n.y;
-        vertices[index1 + Nplus1 * N].nz = n.z;
+        vertices->m_data[index1 + Nplus1 * N].nx = n.x;
+        vertices->m_data[index1 + Nplus1 * N].ny = n.y;
+        vertices->m_data[index1 + Nplus1 * N].nz = n.z;
       }
     }
   }

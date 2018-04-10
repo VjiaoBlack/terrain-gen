@@ -6,7 +6,6 @@
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
 #include "TrRenderLoop/TrRenderLoop.hpp"
 
-
 void TrGame::setupSDL() {
   // Initialize
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {

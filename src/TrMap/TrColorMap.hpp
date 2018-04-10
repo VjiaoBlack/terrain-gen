@@ -7,9 +7,6 @@
 #include "../TrUtils/TrSimulation.hpp"
 #include "TrMapData.hpp"
 
-
-
-
 class TrMap;
 
 // map
@@ -25,6 +22,10 @@ class TrColorMap : public TrMapData<uint32_t> {
   double m_elevation;
 
   cOcean* ocean;
+
+  const dvec3 m_shallowWater = dvec3(0x3A, 0x5B, 0xAA);
+  const dvec3 m_mediumWater = dvec3(0x5A, 0x8B, 0xCA);
+  const dvec3 m_deepWater = dvec3(0x1A, 0x2B, 0x56);
 
   TrColorMap(int rows, int cols);
 

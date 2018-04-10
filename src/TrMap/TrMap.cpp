@@ -168,13 +168,12 @@ void TrMap::update(set<int> keysDown) {
         m_color->m_hour += 0.06;
         if (m_color->m_hour > 24) {
           m_color->m_hour -= 24;
-          m_color->m_month += 1;
+          m_color->m_day += 1;
         }
         if (m_color->m_month > 12) {
           m_color->m_month -= 12;
         }
 
-        // printf("%f, %d\n", m_color->m_hour, m_color->m_month);
         m_color->updateLightAngle();
         m_color->update(this);
     }
