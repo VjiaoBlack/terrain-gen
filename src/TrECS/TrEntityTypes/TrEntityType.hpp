@@ -12,14 +12,8 @@ class TrFootprintComponent;
 class TrEntityType {
  public:
   TrGraphicsComponent* m_graphics;
-  TrFootprintComponent* m_footprint;
 
-  TrEntityType(TrGraphicsComponent* graphics,
-               TrFootprintComponent* footprint)
-      : m_graphics(graphics), m_footprint(footprint){};
+  TrEntityType(TrGraphicsComponent* graphics) : m_graphics(graphics){};
 
-  ~TrEntityType() { 
-  	delete m_footprint;
-  	delete m_graphics;
-  }
+  virtual ~TrEntityType() { delete m_graphics; }
 };

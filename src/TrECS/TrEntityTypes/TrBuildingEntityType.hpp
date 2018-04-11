@@ -4,9 +4,9 @@
  * TrBuildingEntityType.hpp
  */
 
-#include "TrEntityType.hpp"
-#include "../TrComponents/TrBuildingGraphicsComponent.hpp"
 #include "../TrComponents/TrFootprintComponent.hpp"
+#include "../TrComponents/TrGraphicsComponent.hpp"
+#include "TrEntityType.hpp"
 
 /**
  * @brief Anything that is a building
@@ -14,13 +14,10 @@
 class TrBuildingEntityType : public TrEntityType {
  public:
   TrFootprintComponent* m_footprint;
-  TrGraphicsComponent* m_graphics;
 
-  TrBuildingEntityType(TrBuildingGraphicsComponent* graphics,
+  TrBuildingEntityType(TrGraphicsComponent* graphics,
                        TrFootprintComponent* footprint)
-      : TrEntityType(graphics, footprint) {};
+      : TrEntityType(graphics), m_footprint(footprint){};
 
-  virtual ~TrBuildingEntityType() { 
-
-  }
+  virtual ~TrBuildingEntityType() { delete m_footprint; }
 };

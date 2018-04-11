@@ -4,24 +4,20 @@
  * TrBuildingEntity.hpp
  */
 
-#include "../TrComponents/TrBuildingGraphicsComponent.hpp"
 #include "../TrComponents/TrGraphicsComponent.hpp"
 #include "../TrEntities.hpp"
 
-class TrFootprintComponent;
+class TrBuildingEntityType;
 
 /**
  * @brief Anything that is a building
  */
 class TrBuildingEntity : public TrEntity {
  public:
-  TrGraphicsComponent* m_graphics;
-  TrFootprintComponent* m_footprint;
+  TrBuildingEntityType* m_type;
 
-  TrBuildingEntity(TrGame* game, SDL_Rect rect,
-                   TrBuildingGraphicsComponent* graphics,
-                   TrFootprintComponent* footprint)
-      : TrEntity(game, rect), m_graphics(graphics), m_footprint(footprint){};
+  TrBuildingEntity(TrGame* game, SDL_Rect rect, TrBuildingEntityType* type)
+      : TrEntity(game, rect), m_type(type){};
 
-  ~TrBuildingEntity() { free(m_footprint); }
+  ~TrBuildingEntity() {}
 };
