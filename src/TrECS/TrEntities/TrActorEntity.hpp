@@ -1,23 +1,23 @@
 #pragma once
 
 /**
- * TrBuildingEntity.hpp
+ * TrActorEntity.hpp
  */
 
-#include "../TrComponents/TrPhysicsComponent.hpp"
-#include "../TrComponents/TrPlanningComponent.hpp"
+#include "../TrComponents/TrGraphicsComponent.hpp"
 #include "../TrEntities.hpp"
 
+class TrActorEntityType;
+
 /**
- * @brief Anything that moves and is living
+ * @brief Anything that is a building
  */
 class TrActorEntity : public TrEntity {
  public:
-  TrPhysicsComponent* m_physics;
-  TrPlanningComponent* m_planning;
-  TrActorEntity(TrGame* game, SDL_Rect rect, TrGraphicsComponent* graphics,
-                TrPhysicsComponent* physics, TrPlanningComponent* planning)
-      : TrEntity(game, rect, graphics),
-        m_physics(physics),
-        m_planning(planning){};
+  TrActorEntityType* m_type;
+
+  TrActorEntity(TrGame* game, SDL_Rect rect, TrActorEntityType* type)
+      : TrEntity(game, rect), m_type(type){};
+
+  ~TrActorEntity() {}
 };
