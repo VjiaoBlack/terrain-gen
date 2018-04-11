@@ -7,6 +7,10 @@
 #include "../TrGame.hpp"
 #include "TrComponents.hpp"
 
+#include "TrComponents/TrGraphicsComponent.hpp"
+#include "TrComponents/TrPhysicsComponent.hpp"
+#include "TrComponents/TrPlanningComponent.hpp"
+
 /**
  * @brief General interface for all game entities
  */
@@ -16,23 +20,6 @@ class TrEntity {
 
   SDL_Rect m_rect;
 
-  TrGraphicsComponent* m_graphics;
-
-  TrEntity(TrGame* game, SDL_Rect rect, TrGraphicsComponent* graphics)
-      : m_game(game), m_rect(rect), m_graphics(graphics) {}
+  TrEntity(TrGame* game, SDL_Rect rect) : m_game(game), m_rect(rect) {}
   virtual ~TrEntity() = 0;
-};
-
-/**
- * @brief Anything that moves and is living
- */
-class TrActorEntity : public TrEntity {
- public:
-  TrPhysicsComponent* m_physics;
-  TrPlanningComponent* m_planning;
-  TrActorEntity(TrGame* game, SDL_Rect rect, TrGraphicsComponent* graphics,
-                TrPhysicsComponent* physics, TrPlanningComponent* planning)
-      : TrEntity(game, rect, graphics),
-        m_physics(physics),
-        m_planning(planning){};
 };

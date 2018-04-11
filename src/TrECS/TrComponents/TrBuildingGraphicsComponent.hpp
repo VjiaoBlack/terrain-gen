@@ -4,7 +4,8 @@
  * TrBuildingGraphicsComponent.hpp
  */
 
-#include "TrComponents.hpp"
+#include "../TrComponents.hpp"
+#include "TrGraphicsComponent.hpp"
 
 class TrBuildingEntity;
 /**
@@ -20,7 +21,6 @@ class TrBuildingGraphicsComponent : public TrGraphicsComponent {
   /**
    * @brief draws the given entity
    */
-  // TODO: is this right
-  using TrComponent::update;
+  using TrGraphicsComponent::update;
   virtual void update(TrGame* game, TrBuildingEntity* entity);
 };

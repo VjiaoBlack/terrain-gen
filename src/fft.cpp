@@ -1,8 +1,6 @@
 
 #include "../include/fft/fft.h"
 
-
-
 // from
 // https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
 vector3::vector3() : x(0.0f), y(0.0f), z(0.0f) {}
@@ -370,7 +368,8 @@ complex_t cOcean::hTilde(float t, int n_prime, int m_prime) {
   int index = m_prime * Nplus1 + n_prime;
 
   complex_t htilde0(vertices->m_data[index].a, vertices->m_data[index].b);
-  complex_t htilde0mkconj(vertices->m_data[index]._a, vertices->m_data[index]._b);
+  complex_t htilde0mkconj(vertices->m_data[index]._a,
+                          vertices->m_data[index]._b);
 
   float omegat = dispersion(n_prime, m_prime) * t;
 
@@ -440,8 +439,10 @@ void cOcean::evaluateWaves(float t) {
 
       vertices->m_data[index].y = h_d_and_n.h.a;
 
-      vertices->m_data[index].x = vertices->m_data[index].ox + lambda * h_d_and_n.D.x;
-      vertices->m_data[index].z = vertices->m_data[index].oz + lambda * h_d_and_n.D.y;
+      vertices->m_data[index].x =
+          vertices->m_data[index].ox + lambda * h_d_and_n.D.x;
+      vertices->m_data[index].z =
+          vertices->m_data[index].oz + lambda * h_d_and_n.D.y;
 
       vertices->m_data[index].nx = h_d_and_n.n.x;
       vertices->m_data[index].ny = h_d_and_n.n.y;
@@ -451,9 +452,11 @@ void cOcean::evaluateWaves(float t) {
         vertices->m_data[index + N + Nplus1 * N].y = h_d_and_n.h.a;
 
         vertices->m_data[index + N + Nplus1 * N].x =
-            vertices->m_data[index + N + Nplus1 * N].ox + lambda * h_d_and_n.D.x;
+            vertices->m_data[index + N + Nplus1 * N].ox +
+            lambda * h_d_and_n.D.x;
         vertices->m_data[index + N + Nplus1 * N].z =
-            vertices->m_data[index + N + Nplus1 * N].oz + lambda * h_d_and_n.D.y;
+            vertices->m_data[index + N + Nplus1 * N].oz +
+            lambda * h_d_and_n.D.y;
 
         vertices->m_data[index + N + Nplus1 * N].nx = h_d_and_n.n.x;
         vertices->m_data[index + N + Nplus1 * N].ny = h_d_and_n.n.y;
@@ -462,8 +465,10 @@ void cOcean::evaluateWaves(float t) {
       if (n_prime == 0) {
         vertices->m_data[index + N].y = h_d_and_n.h.a;
 
-        vertices->m_data[index + N].x = vertices->m_data[index + N].ox + lambda * h_d_and_n.D.x;
-        vertices->m_data[index + N].z = vertices->m_data[index + N].oz + lambda * h_d_and_n.D.y;
+        vertices->m_data[index + N].x =
+            vertices->m_data[index + N].ox + lambda * h_d_and_n.D.x;
+        vertices->m_data[index + N].z =
+            vertices->m_data[index + N].oz + lambda * h_d_and_n.D.y;
 
         vertices->m_data[index + N].nx = h_d_and_n.n.x;
         vertices->m_data[index + N].ny = h_d_and_n.n.y;
@@ -542,8 +547,10 @@ void cOcean::evaluateWavesFFT(float t) {
       // displacement
       h_tilde_dx[index] = h_tilde_dx[index] * sign;
       h_tilde_dz[index] = h_tilde_dz[index] * sign;
-      vertices->m_data[index1].x = vertices->m_data[index1].ox + h_tilde_dx[index].a * lambda;
-      vertices->m_data[index1].z = vertices->m_data[index1].oz + h_tilde_dz[index].a * lambda;
+      vertices->m_data[index1].x =
+          vertices->m_data[index1].ox + h_tilde_dx[index].a * lambda;
+      vertices->m_data[index1].z =
+          vertices->m_data[index1].oz + h_tilde_dz[index].a * lambda;
 
       // normal
       h_tilde_slopex[index] = h_tilde_slopex[index] * sign;
@@ -560,9 +567,11 @@ void cOcean::evaluateWavesFFT(float t) {
         vertices->m_data[index1 + N + Nplus1 * N].y = h_tilde[index].a;
 
         vertices->m_data[index1 + N + Nplus1 * N].x =
-            vertices->m_data[index1 + N + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
+            vertices->m_data[index1 + N + Nplus1 * N].ox +
+            h_tilde_dx[index].a * lambda;
         vertices->m_data[index1 + N + Nplus1 * N].z =
-            vertices->m_data[index1 + N + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
+            vertices->m_data[index1 + N + Nplus1 * N].oz +
+            h_tilde_dz[index].a * lambda;
 
         vertices->m_data[index1 + N + Nplus1 * N].nx = n.x;
         vertices->m_data[index1 + N + Nplus1 * N].ny = n.y;
@@ -584,9 +593,11 @@ void cOcean::evaluateWavesFFT(float t) {
         vertices->m_data[index1 + Nplus1 * N].y = h_tilde[index].a;
 
         vertices->m_data[index1 + Nplus1 * N].x =
-            vertices->m_data[index1 + Nplus1 * N].ox + h_tilde_dx[index].a * lambda;
+            vertices->m_data[index1 + Nplus1 * N].ox +
+            h_tilde_dx[index].a * lambda;
         vertices->m_data[index1 + Nplus1 * N].z =
-            vertices->m_data[index1 + Nplus1 * N].oz + h_tilde_dz[index].a * lambda;
+            vertices->m_data[index1 + Nplus1 * N].oz +
+            h_tilde_dz[index].a * lambda;
 
         vertices->m_data[index1 + Nplus1 * N].nx = n.x;
         vertices->m_data[index1 + Nplus1 * N].ny = n.y;

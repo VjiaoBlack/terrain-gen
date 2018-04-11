@@ -56,6 +56,8 @@ TrGame::TrGame()
       m_speed(1) {
   TrData data = TrData::getInstance();
 
+  exit(0);
+
   this->setupSDL();
 
   // create texture for map

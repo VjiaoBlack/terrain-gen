@@ -42,6 +42,14 @@ build/%.o: src/*/%.cpp src/*/%.hpp src/*/%-impl.hpp
 build/%.o: src/*/%.cpp src/*/%.hpp
 	$(COMPILE) -c $(FLAGS) $< -o $@
 
+build/%.o: src/*/*/%.cpp src/*/*/%.hpp
+	$(COMPILE) -c $(FLAGS) $< -o $@
+
+build/%.o: src/*/*/*/%.cpp src/*/*/*/%.hpp
+	$(COMPILE) -c $(FLAGS) $< -o $@
+
+build/%.o: src/*/*/*/*/%.cpp src/*/*/*/*/%.hpp
+	$(COMPILE) -c $(FLAGS) $< -o $@
  
 build/%.o: src/%.cpp src/%.hpp
 	$(COMPILE) -c $(FLAGS) $< -o $@

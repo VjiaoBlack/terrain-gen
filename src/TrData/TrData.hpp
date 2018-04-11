@@ -12,18 +12,18 @@
 
 #include "../../include/fast-cpp-csv-parser/csv.h"
 
-#include "../TrECS/TrBuildingEntity.hpp"
 #include "../TrECS/TrEntities.hpp"
+#include "../TrECS/TrEntities/TrBuildingEntity.hpp"
 using namespace std;
 
 class TrData {
  private:
   TrData();
 
+ public:
   map<string, TrEntity*> m_entities;
   // map<string, TrEntity*> m_entities;
   // map<string, TrEntity*> m_entities;
 
- public:
   static TrData& getInstance();
 };

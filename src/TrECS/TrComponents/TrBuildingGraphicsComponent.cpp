@@ -3,8 +3,8 @@
  */
 
 #include "TrBuildingGraphicsComponent.hpp"
-#include "TrBuildingEntity.hpp"
-#include "TrBuildingFootprintComponent.hpp"
+#include "../TrEntities/TrBuildingEntity.hpp"
+#include "TrFootprintComponent.hpp"
 
 TrBuildingGraphicsComponent::TrBuildingGraphicsComponent(SDL_Texture* texture)
     : TrGraphicsComponent(texture){};
