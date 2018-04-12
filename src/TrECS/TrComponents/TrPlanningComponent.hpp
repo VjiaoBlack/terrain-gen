@@ -35,5 +35,5 @@ class TrPlanningComponent : public TrComponent {
   /**
    * @brief based on the game and entity state, figure out something to do
    */
-  virtual void update(TrGame* game, TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity);
 };

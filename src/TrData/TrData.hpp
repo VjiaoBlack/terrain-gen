@@ -1,10 +1,7 @@
 #pragma once
 
 /**
- * TrCSVObject.hpp
- *
- * Basically wraps fast-cpp-csv-parser and imports the data from .csv filesls
- * Note: all filepaths are from point of view of root directory of the project
+ * TrData.hpp
  */
 #include <iostream>
 #include <map>
@@ -12,18 +9,18 @@
 
 #include "../../include/fast-cpp-csv-parser/csv.h"
 
-#include "../TrECS/TrEntities.hpp"
-#include "../TrECS/TrEntities/TrBuildingEntity.hpp"
+#include "../TrECS/TrEntityTypes/TrEntityType.hpp"
+#include "../TrECS/TrFormulas/TrFormula.hpp"
+#include "../TrECS/TrItems/TrItem.hpp"
+
 using namespace std;
 
-class TrData {
- private:
-  TrData();
-
+static class TrData {
  public:
-  map<string, TrEntity*> m_entities;
-  // map<string, TrEntity*> m_entities;
-  // map<string, TrEntity*> m_entities;
+  static void loadData();
+  static void deleteData();
 
-  static TrData& getInstance();
+  static map<string, TrEntityType*> m_entityTypes;
+  static map<string, TrFormula*> m_formulas;
+  static map<string, TrItem*> m_items;
 };

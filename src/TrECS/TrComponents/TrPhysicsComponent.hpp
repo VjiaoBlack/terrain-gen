@@ -28,5 +28,5 @@ class TrPhysicsComponent : public TrComponent {
   /**
    * @brief calculates the physics stuffs
    */
-  virtual void update(TrGame* game, TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity);
 };

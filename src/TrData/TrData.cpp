@@ -2,9 +2,93 @@
  * TrData.cpp
  */
 
+#include <sstream>
+
 #include "TrData.hpp"
 
-TrData::TrData() {
+#include "../TrECS/TrComponents/TrFootprintComponent.hpp"
+#include "../TrECS/TrComponents/TrGraphicsComponent.hpp"
+#include "../TrECS/TrComponents/TrPhysicsComponent.hpp"
+#include "../TrECS/TrComponents/TrPlanningComponent.hpp"
+
+#include "../TrECS/TrEntityTypes/TrActorEntityType.hpp"
+#include "../TrECS/TrEntityTypes/TrBuildingEntityType.hpp"
+#include "../TrECS/TrEntityTypes/TrPlantEntityType.hpp"
+
+map<string, TrEntityType*> TrData::m_entityTypes = map<string, TrEntityType*>();
+map<string, TrFormula*> TrData::m_formulas = map<string, TrFormula*>();
+map<string, TrItem*> TrData::m_items = map<string, TrItem*>();
+
+inline static void trim(string& str) {
+  int start = 0;
+  int end = str.size() - 1;
+
+  while (str[start] == ' ' && start < str.size()) {start++;}
+  while (str[end] == ' ' && end >= 0) {end--;}
+
+  str = str.substr(start, end - start + 1);
+}
+
+inline static SDL_Color parseColor(const string& color) {
+  unsigned char r, g, b;
+  stringstream ss;
+  ss << std::hex << color.substr(1, 2);
+  ss >> r;
+  ss.clear();
+  ss << std::hex << color.substr(3, 2);
+  ss >> g;
+  ss.clear();
+  ss << std::hex << color.substr(5, 2);
+  ss >> b;
+  ss.clear();
+
+  return (SDL_Color){0xFF, r, g, b};
+} 
+
+inline static pair<int, int> parseSize(const string& size) {
+  size_t pos = size.find('x');
+
+  return make_pair(stoi(size.substr(0, pos)), stoi(size.substr(pos + 1)));
+}
+
+inline static pair<int, string> parseIngredient(const string& ingredient) {
+  int num;
+  string name;
+
+  stringstream ss;
+  ss << ingredient;
+  ss >> num;
+  getline(ss, name);
+  trim(name);
+
+  return make_pair(num, name);
+}
+
+inline static vector<pair<int, string>> parseIngredientList(
+    const string& ingredientList) {
+  vector<pair<int, string>> ans;
+
+  size_t pos, lastPos = 0;
+
+  do {
+    pos = ingredientList.substr(lastPos).find(';');
+
+    if (pos == string::npos) {
+      ans.push_back(parseIngredient(ingredientList.substr(lastPos)));
+    } else {
+      ans.push_back(
+          parseIngredient(ingredientList.substr(lastPos, pos)));
+    }
+
+    lastPos += pos + 1;
+  } while (pos != string::npos);
+
+  return ans;
+}
+
+inline static vector<string> parseTagList(const string& tagList) {}
+
+void TrData::loadData() {
   // load Entities
   {
     string name;
@@ -20,6 +104,14 @@ TrData::TrData() {
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
         cout << name << endl;
+
+        TrGraphicsComponent* graphics =
+            new TrGraphicsComponent(parseColor(color));
+        TrPhysicsComponent* physics = new TrPhysicsComponent(0, 0);
+        TrPlanningComponent* planning = new TrPlanningComponent();
+
+        TrData::m_entityTypes[name] =
+            new TrActorEntityType(graphics, physics, planning);
       }
     }
 
@@ -32,13 +124,17 @@ TrData::TrData() {
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
         cout << name << endl;
-        // m_entities[name] = new TrBuildingEntity(
-        //   TrGame* game,
-        //   SDL_Rect rect,
-        //   TrBuildingGraphicsComponent* graphics,
-        //   TrFootprintComponent* footprint
+        TrGraphicsComponent* graphics =
+            new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
+        pair<int, int> footprintSize(1, 1);
+        if (size.size() > 0) {
+          footprintSize = parseSize(size);
+        }
+        TrFootprintComponent* footprint = new TrFootprintComponent(
+            footprintSize.first, footprintSize.second, NULL);
 
-        //   );
+        TrData::m_entityTypes[name] =
+            new TrBuildingEntityType(graphics, footprint);
       }
     }
 
@@ -51,37 +147,17 @@ TrData::TrData() {
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
         cout << name << endl;
-      }
-    }
-  }
+        TrGraphicsComponent* graphics =
+            new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
+        pair<int, int> footprintSize(1, 1);
+        if (size.size() > 0) {
+          footprintSize = parseSize(size);
+        }
+        TrFootprintComponent* footprint = new TrFootprintComponent(
+            footprintSize.first, footprintSize.second, NULL);
 
-  // load Formulas
-  {
-    string labor;
-    string inputs;
-    string outputs;
-    string byproducts;
-    // read Buildings
-    {
-      io::CSVReader<4> in("data/Formulas - Buildings.csv");
-      in.read_header(io::ignore_extra_column, "labor", "inputs", "outputs",
-                     "byproducts");
-
-      while (in.read_row(labor, inputs, outputs, byproducts)) {
-        // do stuff with the data
-        cout << outputs << endl;
-      }
-    }
-
-    // read Items
-    {
-      io::CSVReader<4> in("data/Formulas - Items.csv");
-      in.read_header(io::ignore_extra_column, "labor", "inputs", "outputs",
-                     "byproducts");
-
-      while (in.read_row(labor, inputs, outputs, byproducts)) {
-        // do stuff with the data
-        cout << outputs << endl;
+        TrData::m_entityTypes[name] =
+            new TrPlantEntityType(graphics, footprint);
       }
     }
   }
@@ -99,6 +175,7 @@ TrData::TrData() {
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
         cout << name << endl;
+        TrData::m_items[name] = new TrItem(name);
       }
     }
 
@@ -110,6 +187,7 @@ TrData::TrData() {
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
         cout << name << endl;
+        TrData::m_items[name] = new TrItem(name);
       }
     }
 
@@ -121,6 +199,7 @@ TrData::TrData() {
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
         cout << name << endl;
+        TrData::m_items[name] = new TrItem(name);
       }
     }
 
@@ -132,12 +211,47 @@ TrData::TrData() {
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
         cout << name << endl;
+        TrData::m_items[name] = new TrItem(name);
+      }
+    }
+  }
+
+  // load Formulas
+  {
+    string labor;
+    string inputs;
+    string outputs;
+    string byproducts;
+
+    // read Formulas - Items
+    {
+      io::CSVReader<4> in("data/Formulas - Items.csv");
+      in.read_header(io::ignore_extra_column, "labor", "inputs", "outputs",
+                     "byproducts");
+
+      while (in.read_row(labor, inputs, outputs, byproducts)) {
+        // do stuff with the data
+        cout << outputs << endl;
+        parseIngredientList(inputs);
+        parseIngredientList(outputs);
+        parseIngredientList(byproducts);
+        
+        
+      }
+    }
+
+    // read Buildings
+    {
+      io::CSVReader<4> in("data/Formulas - Buildings.csv");
+      in.read_header(io::ignore_extra_column, "labor", "inputs", "outputs",
+                     "byproducts");
+
+      while (in.read_row(labor, inputs, outputs, byproducts)) {
+        // do stuff with the data
+        cout << outputs << endl;
       }
     }
   }
 }
 
-TrData& TrData::getInstance() {
-  static TrData instance;
-  return instance;
-}
+void TrData::deleteData() {}

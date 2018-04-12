@@ -29,5 +29,5 @@ class TrGraphicsComponent : public TrComponent {
   /**
    * @brief draws the given entity
    */
-  virtual void update(TrGame* game, TrEntity* entity) = 0;
+  virtual void update(TrGame* game, TrEntity* entity);
 };

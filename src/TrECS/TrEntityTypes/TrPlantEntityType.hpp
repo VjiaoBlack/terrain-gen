@@ -4,6 +4,7 @@
  * TrPlantEntityType.hpp
  */
 
+#include "../TrComponents/TrFootprintComponent.hpp"
 #include "../TrComponents/TrGraphicsComponent.hpp"
 #include "TrEntityType.hpp"
 
@@ -12,9 +13,11 @@
  */
 class TrPlantEntityType : public TrEntityType {
  public:
+  TrFootprintComponent* m_footprint;
 
-  TrPlantEntityType(TrGraphicsComponent* graphics)
-      : TrEntityType(graphics) {};
+  TrPlantEntityType(TrGraphicsComponent* graphics,
+                    TrFootprintComponent* footprint)
+      : TrEntityType(graphics), m_footprint(footprint){};
 
-  virtual ~TrPlantEntityType() { }
+  virtual ~TrPlantEntityType() {}
 };

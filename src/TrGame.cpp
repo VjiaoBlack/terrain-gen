@@ -54,9 +54,7 @@ TrGame::TrGame()
       m_xOff(0),
       m_yOff(0),
       m_speed(1) {
-  TrData data = TrData::getInstance();
-
-  exit(0);
+  TrData::loadData();
 
   this->setupSDL();
 
