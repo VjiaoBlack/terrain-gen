@@ -128,17 +128,32 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
       dvec3 norm = map->m_normal->at(i, j);
       double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
+      double MdotN = 0;
 
       if (m_light.z > -0.1 && m_light.z <= 0) {
         directional *= lerp5(0.0, 1.0, -0.1, m_light.z, 0.0);
-        directional *= LdotN;
       } else if (m_light.z > 0) {
-        directional *= LdotN;
-
       } else {
-        double MdotN = dot(m_moonlight, map->m_normal->at(i, j));
-        directional *= MdotN * 0.2;
+        LdotN = 0;
+        MdotN = 0.2 * dot(m_moonlight, map->m_normal->at(i, j));
       }
+
+      // do raytracing... but not too far? Trace, let's say,
+      // 256 units.
+
+      if (m_raytrace) {
+        vec3 ray(j, i, map->m_height->at(i, j) * 256);
+
+        for (int step = 0; step < 256; step += 4) {
+          ray += m_light * 4.0;
+          if (map->m_height->bilerp(ray.y, ray.x) * 256 > ray.z) {
+            LdotN = 0.0;
+            break;
+          }
+        }
+      }
+
+      directional *= LdotN + MdotN;
 
       this->at(i, j) =
           multiplyColor(this->at(i, j), directional + ambient,

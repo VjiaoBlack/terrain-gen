@@ -47,6 +47,7 @@ class TrMapData {
   inline T get(int r, int c);
   inline void set(int r, int c, T p);
   inline T& at(int r, int c);
+  inline T bilerp(double r, double c);
 
   inline T gauss(int r, int c);
   inline T gaussDx(int r, int c);
@@ -92,6 +93,30 @@ inline T& TrMapData<T>::at(int r, int c) {
   if (c >= m_cols) c -= m_cols;
 
   return m_data[r * m_cols + c];
+}
+
+template <class T>
+inline T TrMapData<T>::bilerp(double r, double c) {
+  double r1 = floor(r);
+  double r2 = ceil(r);
+  double c1 = floor(c);
+  double c2 = ceil(c);
+
+  if (r1 == r2) {
+    r2++;
+  }
+  if (c1 == c2) {
+    c2++;
+  }
+
+  T vtl = this->at(floor(r), floor(c));
+  T vtr = this->at(floor(r), ceil(c));
+  T vbl = this->at(ceil(r), floor(c));
+  T vbr = this->at(ceil(r), ceil(c));
+
+  // using formula on https://en.wikipedia.org/wiki/Bilinear_interpolation
+  return dot(dvec2(c2 - c, c - c1) * dmat2(vtl, vtr, vbl, vbr),
+             dvec2(r2 - r, r - r1));
 }
 
 template <class T>

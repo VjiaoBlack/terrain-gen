@@ -176,6 +176,12 @@ void TrMap::update(set<int> keysDown) {
 
         m_color->updateLightAngle();
         m_color->update(this);
+        break;
+      case SDLK_y:
+        m_color->m_raytrace = !m_color->m_raytrace;
+        cout << "RAYTRACING: " << m_color->m_raytrace << endl;
+        m_color->update(this);
+        break;
     }
   }
 }

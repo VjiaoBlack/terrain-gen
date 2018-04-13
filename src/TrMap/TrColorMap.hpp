@@ -21,6 +21,8 @@ class TrColorMap : public TrMapData<uint32_t> {
   int m_month;
   double m_elevation;
 
+  bool m_raytrace = false;
+
   cOcean* ocean;
 
   const dvec3 m_shallowWater = dvec3(0x3A, 0x5B, 0xAA);

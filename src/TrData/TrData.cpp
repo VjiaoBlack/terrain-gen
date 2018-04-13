@@ -23,8 +23,12 @@ inline static void trim(string& str) {
   int start = 0;
   int end = str.size() - 1;
 
-  while (str[start] == ' ' && start < str.size()) {start++;}
-  while (str[end] == ' ' && end >= 0) {end--;}
+  while (str[start] == ' ' && start < str.size()) {
+    start++;
+  }
+  while (str[end] == ' ' && end >= 0) {
+    end--;
+  }
 
   str = str.substr(start, end - start + 1);
 }
@@ -43,7 +47,7 @@ inline static SDL_Color parseColor(const string& color) {
   ss.clear();
 
   return (SDL_Color){0xFF, r, g, b};
-} 
+}
 
 inline static pair<int, int> parseSize(const string& size) {
   size_t pos = size.find('x');
@@ -76,8 +80,7 @@ inline static vector<pair<int, string>> parseIngredientList(
     if (pos == string::npos) {
       ans.push_back(parseIngredient(ingredientList.substr(lastPos)));
     } else {
-      ans.push_back(
-          parseIngredient(ingredientList.substr(lastPos, pos)));
+      ans.push_back(parseIngredient(ingredientList.substr(lastPos, pos)));
     }
 
     lastPos += pos + 1;
@@ -235,8 +238,6 @@ void TrData::loadData() {
         parseIngredientList(inputs);
         parseIngredientList(outputs);
         parseIngredientList(byproducts);
-        
-        
       }
     }
 
