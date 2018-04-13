@@ -127,12 +127,25 @@ void TrColorMap::updateDisplay(TrMap* map) {
       double directional = 0.6;
 
       dvec3 norm = map->m_normal->at(i, j);
+
+      if (m_terrace) {
+        norm.z += 2.0;
+        norm = normalize(norm);
+      }
+
       double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
       double MdotN = 0;
 
-      if (m_light.z > -0.1 && m_light.z <= 0) {
-        directional *= lerp5(0.0, 1.0, -0.1, m_light.z, 0.0);
-      } else if (m_light.z > 0) {
+      dvec3 temp_light = m_light;
+
+      if (m_terrace) {
+        temp_light.z /= 4.0;
+        temp_light = normalize(temp_light);
+      }
+
+      if (temp_light.z > -0.1 && temp_light.z <= 0) {
+        directional *= lerp5(0.0, 1.0, -0.1, temp_light.z, 0.0);
+      } else if (temp_light.z > 0) {
       } else {
         LdotN = 0;
         MdotN = 0.2 * dot(m_moonlight, map->m_normal->at(i, j));
@@ -142,13 +155,43 @@ void TrColorMap::updateDisplay(TrMap* map) {
       // 256 units.
 
       if (m_raytrace) {
-        vec3 ray(j, i, map->m_height->at(i, j) * 256);
+        if (m_terrace) {
+          vec3 ray1(j, i, map->m_height->m_terrace.at(i, j) * 32);
+          vec3 ray2(j, i, -map->m_height->m_terrace.at(i, j) * 32);
 
-        for (int step = 0; step < 256; step += 4) {
-          ray += m_light * 4.0;
-          if (map->m_height->bilerp(ray.y, ray.x) * 256 > ray.z) {
-            LdotN = 0.0;
-            break;
+          for (int step = 0; step < 1; step += 1) {
+            ray1 += temp_light * 1.0;
+            ray2 += temp_light * 1.0;
+            if (map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 > ray1.z) {
+              LdotN -= 0.25;
+              break;
+            }
+
+            if (-map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 >
+                ray2.z) {
+              LdotN += 0.3;
+              break;
+            }
+          }
+
+          vec3 ray3(j, i, map->m_height->m_terrace.at(i, j) * 32);
+
+          for (int step = 0; step < 2; step += 1) {
+            ray3 += temp_light * 1.0;
+            if (map->m_height->m_terrace.bilerp(ray3.y, ray3.x) * 32 > ray3.z) {
+              LdotN -= 0.25;
+              break;
+            }
+          }
+        } else {
+          vec3 ray(j, i, map->m_height->at(i, j) * 256);
+
+          for (int step = 0; step < 32; step += 1) {
+            ray += m_light * 1.0;
+            if (map->m_height->bilerp(ray.y, ray.x) * 256 > ray.z) {
+              LdotN = 0.0;
+              break;
+            }
           }
         }
       }
