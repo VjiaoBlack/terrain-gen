@@ -107,6 +107,18 @@ void TrColorMap::updateDisplay(TrMap* map) {
   ocean->render(calcMs / 1000, true);
 
   double deriv = 200.0 / LENGTH;
+
+  dvec3 temp_light = m_light;
+
+  if (m_terrace) {
+    temp_light.z /= 6.0;
+    temp_light = normalize(temp_light);
+  }
+
+  dvec3 temp_light_a = sphToCart(cartToSph(temp_light) + dvec3(0, 0, -0.2));
+  dvec3 temp_light_b = sphToCart(cartToSph(temp_light) + dvec3(0, 0,  0.2));
+
+
   for (int i = 1; i < m_rows - 1; i++) {
     for (int j = 1; j < m_cols - 1; j++) {
       // render land
@@ -136,12 +148,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
       double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
       double MdotN = 0;
 
-      dvec3 temp_light = m_light;
 
-      if (m_terrace) {
-        temp_light.z /= 4.0;
-        temp_light = normalize(temp_light);
-      }
 
       if (temp_light.z > -0.1 && temp_light.z <= 0) {
         directional *= lerp5(0.0, 1.0, -0.1, temp_light.z, 0.0);
@@ -155,20 +162,31 @@ void TrColorMap::updateDisplay(TrMap* map) {
       // 256 units.
 
       if (m_raytrace) {
-        if (m_terrace) {
+        if (m_terrace && temp_light.z > 0.0) {
           vec3 ray1(j, i, map->m_height->m_terrace.at(i, j) * 32);
+          vec3 ray1_a(j, i, map->m_height->m_terrace.at(i, j) * 32);
+          vec3 ray1_b(j, i, map->m_height->m_terrace.at(i, j) * 32);
+
           vec3 ray2(j, i, -map->m_height->m_terrace.at(i, j) * 32);
+          vec3 ray2_a(j, i, -map->m_height->m_terrace.at(i, j) * 32);
+          vec3 ray2_b(j, i, -map->m_height->m_terrace.at(i, j) * 32);
 
           for (int step = 0; step < 1; step += 1) {
             ray1 += temp_light * 1.0;
+            ray1_a += temp_light_a * 1.0;
+            ray1_b += temp_light_b * 1.0;
             ray2 += temp_light * 1.0;
-            if (map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 > ray1.z) {
+            ray2_a += temp_light_a * 1.0;
+            ray2_b += temp_light_b * 1.0;
+
+            if (map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 > ray1.z ||
+                map->m_height->m_terrace.bilerp(ray1_a.y, ray1_a.x) * 32 > ray1_a.z ||
+                map->m_height->m_terrace.bilerp(ray1_b.y, ray1_b.x) * 32 > ray1_b.z) {
               LdotN -= 0.25;
               break;
-            }
-
-            if (-map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 >
-                ray2.z) {
+            } else if (-map->m_height->m_terrace.bilerp(ray2.y, ray2.x) * 32 > ray2.z ||
+                       -map->m_height->m_terrace.bilerp(ray2_a.y, ray2_a.x) * 32 > ray2_a.z ||
+                       -map->m_height->m_terrace.bilerp(ray2_b.y, ray2_b.x) * 32 > ray2_b.z) {
               LdotN += 0.3;
               break;
             }
