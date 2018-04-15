@@ -30,6 +30,8 @@
 
 #define K_RGBA_BYTES 32
 
+#define K_FPS 30
+
 using namespace std;
 using namespace glm;
 

@@ -187,23 +187,13 @@ void TrGame::run() {
     // do render stuff
     clock_t endFrame = clock();
 
-    m_deltaTime += endFrame - beginFrame;
-    m_frames++;
-
-    // display FPS
-    // TODO: fix (make this update faster)
-    if (clockToMilliseconds(m_deltaTime) > 100.0) {  // every second
-      m_frameRate = (double)m_frames;                // more stable
-      m_frames = 0;
-      m_deltaTime -= CLOCKS_PER_SEC;
-
-      std::cout << "fps: " << m_frameRate << "        \n";
-      std::flush(std::cout);
-    }
-
-    float calcMs = clockToMilliseconds(endFrame - beginFrame);
-    if (calcMs < 16.6) {
-      usleep(1000 * ((int)(16.6 - calcMs)));
+    m_deltaTime = clockToMilliseconds(endFrame - beginFrame);
+    double rfps = (1000.0 / m_deltaTime);
+    // display rFPS (rendering FPS)
+    std::cout << "rFPS: " << rfps << "       \r";
+    fflush(stdout);
+    if (m_deltaTime < (1000.0 / 30.0)) {
+      usleep(1000 * ((1000.0 / 30.0) - m_deltaTime));
     }
   }
 }

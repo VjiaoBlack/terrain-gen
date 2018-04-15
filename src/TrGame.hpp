@@ -67,7 +67,7 @@ class TrGame {
   uniform_int_distribution<int> m_xrandDist;
 
   // framerate counter
-  clock_t m_deltaTime;
+  double m_deltaTime;
   unsigned int m_frames;
   double m_frameRate;
 
