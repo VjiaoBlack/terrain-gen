@@ -53,6 +53,8 @@ class TrMapData {
   inline T gaussDx(int r, int c);
   inline T gaussDy(int r, int c);
 
+  inline bool isOut(double r, double c);
+
   virtual void update(TrMap* map){};
 
   void diamondSquare(int s, double level);
@@ -140,6 +142,11 @@ inline T TrMapData<T>::gaussDy(int r, int c) {
   return 0.25 * (2 * (this->at(r + 1, c) - this->at(r - 1, c)) +
                  (this->at(r + 1, c + 1) - this->at(r - 1, c + 1)) +
                  (this->at(r + 1, c - 1) - this->at(r - 1, c - 1)));
+}
+
+template <class T>
+inline bool TrMapData<T>::isOut(double r, double c) {
+  return r < 0 || c < 0 || r >= m_rows - 1 || c >= m_cols - 1;
 }
 
 template <class T>

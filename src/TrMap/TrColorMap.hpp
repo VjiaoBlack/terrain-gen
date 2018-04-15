@@ -21,8 +21,8 @@ class TrColorMap : public TrMapData<uint32_t> {
   int m_month;
   double m_elevation;
 
-  bool m_raytrace = false;
-  bool m_terrace = false;
+  int m_raytrace = 0;
+  int m_terrace = 0;
 
   cOcean* ocean;
 

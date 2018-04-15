@@ -94,6 +94,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
   threshold[6] = 0.68 * 256;  // dark mountain level
   threshold[7] = 0.70 * 256;
   threshold[8] = 0.80 * 256;
+
   // 1: snow
 
   // uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
@@ -116,8 +117,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
   }
 
   dvec3 temp_light_a = sphToCart(cartToSph(temp_light) + dvec3(0, 0, -0.2));
-  dvec3 temp_light_b = sphToCart(cartToSph(temp_light) + dvec3(0, 0,  0.2));
-
+  dvec3 temp_light_b = sphToCart(cartToSph(temp_light) + dvec3(0, 0, 0.2));
 
   for (int i = 1; i < m_rows - 1; i++) {
     for (int j = 1; j < m_cols - 1; j++) {
@@ -148,8 +148,6 @@ void TrColorMap::updateDisplay(TrMap* map) {
       double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
       double MdotN = 0;
 
-
-
       if (temp_light.z > -0.1 && temp_light.z <= 0) {
         directional *= lerp5(0.0, 1.0, -0.1, temp_light.z, 0.0);
       } else if (temp_light.z > 0) {
@@ -162,7 +160,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
       // 256 units.
 
       if (m_raytrace) {
-        if (m_terrace && temp_light.z > 0.0) {
+        if (m_terrace) {
           vec3 ray1(j, i, map->m_height->m_terrace.at(i, j) * 32);
           vec3 ray1_a(j, i, map->m_height->m_terrace.at(i, j) * 32);
           vec3 ray1_b(j, i, map->m_height->m_terrace.at(i, j) * 32);
@@ -171,22 +169,37 @@ void TrColorMap::updateDisplay(TrMap* map) {
           vec3 ray2_a(j, i, -map->m_height->m_terrace.at(i, j) * 32);
           vec3 ray2_b(j, i, -map->m_height->m_terrace.at(i, j) * 32);
 
-          for (int step = 0; step < 1; step += 1) {
-            ray1 += temp_light * 1.0;
-            ray1_a += temp_light_a * 1.0;
-            ray1_b += temp_light_b * 1.0;
-            ray2 += temp_light * 1.0;
-            ray2_a += temp_light_a * 1.0;
-            ray2_b += temp_light_b * 1.0;
+          for (int step = 0; step < 1; step++) {
+            ray1 += temp_light;
+            ray1_a += temp_light_a;
+            ray1_b += temp_light_b;
+            ray2 += temp_light;
+            ray2_a += temp_light_a;
+            ray2_b += temp_light_b;
+
+            if (this->isOut(ray1.y, ray1.x) || this->isOut(ray2.y, ray2.x) ||
+                this->isOut(ray1_a.y, ray1_a.x) ||
+                this->isOut(ray2_a.y, ray2_a.x) ||
+                this->isOut(ray1_b.y, ray1_b.x) ||
+                this->isOut(ray2_b.y, ray2_b.x)) {
+              break;
+            }
 
             if (map->m_height->m_terrace.bilerp(ray1.y, ray1.x) * 32 > ray1.z ||
-                map->m_height->m_terrace.bilerp(ray1_a.y, ray1_a.x) * 32 > ray1_a.z ||
-                map->m_height->m_terrace.bilerp(ray1_b.y, ray1_b.x) * 32 > ray1_b.z) {
+                map->m_height->m_terrace.bilerp(ray1_a.y, ray1_a.x) * 32 >
+                    ray1_a.z ||
+                map->m_height->m_terrace.bilerp(ray1_b.y, ray1_b.x) * 32 >
+                    ray1_b.z) {
               LdotN -= 0.25;
               break;
-            } else if (-map->m_height->m_terrace.bilerp(ray2.y, ray2.x) * 32 > ray2.z ||
-                       -map->m_height->m_terrace.bilerp(ray2_a.y, ray2_a.x) * 32 > ray2_a.z ||
-                       -map->m_height->m_terrace.bilerp(ray2_b.y, ray2_b.x) * 32 > ray2_b.z) {
+            } else if (-map->m_height->m_terrace.bilerp(ray2.y, ray2.x) * 32 >
+                           ray2.z ||
+                       -map->m_height->m_terrace.bilerp(ray2_a.y, ray2_a.x) *
+                               32 >
+                           ray2_a.z ||
+                       -map->m_height->m_terrace.bilerp(ray2_b.y, ray2_b.x) *
+                               32 >
+                           ray2_b.z) {
               LdotN += 0.3;
               break;
             }
@@ -214,7 +227,7 @@ void TrColorMap::updateDisplay(TrMap* map) {
         }
       }
 
-      directional *= LdotN + MdotN;
+      directional *= clamp(LdotN + MdotN, -ambient, 2.0);
 
       this->at(i, j) =
           multiplyColor(this->at(i, j), directional + ambient,
@@ -227,7 +240,8 @@ void TrColorMap::updateDisplay(TrMap* map) {
 
         double alpha =
             lerp5(0.6, 1.0, 0.001, map->m_water->m_water_avg->at(i, j), 0.10);
-        alpha = clamp(0.6, alpha, 1.0);
+        // alpha = clamp(0.6, alpha, 1.0);
+        alpha = clamp(alpha, 0.6, 1.0);
 
         dvec3 ocolor = colorToVec(this->at(i, j));
         dvec3 wcolor = m_deepWater;

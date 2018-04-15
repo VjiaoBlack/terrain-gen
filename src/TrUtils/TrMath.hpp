@@ -13,7 +13,6 @@
     }                       \
   }
 
-
 using namespace glm;
 
 // TODO: check this
@@ -32,9 +31,11 @@ using namespace glm;
   }
 
 inline dvec3 cartToSph(const dvec3 xyz) {
-  return dvec3(length(xyz), atan2(xyz.z, length(dvec2(xyz))), atan2(xyz.x, xyz.y));
+  return dvec3(length(xyz), atan2(xyz.z, length(dvec2(xyz))),
+               atan2(xyz.x, xyz.y));
 }
 
 inline dvec3 sphToCart(const dvec3 rea) {
-  return dvec3(cos(rea.y) * sin(rea.z), cos(rea.y) * cos(rea.z), rea.x * sin(rea.y));
+  return dvec3(cos(rea.y) * sin(rea.z), cos(rea.y) * cos(rea.z),
+               rea.x * sin(rea.y));
 }

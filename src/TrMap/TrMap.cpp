@@ -179,12 +179,13 @@ void TrMap::update(set<int> keysDown) {
         break;
       case SDLK_y:
         m_color->m_raytrace = !m_color->m_raytrace;
-        cout << "RAYTRACING: " << m_color->m_raytrace << endl;
         m_color->update(this);
         break;
       case SDLK_h:
-        m_color->m_terrace = !m_color->m_terrace;
-        cout << "TERRACING: " << m_color->m_terrace << endl;
+        m_color->m_terrace++;
+        if (m_color->m_terrace > 3) {
+          m_color->m_terrace = 0;
+        }
         m_color->update(this);
         break;
     }
