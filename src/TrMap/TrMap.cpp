@@ -93,7 +93,7 @@ void TrMap::update(set<int> keysDown) {
                 (double)m_speed / 255.0;
           }
         }
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
 
         break;
       case SDLK_i:
@@ -103,23 +103,23 @@ void TrMap::update(set<int> keysDown) {
                 (double)m_speed / 255.0;
           }
         }
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
 
         break;
       case SDLK_b:
         for (int i = 0; i < m_speed; i++) {
           this->m_height->boxBlur();
         }
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
 
         break;
       case SDLK_r:
         m_water->rain(this);
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_d:
         this->m_water->set(0.0);
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_e:
         this->m_erosionState = !this->m_erosionState;
@@ -131,20 +131,20 @@ void TrMap::update(set<int> keysDown) {
         for (int i = 0; i < m_speed; i++) {
           m_water->update(this);
         }
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_n:
         // reclaculate normals
-        m_height->update(this);
-        m_normal->update(this);
-        m_color->update(this);
+        m_toUpdate.insert(m_height);
+        m_toUpdate.insert(m_normal);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_m:
         // update water!! omg
         for (int i = 0; i < m_speed; i++) {
           m_moisture->update(this);
-          m_color->update(this);
         }
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_k:
         // toggle moisture / not
@@ -153,7 +153,7 @@ void TrMap::update(set<int> keysDown) {
           m_renderState = 0;
         }
 
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         usleep(100000);
 
         break;
@@ -175,20 +175,24 @@ void TrMap::update(set<int> keysDown) {
         }
 
         m_color->updateLightAngle();
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_y:
         m_color->m_raytrace = !m_color->m_raytrace;
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
       case SDLK_h:
         m_color->m_terrace++;
         if (m_color->m_terrace > 3) {
           m_color->m_terrace = 0;
         }
-        m_color->update(this);
+        m_toUpdate.insert(m_color);
         break;
     }
+  }
+
+  for (auto mapdata : m_toUpdate) {
+    mapdata->update(this);
   }
 }
 

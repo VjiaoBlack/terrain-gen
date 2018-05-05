@@ -28,6 +28,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <set>
 
 class TrMap;
 
@@ -39,11 +40,15 @@ class TrMap;
 #include "TrWaterMap.hpp"
 #include "TrWindMap.hpp"
 
+#include "TrMapData.hpp"
+
 using namespace std;
 
 // map
 // is this too much memory? make sure to check
 class TrMap {
+ private:
+  set<TrMapUpdatable*> m_toUpdate;
  public:
   int m_rows, m_cols;
 

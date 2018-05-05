@@ -26,9 +26,14 @@ using namespace glm;
 
 class TrMap;
 
+class TrMapUpdatable {
+ public:
+virtual void update(TrMap* map){};
+};
+
 // stores pixels and stuff
 template <class T>
-class TrMapData {
+class TrMapData : public TrMapUpdatable {
  public:
   T* m_data;
 
