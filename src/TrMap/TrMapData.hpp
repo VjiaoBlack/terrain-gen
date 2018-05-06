@@ -10,8 +10,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <set>
@@ -60,7 +60,7 @@ class TrMapData : public TrMapUpdatable {
 
   inline bool isOut(double r, double c);
 
-  virtual void update(TrMap* map){};
+  void update(TrMap* map) override {};
 
   void diamondSquare(int s, double level);
   void boxBlur();

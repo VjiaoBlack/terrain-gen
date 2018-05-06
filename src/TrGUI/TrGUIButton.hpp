@@ -13,6 +13,6 @@ class TrGUIButton : public TrGUIObject {
 
   TrGUIButton(TrGame* game, SDL_Rect rect, string name);
 
-  void draw();
-  void update();
+  void draw() override;
+  void update() override;
 };

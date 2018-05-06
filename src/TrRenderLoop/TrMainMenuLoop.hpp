@@ -11,7 +11,7 @@
 #include "TrRenderLoop.hpp"
 class TrGame;
 
-class TrMainMenuLoop : public TrRenderLoop {
+class TrMainMenuLoop : public TrRenderLoop, public std::enable_shared_from_this<TrMainMenuLoop> {
  public:
   std::string score_text = "ATHENA";
   int score = 10;
@@ -27,10 +27,14 @@ class TrMainMenuLoop : public TrRenderLoop {
 
   TrGUIMenu* m_menu;
 
-  TrMainMenuLoop(TrGame* game);
+  explicit TrMainMenuLoop(TrGame* game);
 
-  virtual ~TrMainMenuLoop();
+  std::shared_ptr<TrMainMenuLoop> getptr() {
+    return std::enable_shared_from_this<TrMainMenuLoop>::shared_from_this();
+  }
 
-  virtual TrRenderLoop* update(TrGame* game);
-  virtual void render(TrGame* game);
+  ~TrMainMenuLoop() override;
+
+  TrRenderLoop* update(TrGame* game) override;
+  void render(TrGame* game) override;
 };

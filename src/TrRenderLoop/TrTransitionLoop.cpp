@@ -22,7 +22,6 @@ TrRenderLoop* TrTransitionLoop::update(TrGame* game) {
     return this;
   }
 
-  delete this;
   return nullptr;
 }
 
@@ -37,19 +36,19 @@ void TrTransitionLoop::render(TrGame* game) {
   // getting coarser
   if (m_curTick < m_maxTicks / 2) {
     mx = 20 +
-         (K_MAP_SIZE_X - 20) * ((float)((m_maxTicks / 2) - m_curTick) /
-                                (float)((m_maxTicks / 2)));
+         (K_MAP_SIZE_X - 20) * ((float)((m_maxTicks / 2.0) - m_curTick) /
+                                (float)((m_maxTicks / 2.0)));
     my = 20 +
-         (K_MAP_SIZE_Y - 20) * ((float)((m_maxTicks / 2) - m_curTick) /
-                                (float)((m_maxTicks / 2)));
+         (K_MAP_SIZE_Y - 20) * ((float)((m_maxTicks / 2.0) - m_curTick) /
+                                (float)((m_maxTicks / 2.0)));
   } else {
     // getting finer
     mx = 20 +
-         (K_MAP_SIZE_X - 20) * ((float)(m_curTick - (m_maxTicks / 2)) /
-                                (float)((m_maxTicks / 2)));
+         (K_MAP_SIZE_X - 20) * ((float)(m_curTick - (m_maxTicks / 2.0)) /
+                                (float)((m_maxTicks / 2.0)));
     my = 20 +
-         (K_MAP_SIZE_Y - 20) * ((float)(m_curTick - (m_maxTicks / 2)) /
-                                (float)((m_maxTicks / 2)));
+         (K_MAP_SIZE_Y - 20) * ((float)(m_curTick - (m_maxTicks / 2.0)) /
+                                (float)((m_maxTicks / 2.0)));
   }
 
   // TODO: is this slow?
@@ -84,11 +83,11 @@ void TrTransitionLoop::render(TrGame* game) {
   SDL_RenderCopy(game->m_SDLRenderer, tempTexFull, nullptr, &tmp);
 
   float alpha = m_curTick;
-  if (alpha >= m_maxTicks / 2) {
+  if (alpha >= m_maxTicks / 2.0) {
     alpha = m_maxTicks - m_curTick;
   }
 
-  alpha = (float)alpha / (float)(m_maxTicks / 2);
+  alpha = alpha / (float)(m_maxTicks / 2.0);
 
   alpha = sqrt(1.0 - alpha) * 0.9 + 0.1;
 

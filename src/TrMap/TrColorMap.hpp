@@ -6,8 +6,9 @@
 #include "../TrUtils/TrMath.hpp"
 #include "../TrUtils/TrSimulation.hpp"
 #include "TrMapData.hpp"
-
+#include <memory>
 class TrMap;
+
 
 // map
 // is this too much memory? make sure to check
@@ -24,7 +25,7 @@ class TrColorMap : public TrMapData<uint32_t> {
   int m_raytrace = 0;
   int m_terrace = 0;
 
-  cOcean* ocean;
+  unique_ptr<cOcean> ocean;
 
   const dvec3 m_shallowWater = dvec3(0x3A, 0x5B, 0xAA);
   const dvec3 m_mediumWater = dvec3(0x5A, 0x8B, 0xCA);
@@ -32,9 +33,9 @@ class TrColorMap : public TrMapData<uint32_t> {
 
   TrColorMap(int rows, int cols);
 
-  ~TrColorMap() { delete ocean; }
+  ~TrColorMap() override {}
 
-  void update(TrMap* map);
+  void update(TrMap* map) override;
 
   void updateLightAngle();
 

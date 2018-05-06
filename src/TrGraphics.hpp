@@ -10,8 +10,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -21,5 +21,4 @@
 
 using namespace std;
 
-void renderTextureWithOffset(SDL_Renderer* renderer, SDL_Texture* texture,
-                             int xOff, int yOff, int pixelSize);
+

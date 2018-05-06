@@ -6,11 +6,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/time.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 #include <iostream>
 #include <iostream>
@@ -18,6 +18,7 @@
 #include <list>
 #include <random>
 #include <vector>
+#include <memory>
 
 #include "TrMap/TrMap.hpp"
 
@@ -54,8 +55,9 @@ class TrGame {
   int m_yOff;
   int m_speed;
 
-  TrRenderLoop* m_gameStateTransition;
-  list<TrRenderLoop*> m_gameStateStack;
+
+  unique_ptr<TrRenderLoop> m_gameStateTransition;
+  list<shared_ptr<TrRenderLoop>> m_gameStateStack;
 
   // random number generator for rain
   random_device m_yrandDevice;

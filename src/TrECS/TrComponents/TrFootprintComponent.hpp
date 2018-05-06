@@ -14,6 +14,6 @@ class TrFootprintComponent : public TrComponent {
   TrFootprintComponent(int w, int h, bool* footprint)
       : m_w(w), m_h(h), m_cells(footprint){};
 
-  virtual void update(TrGame* game, TrEntity* entity){};
+  void update(TrGame* game, TrEntity* entity) override {};
   virtual void render(TrGame* game, TrEntity* entity);
 };

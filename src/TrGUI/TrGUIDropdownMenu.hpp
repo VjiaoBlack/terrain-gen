@@ -18,8 +18,8 @@ class TrGUIDropdownMenu : public TrGUIObject {
   // TODO: how ot call parent constructor
 
   TrGUIDropdownMenu(TrGame* game, TrGUIButton* button, TrGUIMenu* menu);
-  virtual ~TrGUIDropdownMenu();
+  ~TrGUIDropdownMenu() override;
 
-  void draw();
-  void update();
+  void draw() override;
+  void update() override;
 };

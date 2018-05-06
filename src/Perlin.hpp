@@ -28,7 +28,7 @@ class PerlinNoise {
   // Initialize with the reference values for the permutation vector
   PerlinNoise();
   // Generate a new permutation vector based on the value of seed
-  PerlinNoise(unsigned int seed);
+  explicit PerlinNoise(unsigned int seed);
   // Get a noise value, for 2D images z can have any value
   double noise(double x, double y, double z);
 
@@ -36,10 +36,10 @@ class PerlinNoise {
   inline double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); };
   inline double lerp(double t, double a, double b) { return a + t * (b - a); };
 
-  inline double grad(int hash, double x, double y, double z) {
-    int h = hash & 15;
+  inline double grad(uint hash, double x, double y, double z) {
+    uint h = hash & 15u;
     // Convert lower 4 bits of hash into 12 gradient directions
     double u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
-    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    return ((h & 1u) == 0 ? u : -u) + ((h & 2u) == 0 ? v : -v);
   };
 };

@@ -14,13 +14,13 @@ class TrGUIObject {
   TrGame* m_game;
   bool m_activated;
   SDL_Texture* m_texture;
-  SDL_Rect m_srcRect;
-  SDL_Rect m_destRect;
-  SDL_Rect m_rect;
+  SDL_Rect m_srcRect{};
+  SDL_Rect m_destRect{};
+  SDL_Rect m_rect{};
 
   TrGUIObject() : m_game(nullptr), m_activated(false), m_texture(nullptr){};
-  TrGUIObject(TrGame* game) : m_game(game){};
-  virtual ~TrGUIObject(){};
+  explicit TrGUIObject(TrGame* game) : m_game(game){};
+  virtual ~TrGUIObject() = default;;
 
   virtual void draw() = 0;
   virtual void update() = 0;

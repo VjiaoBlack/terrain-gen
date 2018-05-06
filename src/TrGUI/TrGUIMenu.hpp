@@ -20,8 +20,8 @@ class TrGUIMenu : public TrGUIObject {
   static TrGUIMenu *MakeVerticalMenu(TrGame *game, SDL_Rect rect,
                                      vector<string> labels);
 
-  virtual ~TrGUIMenu();
+  ~TrGUIMenu() override;
 
-  void draw();
-  void update();
+  void draw() override;
+  void update() override;
 };

@@ -19,5 +19,5 @@ class TrPlantEntity : public TrEntity {
   TrPlantEntity(TrGame* game, SDL_Rect rect, TrPlantEntityType* type)
       : TrEntity(game, rect), m_type(type){};
 
-  ~TrPlantEntity() {}
+  ~TrPlantEntity() override = default;
 };

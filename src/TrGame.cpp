@@ -96,7 +96,7 @@ TrGame::TrGame()
   }
 
   // setup game loop
-  m_gameStateStack.push_back(new TrMainMenuLoop(this));
+  m_gameStateStack.push_back(move(make_shared<TrMainMenuLoop>(this)));
 }
 
 TrGame::~TrGame() {
@@ -112,13 +112,10 @@ TrGame::~TrGame() {
   if (m_menuFont) {
     TTF_CloseFont(m_menuFont);
   }
-  while (m_gameStateStack.size()) {
-    delete m_gameStateStack.back();
+  while (!m_gameStateStack.empty()) {
+//    delete m_gameStateStack.back();
+//    m_gameStateStack.back().reset(nullptr);
     m_gameStateStack.pop_back();
-  }
-
-  if (m_gameStateTransition) {
-    delete m_gameStateTransition;
   }
 
   TTF_Quit();
@@ -159,8 +156,8 @@ void TrGame::run() {
     handleInput();
 
     // Assuming that order of processing doesn't matter.
-    for (auto it = m_keysDown.begin(); it != m_keysDown.end(); it++) {
-      handleKey(*it);
+    for (int it : m_keysDown) {
+      handleKey(it);
     }
 
     SDL_UpdateTexture(m_mapTexture, nullptr, m_map->m_color->m_data,
@@ -173,8 +170,9 @@ void TrGame::run() {
     if (m_gameStateTransition) {
       m_gameStateTransition->render(this);
       TrRenderLoop* loop = m_gameStateTransition->update(this);
+// TEST_UNIQUE_PTR
       if (!loop) {
-        m_gameStateTransition = nullptr;
+        m_gameStateTransition.reset(nullptr);
       }
     } else {
       m_gameStateStack.back()->render(this);

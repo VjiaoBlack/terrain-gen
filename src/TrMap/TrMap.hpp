@@ -11,18 +11,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <set>
 #include <vector>
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/time.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 #include <iostream>
 #include <iostream>
@@ -41,6 +41,7 @@ class TrMap;
 #include "TrWindMap.hpp"
 
 #include "TrMapData.hpp"
+#include <memory>
 
 using namespace std;
 
@@ -48,17 +49,17 @@ using namespace std;
 // is this too much memory? make sure to check
 class TrMap {
  private:
-  set<TrMapUpdatable*> m_toUpdate;
+  set<shared_ptr<TrMapUpdatable>> m_toUpdate;
  public:
   int m_rows, m_cols;
 
-  TrColorMap* m_color;
-  TrHeightMap* m_height;
-  TrMoistureMap* m_moisture;
-  TrNormalMap* m_normal;
-  TrVegetationMap* m_vegetation;
-  TrWaterMap* m_water;
-  TrWindMap* m_wind;
+  shared_ptr<TrColorMap> m_color;
+  shared_ptr<TrHeightMap> m_height;
+  shared_ptr<TrMoistureMap> m_moisture;
+  shared_ptr<TrNormalMap> m_normal;
+  shared_ptr<TrVegetationMap> m_vegetation;
+  shared_ptr<TrWaterMap> m_water;
+  shared_ptr<TrWindMap> m_wind;
 
   int m_renderState;
   int m_erosionState;

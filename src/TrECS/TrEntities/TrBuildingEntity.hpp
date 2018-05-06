@@ -19,5 +19,5 @@ class TrBuildingEntity : public TrEntity {
   TrBuildingEntity(TrGame* game, SDL_Rect rect, TrBuildingEntityType* type)
       : TrEntity(game, rect), m_type(type){};
 
-  ~TrBuildingEntity() {}
+  ~TrBuildingEntity() override = default;
 };

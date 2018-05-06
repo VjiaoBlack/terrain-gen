@@ -48,9 +48,9 @@ TrRenderLoop* TrMainMenuLoop::update(TrGame* game) {
   m_menu->update();
 
   if (m_menu->m_buttons[0]->m_activated) {
-    game->m_gameStateStack.push_back(new TrGameLoop(game));
-    game->m_gameStateTransition = TrTransitionLoop::makePushLoop(
-        game, this, game->m_gameStateStack.back());
+    game->m_gameStateStack.push_back(move(make_shared<TrGameLoop>(game)));
+    game->m_gameStateTransition.reset(TrTransitionLoop::makePushLoop(
+        game, this->getptr(), game->m_gameStateStack.back()));
   }
 
   if (m_menu->m_buttons[2]->m_activated) {

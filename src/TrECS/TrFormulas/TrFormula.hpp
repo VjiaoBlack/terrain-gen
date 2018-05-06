@@ -13,11 +13,11 @@ class TrItem;
 
 class TrFormula {
  public:
-  TrFormula() {}
+  TrFormula() = default;
 
   map<TrItem*, int> m_inputs;
   map<TrItem*, int> m_outputs;
   map<TrItem*, int> m_byproducts;
 
-  virtual ~TrFormula() {}
+  virtual ~TrFormula() = default;
 };

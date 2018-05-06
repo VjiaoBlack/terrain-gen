@@ -26,16 +26,7 @@ class TrWaterPoint {
 
   bool operator==(const TrWaterPoint& right) const { return _id == right._id; }
 
-  TrWaterPoint& operator=(const TrWaterPoint& right) {
-    _id = right._id;
-    x = right.x;
-    y = right.y;
-    amt = right.amt;
-    vx = right.vx;
-    vy = right.vy;
-    dirt = right.dirt;
-    return *this;
-  }
+  TrWaterPoint& operator=(const TrWaterPoint& right) = default;
 
   static TrWaterPoint Merge(const TrWaterPoint& a, const TrWaterPoint& b) {
     if (a.amt < 0.00001 && b.amt < 0.00001) {
@@ -83,14 +74,14 @@ class TrWaterTempMap : public TrMapData<double> {
  public:
   TrWaterTempMap(int rows, int cols) : TrMapData(rows, cols) {}
 
-  void update(TrMap* map){};
+  void update(TrMap* map) override {};
 };
 
 class TrWaterDataMap : public TrMapData<TrWaterPoint> {
  public:
   TrWaterDataMap(int rows, int cols) : TrMapData(rows, cols) {}
 
-  void update(TrMap* map) {}
+  void update(TrMap* map) override {}
 };
 
 // map
@@ -112,12 +103,12 @@ class TrWaterMap : public TrMapData<double> {
     // , m_water_temp(new TrWaterDataMap(rows, cols)) {
   }
 
-  ~TrWaterMap() {
+  ~TrWaterMap() override {
     delete m_water_temp;
     delete m_water_avg;
   }
 
-  void update(TrMap* map);
+  void update(TrMap* map) override;
   void experimentalUpdate(TrMap* map);
 
   void rain(TrMap* map);

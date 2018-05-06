@@ -19,15 +19,15 @@ class TrGraphicsComponent : public TrComponent {
   SDL_Texture* m_texture;
   SDL_Color m_color;
 
-  TrGraphicsComponent(SDL_Texture* texture)
+  explicit TrGraphicsComponent(SDL_Texture* texture)
       : m_texture(texture), m_color{0, 0, 0, 0} {};
-  TrGraphicsComponent(SDL_Color color) : m_texture(nullptr), m_color(color){};
+  explicit TrGraphicsComponent(SDL_Color color) : m_texture(nullptr), m_color(color){};
   TrGraphicsComponent() : TrGraphicsComponent(nullptr) {}
 
-  virtual ~TrGraphicsComponent(){};
+  ~TrGraphicsComponent() override = default;;
 
   /**
    * @brief draws the given entity
    */
-  virtual void update(TrGame* game, TrEntity* entity);
+  void update(TrGame* game, TrEntity* entity) override;
 };

@@ -21,5 +21,5 @@ class TrActorEntityType : public TrEntityType {
                     TrPlanningComponent* planning)
       : TrEntityType(graphics), m_physics(physics), m_planning(planning){};
 
-  virtual ~TrActorEntityType() {}
+  ~TrActorEntityType() override = default;
 };

@@ -56,8 +56,8 @@ TrGUIMenu* TrGUIMenu::MakeVerticalMenu(TrGame* game, SDL_Rect rect,
 }
 
 TrGUIMenu::~TrGUIMenu() {
-  for (int i = 0; i < m_buttons.size(); i++) {
-    delete m_buttons[i];
+  for (auto &m_button : m_buttons) {
+    delete m_button;
   }
 
   if (m_texture) {

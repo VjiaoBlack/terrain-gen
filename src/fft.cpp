@@ -27,12 +27,7 @@ vector3 vector3::operator*(const float s) {
   return vector3(this->x * s, this->y * s, this->z * s);
 }
 
-vector3& vector3::operator=(const vector3& v) {
-  this->x = v.x;
-  this->y = v.y;
-  this->z = v.z;
-  return *this;
-}
+vector3& vector3::operator=(const vector3& v) = default;
 
 float vector3::length() {
   return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
@@ -62,11 +57,7 @@ vector2 vector2::operator*(const float s) {
   return vector2(this->x * s, this->y * s);
 }
 
-vector2& vector2::operator=(const vector2& v) {
-  this->x = v.x;
-  this->y = v.y;
-  return *this;
-}
+vector2& vector2::operator=(const vector2& v) = default;
 
 float vector2::length() { return sqrt(this->x * this->x + this->y * this->y); }
 
@@ -75,8 +66,8 @@ vector2 vector2::unit() {
   return vector2(this->x / l, this->y / l);
 }
 
-cFFT::cFFT(unsigned int N) : N(N), reversed(0), T(0), pi2(2 * M_PI) {
-  c[0] = c[1] = 0;
+cFFT::cFFT(unsigned int N) : N(N), reversed(nullptr), T(nullptr), pi2(2 * M_PI) {
+  c[0] = c[1] = nullptr;
 
   log_2_N = log(N) / log(2);
 
@@ -104,13 +95,13 @@ cFFT::~cFFT() {
       if (T[i]) delete[] T[i];
     delete[] T;
   }
-  if (reversed) delete[] reversed;
+  delete[] reversed;
 }
 
 unsigned int cFFT::reverse(unsigned int i) {
   unsigned int res = 0;
   for (int j = 0; j < log_2_N; j++) {
-    res = (res << 1) + (i & 1);
+    res = (res << 1u) + (i & 1u);
     i >>= 1;
   }
   return res;
@@ -124,7 +115,7 @@ void cFFT::fft(complex_t* input, complex_t* output, int stride, int offset) {
   for (int i = 0; i < N; i++)
     c[which][i] = input[reversed[i] * stride + offset];
 
-  int loops = N >> 1;
+  int loops = N >> 1u;
   int size = 1 << 1;
   int size_over_2 = 1;
   int w_ = 0;
@@ -161,14 +152,14 @@ cOcean::cOcean(const int N, const float A, const vector2 w, const float length,
       A(A),
       w(w),
       length(length),
-      vertices(0),
-      indices(0),
-      h_tilde(0),
-      h_tilde_slopex(0),
-      h_tilde_slopez(0),
-      h_tilde_dx(0),
-      h_tilde_dz(0),
-      fft(0) {
+      vertices(nullptr),
+      indices(nullptr),
+      h_tilde(nullptr),
+      h_tilde_slopex(nullptr),
+      h_tilde_slopez(nullptr),
+      h_tilde_dx(nullptr),
+      h_tilde_dz(nullptr),
+      fft(nullptr) {
   h_tilde = new complex_t[N * N];
   h_tilde_slopex = new complex_t[N * N];
   h_tilde_slopez = new complex_t[N * N];
@@ -260,14 +251,14 @@ cOcean::cOcean(const int N, const float A, const vector2 w, const float length,
 }
 
 cOcean::~cOcean() {
-  if (h_tilde) delete[] h_tilde;
-  if (h_tilde_slopex) delete[] h_tilde_slopex;
-  if (h_tilde_slopez) delete[] h_tilde_slopez;
-  if (h_tilde_dx) delete[] h_tilde_dx;
-  if (h_tilde_dz) delete[] h_tilde_dz;
-  if (fft) delete fft;
-  if (vertices) delete vertices;
-  if (indices) delete[] indices;
+  delete[] h_tilde;
+  delete[] h_tilde_slopex;
+  delete[] h_tilde_slopez;
+  delete[] h_tilde_dx;
+  delete[] h_tilde_dz;
+  delete fft;
+  delete vertices;
+  delete[] indices;
 }
 
 void cOcean::release() {
@@ -312,11 +303,7 @@ complex_t complex_t::operator*(const float c) const {
   return complex_t(this->a * c, this->b * c);
 }
 
-complex_t& complex_t::operator=(const complex_t& c) {
-  this->a = c.a;
-  this->b = c.b;
-  return *this;
-}
+complex_t& complex_t::operator=(const complex_t& c) = default;
 
 void complex_t::reset() {
   complex_t::additions = 0;

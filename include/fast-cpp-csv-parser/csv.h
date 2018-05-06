@@ -135,7 +135,7 @@ namespace io{
 
         class ByteSourceBase{
         public:
-                virtual int read(char*buffer, int size)=0;
+                virtual int read(char*buffer, size_t size)=0;
                 virtual ~ByteSourceBase(){}
         };
 
@@ -148,7 +148,7 @@ namespace io{
                                 std::setvbuf(file, 0, _IONBF, 0);
                         }
 
-                        int read(char*buffer, int size){
+                        int read(char*buffer, size_t size){
                                 return std::fread(buffer, 1, size, file);
                         }
 
@@ -164,7 +164,7 @@ namespace io{
                 public:
                         explicit NonOwningIStreamByteSource(std::istream&in):in(in){}
 
-                        int read(char*buffer, int size){
+                        int read(char*buffer, size_t size){
                                 in.read(buffer, size);
                                 return in.gcount();
                         }
@@ -179,7 +179,7 @@ namespace io{
                 public:
                         NonOwningStringByteSource(const char*str, long long size):str(str), remaining_byte_count(size){}
 
-                        int read(char*buffer, int desired_byte_count){
+                        int read(char*buffer, size_t desired_byte_count){
                                 int to_copy_byte_count = desired_byte_count;
                                 if(remaining_byte_count < to_copy_byte_count)
                                         to_copy_byte_count = remaining_byte_count;
@@ -210,7 +210,7 @@ namespace io{
                                                 try{
                                                         for(;;){
                                                                 read_requested_condition.wait(
-                                                                        guard, 
+                                                                        guard,
                                                                         [&]{
                                                                                 return desired_byte_count != -1 || termination_requested;
                                                                         }

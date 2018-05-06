@@ -19,5 +19,5 @@ class TrBuildingEntityType : public TrEntityType {
                        TrFootprintComponent* footprint)
       : TrEntityType(graphics), m_footprint(footprint){};
 
-  virtual ~TrBuildingEntityType() { delete m_footprint; }
+  ~TrBuildingEntityType() override { delete m_footprint; }
 };

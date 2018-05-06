@@ -10,14 +10,18 @@
 
 using namespace std;
 
-class TrGameLoop : public TrRenderLoop {
+ class TrGameLoop : public TrRenderLoop, public std::enable_shared_from_this<TrGameLoop> {
  public:
   TrGUIMenu* m_menu;
   SDL_Texture* m_map;
 
-  TrGameLoop(TrGame* game);
-  virtual ~TrGameLoop();
+  explicit TrGameLoop(TrGame* game);
 
-  virtual TrRenderLoop* update(TrGame* game);
-  virtual void render(TrGame* game);
+  std::shared_ptr<TrGameLoop> getptr() {
+    return std::enable_shared_from_this<TrGameLoop>::shared_from_this();
+  }
+  ~TrGameLoop() override;
+
+  TrRenderLoop* update(TrGame* game) override;
+  void render(TrGame* game) override;
 };

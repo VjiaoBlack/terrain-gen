@@ -42,9 +42,9 @@ PerlinNoise::PerlinNoise() {
 
 double PerlinNoise::noise(double x, double y, double z) {
   // Find the unit cube that contains the point
-  int X = (int)floor(x) & 255;
-  int Y = (int)floor(y) & 255;
-  int Z = (int)floor(z) & 255;
+  int X = (uint) floor(x) & 255u;
+  int Y = (uint) floor(y) & 255u;
+  int Z = (uint) floor(z) & 255u;
 
   // Find relative x, y,z of point in cube
   x -= floor(x);

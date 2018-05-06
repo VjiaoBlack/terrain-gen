@@ -13,7 +13,7 @@ class TrEntityType {
  public:
   TrGraphicsComponent* m_graphics;
 
-  TrEntityType(TrGraphicsComponent* graphics) : m_graphics(graphics){};
+  explicit TrEntityType(TrGraphicsComponent* graphics) : m_graphics(graphics){};
 
   virtual ~TrEntityType() { delete m_graphics; }
 };

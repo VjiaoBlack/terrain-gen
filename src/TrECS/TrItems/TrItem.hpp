@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <utility> #include <utility>
 /**
  * TrItem.hpp
  */
@@ -12,7 +12,7 @@ class TrItem {
  public:
   string m_name;
 
-  TrItem(string name) : m_name(name) {}
+  explicit TrItem(string name) : m_name(std::move(std::move(name))) {}
 
-  virtual ~TrItem() {}
+  virtual ~TrItem() = default;
 };

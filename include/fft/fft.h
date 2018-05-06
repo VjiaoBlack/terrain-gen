@@ -1,7 +1,7 @@
 
 #pragma once 
 
-#include <math.h>
+#include <cmath>
 
 #include <glm/glm.hpp>
 
@@ -71,7 +71,7 @@ class vector3 {
     vector3 cross(const vector3& v);
     vector3 operator+(const vector3& v);
     vector3 operator-(const vector3& v);
-    vector3 operator*(const float s);
+    vector3 operator*(float s);
     vector3& operator=(const vector3& v);
     float length();
     vector3 unit();
@@ -87,7 +87,7 @@ class vector2 {
     float operator*(const vector2& v);
     vector2 operator+(const vector2& v);
     vector2 operator-(const vector2& v);
-    vector2 operator*(const float s);
+    vector2 operator*(float s);
     vector2& operator=(const vector2& v);
     float length();
     vector2 unit();
@@ -107,7 +107,7 @@ class complex_t {
     complex_t operator+(const complex_t& c) const;
     complex_t operator-(const complex_t& c) const;
     complex_t operator-() const;
-    complex_t operator*(const float c) const;
+    complex_t operator*(float c) const;
     complex_t& operator=(const complex_t& c);
     static void reset();
 };
@@ -136,7 +136,7 @@ class cFFT {
 	complex_t *c[2];
   protected:
   public:
-	cFFT(unsigned int N);
+  explicit cFFT(unsigned int N);
 	~cFFT();
 	unsigned int reverse(unsigned int i);
 	complex_t t(unsigned int x, unsigned int N);
@@ -171,7 +171,7 @@ class cOcean {
 	// vertex_ocean *vertices;			// vertices for vertex buffer object
   TrMapData<vertex_ocean>* vertices;
 
-	cOcean(const int N, const float A, const vector2 w, const float length, bool geometry);
+	cOcean(int N, float A, vector2 w, float length, bool geometry);
 	~cOcean();
 	void release();
 

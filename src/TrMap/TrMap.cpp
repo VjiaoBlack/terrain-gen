@@ -73,13 +73,6 @@ TrMap::TrMap(int rows, int cols)
 }
 
 TrMap::~TrMap() {
-  delete m_color;
-  delete m_height;
-  delete m_moisture;
-  delete m_normal;
-  delete m_vegetation;
-  delete m_water;
-  delete m_wind;
 }
 
 void TrMap::update(set<int> keysDown) {
@@ -188,6 +181,7 @@ void TrMap::update(set<int> keysDown) {
         }
         m_toUpdate.insert(m_color);
         break;
+      default:break;
     }
   }
 
@@ -249,11 +243,11 @@ void TrMap::saveMap() {
   for (int i = 0; i < K_MAP_SIZE_Y; i++) {
     for (int j = 0; j < K_MAP_SIZE_X; j++) {
       map_height.m_data[i * K_MAP_SIZE_X + j] |=
-          map_height.m_data[i * K_MAP_SIZE_X + j] << 8;
+          map_height.m_data[i * K_MAP_SIZE_X + j] << 8u;
       map_height.m_data[i * K_MAP_SIZE_X + j] |=
-          map_height.m_data[i * K_MAP_SIZE_X + j] << 16;
+          map_height.m_data[i * K_MAP_SIZE_X + j] << 16u;
       map_height.m_data[i * K_MAP_SIZE_X + j] |=
-          map_height.m_data[i * K_MAP_SIZE_X + j] << 24;
+          map_height.m_data[i * K_MAP_SIZE_X + j] << 24u;
       map_height.m_data[i * K_MAP_SIZE_X + j] =
           map_height.m_data[i * K_MAP_SIZE_X + j] | 0xFF000000;
     }

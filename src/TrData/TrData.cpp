@@ -110,8 +110,8 @@ void TrData::loadData() {
 
         TrGraphicsComponent* graphics =
             new TrGraphicsComponent(parseColor(color));
-        TrPhysicsComponent* physics = new TrPhysicsComponent(0, 0);
-        TrPlanningComponent* planning = new TrPlanningComponent();
+        auto * physics = new TrPhysicsComponent(0, 0);
+        auto * planning = new TrPlanningComponent();
 
         TrData::m_entityTypes[name] =
             new TrActorEntityType(graphics, physics, planning);
@@ -130,14 +130,14 @@ void TrData::loadData() {
         TrGraphicsComponent* graphics =
             new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
         pair<int, int> footprintSize(1, 1);
-        if (size.size() > 0) {
+        if (!size.empty()) {
           footprintSize = parseSize(size);
         }
-        TrFootprintComponent* footprint = new TrFootprintComponent(
-            footprintSize.first, footprintSize.second, NULL);
+        auto * footprintComponent = new TrFootprintComponent(
+            footprintSize.first, footprintSize.second, nullptr);
 
         TrData::m_entityTypes[name] =
-            new TrBuildingEntityType(graphics, footprint);
+            new TrBuildingEntityType(graphics, footprintComponent);
       }
     }
 
@@ -153,14 +153,14 @@ void TrData::loadData() {
         TrGraphicsComponent* graphics =
             new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
         pair<int, int> footprintSize(1, 1);
-        if (size.size() > 0) {
+        if (!size.empty()) {
           footprintSize = parseSize(size);
         }
-        TrFootprintComponent* footprint = new TrFootprintComponent(
-            footprintSize.first, footprintSize.second, NULL);
+        auto * footprintComponent = new TrFootprintComponent(
+            footprintSize.first, footprintSize.second, nullptr);
 
         TrData::m_entityTypes[name] =
-            new TrPlantEntityType(graphics, footprint);
+            new TrPlantEntityType(graphics, footprintComponent);
       }
     }
   }

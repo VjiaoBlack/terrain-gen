@@ -29,11 +29,11 @@ class TrPlanningComponent : public TrComponent {
  public:
   set<tr_target_t> m_targets;
 
-  TrPlanningComponent(){};
-  virtual ~TrPlanningComponent(){};
+  TrPlanningComponent() = default;;
+  ~TrPlanningComponent() override = default;;
 
   /**
    * @brief based on the game and entity state, figure out something to do
    */
-  virtual void update(TrGame* game, TrEntity* entity);
+  void update(TrGame* game, TrEntity* entity) override;
 };

@@ -6,9 +6,9 @@
  * a test file for testing driving.
  */
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/time.h>
 #include <unistd.h>
 #include <iostream>

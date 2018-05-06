@@ -12,11 +12,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/time.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 #include <iostream>
 #include <iostream>
@@ -26,10 +26,14 @@
 #include "../TrGame.hpp"
 #include "../TrMap/TrMap.hpp"
 
-class TrRenderLoop {
+class TrRenderLoop : public std::enable_shared_from_this<TrRenderLoop> {
  public:
-  TrRenderLoop(){};
-  virtual ~TrRenderLoop(){};
+  TrRenderLoop() = default;;
+  virtual ~TrRenderLoop() = default;;
+
+  std::shared_ptr<TrRenderLoop> getptr() {
+    return shared_from_this();
+  }
 
   inline virtual TrRenderLoop* update(TrGame* game) { return this; };
   inline virtual void render(TrGame* game){};

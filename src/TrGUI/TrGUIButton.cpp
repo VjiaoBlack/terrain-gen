@@ -56,7 +56,7 @@ void TrGUIButton::update() {
 
   if (SDL_PointInRect(&mousePos, &m_rect)) {
     if (m_game->m_buttonsDown.count(SDL_BUTTON_LEFT)) {
-      if (false == m_wasPressed) {
+      if (!m_wasPressed) {
         m_pressedInside = true;
       }
     } else if (m_pressedInside) {

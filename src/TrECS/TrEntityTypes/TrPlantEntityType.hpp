@@ -19,5 +19,5 @@ class TrPlantEntityType : public TrEntityType {
                     TrFootprintComponent* footprint)
       : TrEntityType(graphics), m_footprint(footprint){};
 
-  virtual ~TrPlantEntityType() {}
+  ~TrPlantEntityType() override = default;
 };

@@ -18,6 +18,6 @@ using namespace std;
  */
 class TrComponent {
  public:
-  virtual ~TrComponent(){};
+  virtual ~TrComponent() = default;;
   virtual void update(TrGame* game, TrEntity* entity) = 0;
 };

@@ -19,5 +19,5 @@ class TrActorEntity : public TrEntity {
   TrActorEntity(TrGame* game, SDL_Rect rect, TrActorEntityType* type)
       : TrEntity(game, rect), m_type(type){};
 
-  ~TrActorEntity() {}
+  ~TrActorEntity() override = default;
 };
