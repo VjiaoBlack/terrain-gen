@@ -5,6 +5,11 @@
 #include "TrMainMenuLoop.hpp"
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
+#include "../TrECS/TrSystems/TrEntitySystem.hpp"
+#include "../TrECS/TrEntities.hpp"
+#include "../TrECS/TrEntityTypes/TrEntityType.hpp"
+#include "../TrECS/TrEntities/TrPlantEntity.hpp"
+#include "../TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
 TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   int score = 10;
@@ -57,6 +62,10 @@ TrRenderLoop *TrMainMenuLoop::update(TrGame *game) {
 void TrMainMenuLoop::render(TrGame *game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture.get(), game->m_xOff,
                           game->m_yOff, K_DISPLAY_SCALE);
+  // draw plants
+  for (auto const& tree : game->m_entSystem->m_plants) {
+    dynamic_cast<TrEntityType*>(tree->m_type)->m_graphics->update(game, tree.get());
+  }
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};
 

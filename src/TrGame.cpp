@@ -230,6 +230,7 @@ TrGame::TrGame()
 
 }
 
+
 TrGame::~TrGame() {
 
   while (!m_gameStateStack.empty()) {

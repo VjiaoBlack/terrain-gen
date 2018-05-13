@@ -285,24 +285,6 @@ void TrColorMap::updateDisplay(TrMap *map) {
         this->at(i, j) = vecToColor(ocolor);
 
       }
-
-
-      // if theres a tree here, draw a special thing
-      if (map && map->m_game && map->m_game->m_entSystem) {
-        SDL_Point p = {j, i};
-        for (int ab = 0; ab < map->m_game->m_entSystem->m_plants.size(); ab++) {
-          auto rect = map->m_game->m_entSystem->m_plants[ab]->m_rect;
-          if (SDL_PointInRect(&p, &rect)) {
-
-            auto col = dynamic_cast<TrEntityType *>(
-                map->m_game->m_entSystem->m_plants[ab]->m_type)->m_graphics->m_color;
-
-            this->at(i, j) = vecToColor(dvec3((double)col.r , (double)col.g , (double)
-                col.b ));
-          }
-        }
-      }
-
     }
   }
 }
