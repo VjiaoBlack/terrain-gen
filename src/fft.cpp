@@ -6,20 +6,20 @@
 vector3::vector3() : x(0.0f), y(0.0f), z(0.0f) {}
 vector3::vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-float vector3::operator*(const vector3& v) {
+float vector3::operator*(const vector3 &v) {
   return this->x * v.x + this->y * v.y + this->z * v.z;
 }
 
-vector3 vector3::cross(const vector3& v) {
+vector3 vector3::cross(const vector3 &v) {
   return vector3(this->y * v.z - this->z * v.y, this->z * v.x - this->x * v.z,
                  this->x * v.y - this->y * v.z);
 }
 
-vector3 vector3::operator+(const vector3& v) {
+vector3 vector3::operator+(const vector3 &v) {
   return vector3(this->x + v.x, this->y + v.y, this->z + v.z);
 }
 
-vector3 vector3::operator-(const vector3& v) {
+vector3 vector3::operator-(const vector3 &v) {
   return vector3(this->x - v.x, this->y - v.y, this->z - v.z);
 }
 
@@ -27,7 +27,7 @@ vector3 vector3::operator*(const float s) {
   return vector3(this->x * s, this->y * s, this->z * s);
 }
 
-vector3& vector3::operator=(const vector3& v) = default;
+vector3 &vector3::operator=(const vector3 &v) = default;
 
 float vector3::length() {
   return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
@@ -41,15 +41,15 @@ vector3 vector3::unit() {
 vector2::vector2() : x(0.0f), y(0.0f) {}
 vector2::vector2(float x, float y) : x(x), y(y) {}
 
-float vector2::operator*(const vector2& v) {
+float vector2::operator*(const vector2 &v) {
   return this->x * v.x + this->y * v.y;
 }
 
-vector2 vector2::operator+(const vector2& v) {
+vector2 vector2::operator+(const vector2 &v) {
   return vector2(this->x + v.x, this->y + v.y);
 }
 
-vector2 vector2::operator-(const vector2& v) {
+vector2 vector2::operator-(const vector2 &v) {
   return vector2(this->x - v.x, this->y - v.y);
 }
 
@@ -57,7 +57,7 @@ vector2 vector2::operator*(const float s) {
   return vector2(this->x * s, this->y * s);
 }
 
-vector2& vector2::operator=(const vector2& v) = default;
+vector2 &vector2::operator=(const vector2 &v) = default;
 
 float vector2::length() { return sqrt(this->x * this->x + this->y * this->y); }
 
@@ -75,7 +75,7 @@ cFFT::cFFT(unsigned int N) : N(N), reversed(nullptr), T(nullptr), pi2(2 * M_PI) 
   for (int i = 0; i < N; i++) reversed[i] = reverse(i);
 
   int pow2 = 1;
-  T = new complex_t*[log_2_N];  // prep T
+  T = new complex_t *[log_2_N];  // prep T
   for (int i = 0; i < log_2_N; i++) {
     T[i] = new complex_t[pow2];
     for (int j = 0; j < pow2; j++) T[i][j] = t(j, pow2 * 2);
@@ -111,12 +111,12 @@ complex_t cFFT::t(unsigned int x, unsigned int N) {
   return complex_t(cos(pi2 * x / N), sin(pi2 * x / N));
 }
 
-void cFFT::fft(complex_t* input, complex_t* output, int stride, int offset) {
+void cFFT::fft(complex_t *input, complex_t *output, int stride, int offset) {
   for (int i = 0; i < N; i++)
     c[which][i] = input[reversed[i] * stride + offset];
 
   int loops = N >> 1u;
-  int size = 1 << 1;
+  int size = 1u << 1u;
   int size_over_2 = 1;
   int w_ = 0;
   for (int i = 1; i <= log_2_N; i++) {
@@ -124,14 +124,14 @@ void cFFT::fft(complex_t* input, complex_t* output, int stride, int offset) {
     for (int j = 0; j < loops; j++) {
       for (int k = 0; k < size_over_2; k++) {
         c[which][size * j + k] =
-            c[which ^ 1][size * j + k] +
-            c[which ^ 1][size * j + size_over_2 + k] * T[w_][k];
+            c[which ^ 1u][size * j + k] +
+                c[which ^ 1u][size * j + size_over_2 + k] * T[w_][k];
       }
 
       for (int k = size_over_2; k < size; k++) {
         c[which][size * j + k] =
             c[which ^ 1][size * j - size_over_2 + k] -
-            c[which ^ 1][size * j + k] * T[w_][k - size_over_2];
+                c[which ^ 1][size * j + k] * T[w_][k - size_over_2];
       }
     }
     loops >>= 1;
@@ -228,26 +228,6 @@ cOcean::cOcean(const int N, const float A, const vector2 w, const float length,
       }
     }
   }
-
-  // createProgram(glProgram, glShaderV, glShaderF, "src/oceanv.sh",
-  // "src/oceanf.sh");
-  // vertex         = glGetAttribLocation(glProgram, "vertex");
-  // normal         = glGetAttribLocation(glProgram, "normal");
-  // texture        = glGetAttribLocation(glProgram, "texture");
-  // light_position = glGetUniformLocation(glProgram, "light_position");
-  // projection     = glGetUniformLocation(glProgram, "Projection");
-  // view           = glGetUniformLocation(glProgram, "View");
-  // model          = glGetUniformLocation(glProgram, "Model");
-
-  // glGenBuffers(1, &vbo_vertices);
-  // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-  // glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_ocean)*(Nplus1)*(Nplus1),
-  // vertices, GL_DYNAMIC_DRAW);
-
-  // glGenBuffers(1, &vbo_indices);
-  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
-  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_count*sizeof(unsigned int),
-  // indices, GL_STATIC_DRAW);
 }
 
 cOcean::~cOcean() {
@@ -262,9 +242,6 @@ cOcean::~cOcean() {
 }
 
 void cOcean::release() {
-  // glDeleteBuffers(1, &vbo_indices);
-  // glDeleteBuffers(1, &vbo_vertices);
-  // releaseProgram(glProgram, glShaderV, glShaderF);
 }
 
 float cOcean::dispersion(int n_prime, int m_prime) {
@@ -281,18 +258,18 @@ complex_t::complex_t() : a(0.0f), b(0.0f) {}
 complex_t::complex_t(float a, float b) : a(a), b(b) {}
 complex_t complex_t::conj() { return complex_t(this->a, -this->b); }
 
-complex_t complex_t::operator*(const complex_t& c) const {
+complex_t complex_t::operator*(const complex_t &c) const {
   complex_t::multiplications++;
   return complex_t(this->a * c.a - this->b * c.b,
                    this->a * c.b + this->b * c.a);
 }
 
-complex_t complex_t::operator+(const complex_t& c) const {
+complex_t complex_t::operator+(const complex_t &c) const {
   complex_t::additions++;
   return complex_t(this->a + c.a, this->b + c.b);
 }
 
-complex_t complex_t::operator-(const complex_t& c) const {
+complex_t complex_t::operator-(const complex_t &c) const {
   complex_t::additions++;
   return complex_t(this->a - c.a, this->b - c.b);
 }
@@ -303,7 +280,7 @@ complex_t complex_t::operator*(const float c) const {
   return complex_t(this->a * c, this->b * c);
 }
 
-complex_t& complex_t::operator=(const complex_t& c) = default;
+complex_t &complex_t::operator=(const complex_t &c) = default;
 
 void complex_t::reset() {
   complex_t::additions = 0;
@@ -321,7 +298,7 @@ complex_t gaussianRandomVariable() {
   return complex_t(x1 * w, x2 * w);
 }
 
-float uniformRandomVariable() { return (float)rand() / RAND_MAX; }
+float uniformRandomVariable() { return (float) rand() / RAND_MAX; }
 
 float cOcean::phillips(int n_prime, int m_prime) {
   vector2 k(M_PI * (2 * n_prime - N) / length,
@@ -343,7 +320,7 @@ float cOcean::phillips(int n_prime, int m_prime) {
   float l2 = L2 * damping * damping;
 
   return A * exp(-1.0f / (k_length2 * L2)) / k_length4 * k_dot_w2 *
-         exp(-k_length2 * l2);
+      exp(-k_length2 * l2);
 }
 
 complex_t cOcean::hTilde_0(int n_prime, int m_prime) {
@@ -440,10 +417,10 @@ void cOcean::evaluateWaves(float t) {
 
         vertices->m_data[index + N + Nplus1 * N].x =
             vertices->m_data[index + N + Nplus1 * N].ox +
-            lambda * h_d_and_n.D.x;
+                lambda * h_d_and_n.D.x;
         vertices->m_data[index + N + Nplus1 * N].z =
             vertices->m_data[index + N + Nplus1 * N].oz +
-            lambda * h_d_and_n.D.y;
+                lambda * h_d_and_n.D.y;
 
         vertices->m_data[index + N + Nplus1 * N].nx = h_d_and_n.n.x;
         vertices->m_data[index + N + Nplus1 * N].ny = h_d_and_n.n.y;
@@ -544,7 +521,7 @@ void cOcean::evaluateWavesFFT(float t) {
       h_tilde_slopez[index] = h_tilde_slopez[index] * sign;
       n = vector3(0.0f - h_tilde_slopex[index].a, 1.0f,
                   0.0f - h_tilde_slopez[index].a)
-              .unit();
+          .unit();
       vertices->m_data[index1].nx = n.x;
       vertices->m_data[index1].ny = n.y;
       vertices->m_data[index1].nz = n.z;
@@ -555,10 +532,10 @@ void cOcean::evaluateWavesFFT(float t) {
 
         vertices->m_data[index1 + N + Nplus1 * N].x =
             vertices->m_data[index1 + N + Nplus1 * N].ox +
-            h_tilde_dx[index].a * lambda;
+                h_tilde_dx[index].a * lambda;
         vertices->m_data[index1 + N + Nplus1 * N].z =
             vertices->m_data[index1 + N + Nplus1 * N].oz +
-            h_tilde_dz[index].a * lambda;
+                h_tilde_dz[index].a * lambda;
 
         vertices->m_data[index1 + N + Nplus1 * N].nx = n.x;
         vertices->m_data[index1 + N + Nplus1 * N].ny = n.y;
@@ -581,10 +558,10 @@ void cOcean::evaluateWavesFFT(float t) {
 
         vertices->m_data[index1 + Nplus1 * N].x =
             vertices->m_data[index1 + Nplus1 * N].ox +
-            h_tilde_dx[index].a * lambda;
+                h_tilde_dx[index].a * lambda;
         vertices->m_data[index1 + Nplus1 * N].z =
             vertices->m_data[index1 + Nplus1 * N].oz +
-            h_tilde_dz[index].a * lambda;
+                h_tilde_dz[index].a * lambda;
 
         vertices->m_data[index1 + Nplus1 * N].nx = n.x;
         vertices->m_data[index1 + Nplus1 * N].ny = n.y;
@@ -603,35 +580,4 @@ void cOcean::render(float t, bool use_fft) {
     evaluateWavesFFT(t);
   }
 
-  // glUseProgram(glProgram);
-  // glUniform3f(light_position, light_pos.x, light_pos.y, light_pos.z);
-  // glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(Projection));
-  // glUniformMatrix4fv(view,       1, GL_FALSE, glm::value_ptr(View));
-  // glUniformMatrix4fv(model,      1, GL_FALSE, glm::value_ptr(Model));
-
-  // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-  // glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertex_ocean) * Nplus1 * Nplus1,
-  // vertices);
-  // glEnableVertexAttribArray(vertex);
-  // glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_ocean),
-  // 0);
-  // glEnableVertexAttribArray(normal);
-  // glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_ocean),
-  // (char *)NULL + 12);
-  // glEnableVertexAttribArray(texture);
-  // glVertexAttribPointer(texture, 3, GL_FLOAT, GL_FALSE, sizeof(vertex_ocean),
-  // (char *)NULL + 24);
-
-  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_indices);
-  // for (int j = 0; j < 10; j++) {
-  // 	for (int i = 0; i < 10; i++) {
-  // 		Model = glm::scale(glm::mat4(1.0f), glm::vec3(5.f,5.f,5.f));
-  // 		Model = glm::translate(Model, glm::vec3(length * i, 0, length *
-  // -j));
-  // 		glUniformMatrix4fv(model, 1, GL_FALSE, glm::value_ptr(Model));
-  // 		glDrawElements(geometry ? GL_LINES : GL_TRIANGLES,
-  // indices_count,
-  // GL_UNSIGNED_INT, 0);
-  // 	}
-  // }
 }

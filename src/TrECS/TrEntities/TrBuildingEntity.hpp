@@ -4,9 +4,9 @@
  * TrBuildingEntity.hpp
  */
 
-#include "../TrComponents/TrGraphicsComponent.hpp"
 #include "../TrEntities.hpp"
 
+class TrGame;
 class TrBuildingEntityType;
 
 /**
@@ -14,10 +14,10 @@ class TrBuildingEntityType;
  */
 class TrBuildingEntity : public TrEntity {
  public:
-  TrBuildingEntityType* m_type;
+  TrBuildingEntityType *m_type;
 
-  TrBuildingEntity(TrGame* game, SDL_Rect rect, TrBuildingEntityType* type)
-      : TrEntity(game, rect), m_type(type){};
+  TrBuildingEntity(TrGame *game, SDL_Rect rect, TrBuildingEntityType *type)
+      : TrEntity(game, rect), m_type(type) {};
 
   ~TrBuildingEntity() override = default;
 };

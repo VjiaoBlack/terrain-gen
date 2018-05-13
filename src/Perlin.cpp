@@ -16,7 +16,7 @@ PerlinNoise::PerlinNoise(unsigned int seed) {
   // Initialize a random engine with seed
   std::default_random_engine engine(seed);
 
-  // Suffle  using the above random engine
+  // Shuffle using the above random engine
   std::shuffle(p.begin(), p.end(), engine);
 
   // Duplicate the permutation vector
@@ -74,18 +74,3 @@ double PerlinNoise::noise(double x, double y, double z) {
                 grad(p[BB + 1], x - 1, y - 1, z - 1))));
   return (res + 1.0) / 2.0;
 }
-
-// double PerlinNoise::fade(double t) {
-//   return t * t * t * (t * (t * 6 - 15) + 10);
-// }
-
-// double PerlinNoise::lerp(double t, double a, double b) {
-//   return a + t * (b - a);
-// }
-
-// double PerlinNoise::grad(int hash, double x, double y, double z) {
-//   int h = hash & 15;
-//   // Convert lower 4 bits of hash into 12 gradient directions
-//   double u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
-//   return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
-// }

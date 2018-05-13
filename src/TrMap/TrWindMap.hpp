@@ -10,5 +10,5 @@ class TrWindMap : public TrMapData<dvec3> {
  public:
   TrWindMap(int rows, int cols) : TrMapData(rows, cols) {}
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 };

@@ -6,7 +6,6 @@
 
 #include <set>
 
-// #include "TrEntities.hpp"
 #include "../TrComponents.hpp"
 
 class TrEntity;
@@ -29,11 +28,11 @@ class TrPlanningComponent : public TrComponent {
  public:
   set<tr_target_t> m_targets;
 
-  TrPlanningComponent() = default;;
-  ~TrPlanningComponent() override = default;;
+  TrPlanningComponent() = default;
+  ~TrPlanningComponent() override = default;
 
   /**
    * @brief based on the game and entity state, figure out something to do
    */
-  void update(TrGame* game, TrEntity* entity) override;
+  void update(TrGame *game, TrEntity *entity) override;
 };

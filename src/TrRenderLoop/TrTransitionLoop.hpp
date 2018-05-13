@@ -7,7 +7,7 @@
 #include "TrRenderLoop.hpp"
 
 #include <memory>
-
+#include <utility> #include <utility>
 class TrTransitionLoop : public TrRenderLoop {
  private:
   shared_ptr<TrRenderLoop> m_target;
@@ -18,29 +18,35 @@ class TrTransitionLoop : public TrRenderLoop {
   int m_maxWaitTick = 20;
   int m_waitTick = 0;
   bool m_deleteSource;
-  TrTransitionLoop(TrGame* game, shared_ptr<TrRenderLoop> source, shared_ptr<TrRenderLoop> target,
+  TrTransitionLoop(TrGame *game,
+                   shared_ptr<TrRenderLoop> source,
+                   shared_ptr<TrRenderLoop> target,
                    bool deleteSource)
-      : m_target(target), m_source(source), m_deleteSource(deleteSource){};
+      : m_target(std::move(target)), m_source(std::move(source)), m_deleteSource(deleteSource) {};
 
  public:
   ~TrTransitionLoop() override {
 //    if (m_deleteSource) delete m_source;
   };
 
-  static TrTransitionLoop* makePushLoop(TrGame* game, shared_ptr<TrRenderLoop> source,
-                                        shared_ptr<TrRenderLoop> target) {
-    return new TrTransitionLoop(game, source, target, false);
+  static unique_ptr<TrTransitionLoop> makePushLoop(TrGame *game, shared_ptr<TrRenderLoop>
+  source,
+                                                   shared_ptr<TrRenderLoop> target) {
+    return unique_ptr<TrTransitionLoop>(new TrTransitionLoop(game, std::move(source),
+                                                             std::move(target), false));
   }
 
-  static TrTransitionLoop* makePopLoop(TrGame* game, shared_ptr<TrRenderLoop> source,
-                                       shared_ptr<TrRenderLoop> target) {
-    return new TrTransitionLoop(game, source, target, true);
+  static unique_ptr<TrTransitionLoop> makePopLoop(TrGame *game, shared_ptr<TrRenderLoop>
+  source,
+                                                  shared_ptr<TrRenderLoop> target) {
+    return unique_ptr<TrTransitionLoop>(new TrTransitionLoop(game, std::move(source),
+                                                             std::move(target), true));
   }
 
-  TrRenderLoop* update(TrGame* game) override;
-  void render(TrGame* game) override;
-  inline void setTarget(TrRenderLoop* target) { m_target.reset(target); }
-  inline void setSource(TrRenderLoop* source) { m_source.reset(source); }
+  TrRenderLoop *update(TrGame *game) override;
+  void render(TrGame *game) override;
+  inline void setTarget(shared_ptr<TrRenderLoop> target) { m_target = std::move(target); }
+  inline void setSource(shared_ptr<TrRenderLoop> source) { m_source = std::move(source); }
 
   // TODO: make a stack of TrRenderLoops inside of TrGame
 };

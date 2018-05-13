@@ -2,7 +2,7 @@
 #include "TrNormalMap.hpp"
 #include "TrMap.hpp"
 
-void TrNormalMap::update(TrMap* map) {
+void TrNormalMap::update(TrMap *map) {
   // go through the map
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {

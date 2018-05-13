@@ -3,18 +3,16 @@
  */
 
 #include "TrGUIDropdownMenu.hpp"
-#include "../TrGame.hpp"
 
-TrGUIDropdownMenu::TrGUIDropdownMenu(TrGame* game, TrGUIButton* button,
-                                     TrGUIMenu* menu)
-    : m_button(button), m_menu(menu), m_isMenuOpen(false) {
+TrGUIDropdownMenu::TrGUIDropdownMenu(TrGame *game, unique_ptr<TrGUIButton> button,
+                                     unique_ptr<TrGUIMenu> menu)
+    : m_isMenuOpen(false) {
+  m_button = std::move(button);
+  m_menu = std::move(menu);
   this->m_game = game;
 };
 
-TrGUIDropdownMenu::~TrGUIDropdownMenu() {
-  delete m_button;
-  delete m_menu;
-}
+TrGUIDropdownMenu::~TrGUIDropdownMenu() = default;
 
 void TrGUIDropdownMenu::draw() {
   m_button->draw();
@@ -32,7 +30,7 @@ void TrGUIDropdownMenu::update() {
   if (m_button->m_activated) {
     m_isMenuOpen = !m_isMenuOpen;
   } else if (m_isMenuOpen && !m_game->m_buttonsDown.count(SDL_BUTTON_LEFT) &&
-             m_game->m_buttonsDownPrev.count(SDL_BUTTON_LEFT)) {
+      m_game->m_buttonsDownPrev.count(SDL_BUTTON_LEFT)) {
     m_isMenuOpen = false;
   }
 }

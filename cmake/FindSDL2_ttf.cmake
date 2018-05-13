@@ -29,40 +29,40 @@
 #  License text for the above reference.)
 
 FIND_PATH(SDL2TTF_INCLUDE_DIR SDL_ttf.h
-  HINTS
-  $ENV{SDL2TTFDIR}
-  $ENV{SDL2DIR}
-  PATH_SUFFIXES include
-  PATHS
-  ~/Library/Frameworks
-  /Library/Frameworks
-  /usr/local/include/SDL2
-  /usr/include/SDL2
-  /sw/include/SDL2 # Fink
-  /opt/local/include/SDL2 # DarwinPorts
-  /opt/csw/include/SDL2 # Blastwave
-  /opt/include/SDL2
-)
+        HINTS
+        $ENV{SDL2TTFDIR}
+        $ENV{SDL2DIR}
+        PATH_SUFFIXES include
+        PATHS
+        ~/Library/Frameworks
+        /Library/Frameworks
+        /usr/local/include/SDL2
+        /usr/include/SDL2
+        /sw/include/SDL2 # Fink
+        /opt/local/include/SDL2 # DarwinPorts
+        /opt/csw/include/SDL2 # Blastwave
+        /opt/include/SDL2
+        )
 
-FIND_LIBRARY(SDL2TTF_LIBRARY 
-  NAMES SDL2_ttf
-  HINTS
-  $ENV{SDL2TTFDIR}
-  $ENV{SDL2DIR}
-  PATH_SUFFIXES lib64 lib
-  PATHS
-  ~/Library/Frameworks
-  /Library/Frameworks
-  /usr/local
-  /usr
-  /sw
-  /opt/local
-  /opt/csw
-  /opt
-)
+FIND_LIBRARY(SDL2TTF_LIBRARY
+        NAMES SDL2_ttf
+        HINTS
+        $ENV{SDL2TTFDIR}
+        $ENV{SDL2DIR}
+        PATH_SUFFIXES lib64 lib
+        PATHS
+        ~/Library/Frameworks
+        /Library/Frameworks
+        /usr/local
+        /usr
+        /sw
+        /opt/local
+        /opt/csw
+        /opt
+        )
 
 SET(SDL2TTF_FOUND "NO")
-IF(SDL2TTF_LIBRARY AND SDL2TTF_INCLUDE_DIR)
-  SET(SDL2TTF_FOUND "YES")
-ENDIF(SDL2TTF_LIBRARY AND SDL2TTF_INCLUDE_DIR)
+IF (SDL2TTF_LIBRARY AND SDL2TTF_INCLUDE_DIR)
+    SET(SDL2TTF_FOUND "YES")
+ENDIF (SDL2TTF_LIBRARY AND SDL2TTF_INCLUDE_DIR)
 

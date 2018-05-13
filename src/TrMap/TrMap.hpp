@@ -43,6 +43,8 @@ class TrMap;
 #include "TrMapData.hpp"
 #include <memory>
 
+class TrGame;
+
 using namespace std;
 
 // map
@@ -52,6 +54,8 @@ class TrMap {
   set<shared_ptr<TrMapUpdatable>> m_toUpdate;
  public:
   int m_rows, m_cols;
+
+  TrGame* m_game;
 
   shared_ptr<TrColorMap> m_color;
   shared_ptr<TrHeightMap> m_height;
@@ -74,7 +78,7 @@ class TrMap {
   std::uniform_int_distribution<int> m_yrandDist;
   std::uniform_real_distribution<double> m_yfrandDist;
 
-  TrMap(int rows, int cols);
+  TrMap(int rows, int cols, TrGame* game);
 
   ~TrMap();
 

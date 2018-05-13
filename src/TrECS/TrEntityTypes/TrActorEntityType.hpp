@@ -14,12 +14,12 @@
  */
 class TrActorEntityType : public TrEntityType {
  public:
-  TrPhysicsComponent* m_physics;
-  TrPlanningComponent* m_planning;
+  TrPhysicsComponent *m_physics;
+  TrPlanningComponent *m_planning;
 
-  TrActorEntityType(TrGraphicsComponent* graphics, TrPhysicsComponent* physics,
-                    TrPlanningComponent* planning)
-      : TrEntityType(graphics), m_physics(physics), m_planning(planning){};
+  TrActorEntityType(TrGraphicsComponent *graphics, TrPhysicsComponent *physics,
+                    TrPlanningComponent *planning)
+      : TrEntityType(graphics), m_physics(physics), m_planning(planning) {};
 
   ~TrActorEntityType() override = default;
 };

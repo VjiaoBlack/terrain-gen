@@ -7,10 +7,12 @@
 */
 
 #include "TrMap.hpp"
+#include "../TrGame.hpp"
 
-TrMap::TrMap(int rows, int cols)
+TrMap::TrMap(int rows, int cols, TrGame* game)
     : m_rows(rows),
       m_cols(cols),
+      m_game(game),
       m_renderState(2),  // TODO: default render state is 2
       m_erosionState(0),
       m_color(new TrColorMap(rows, cols)),
@@ -72,8 +74,7 @@ TrMap::TrMap(int rows, int cols)
   m_color->update(this);
 }
 
-TrMap::~TrMap() {
-}
+TrMap::~TrMap() = default;
 
 void TrMap::update(set<int> keysDown) {
   int m_speed = 1;
@@ -83,7 +84,7 @@ void TrMap::update(set<int> keysDown) {
         for (int i = 0; i < K_MAP_SIZE_Y; i++) {
           for (int j = 0; j < K_MAP_SIZE_X; j++) {
             this->m_height->m_data[i * K_MAP_SIZE_X + j] -=
-                (double)m_speed / 255.0;
+                (double) m_speed / 255.0;
           }
         }
         m_toUpdate.insert(m_color);
@@ -93,7 +94,7 @@ void TrMap::update(set<int> keysDown) {
         for (int i = 0; i < K_MAP_SIZE_Y; i++) {
           for (int j = 0; j < K_MAP_SIZE_X; j++) {
             this->m_height->m_data[i * K_MAP_SIZE_X + j] +=
-                (double)m_speed / 255.0;
+                (double) m_speed / 255.0;
           }
         }
         m_toUpdate.insert(m_color);
@@ -106,16 +107,13 @@ void TrMap::update(set<int> keysDown) {
         m_toUpdate.insert(m_color);
 
         break;
-      case SDLK_r:
-        m_water->rain(this);
+      case SDLK_r:m_water->rain(this);
         m_toUpdate.insert(m_color);
         break;
-      case SDLK_d:
-        this->m_water->set(0.0);
+      case SDLK_d:this->m_water->set(0.0);
         m_toUpdate.insert(m_color);
         break;
-      case SDLK_e:
-        this->m_erosionState = !this->m_erosionState;
+      case SDLK_e:this->m_erosionState = !this->m_erosionState;
         usleep(100000);
         break;
 
@@ -150,15 +148,13 @@ void TrMap::update(set<int> keysDown) {
         usleep(100000);
 
         break;
-      case SDLK_j:
-        m_wind->update(this);
+      case SDLK_j:m_wind->update(this);
         break;
       case SDLK_s:
         // Save the map: color and heightmap
         this->saveMap();
         break;
-      case SDLK_t:
-        m_color->m_hour += 0.06;
+      case SDLK_t:m_color->m_hour += 0.06;
         if (m_color->m_hour > 24) {
           m_color->m_hour -= 24;
           m_color->m_day += 1;
@@ -170,12 +166,10 @@ void TrMap::update(set<int> keysDown) {
         m_color->updateLightAngle();
         m_toUpdate.insert(m_color);
         break;
-      case SDLK_y:
-        m_color->m_raytrace = !m_color->m_raytrace;
+      case SDLK_y:m_color->m_raytrace = !m_color->m_raytrace;
         m_toUpdate.insert(m_color);
         break;
-      case SDLK_h:
-        m_color->m_terrace++;
+      case SDLK_h:m_color->m_terrace++;
         if (m_color->m_terrace > 3) {
           m_color->m_terrace = 0;
         }

@@ -11,7 +11,7 @@
 #include "TrRenderLoop.hpp"
 class TrGame;
 
-class TrMainMenuLoop : public TrRenderLoop, public std::enable_shared_from_this<TrMainMenuLoop> {
+class TrMainMenuLoop : public TrRenderLoop {
  public:
   std::string score_text = "ATHENA";
   int score = 10;
@@ -21,20 +21,16 @@ class TrMainMenuLoop : public TrRenderLoop, public std::enable_shared_from_this<
   int text_width;
   int text_height;
 
-  SDL_Texture* text0;
-  SDL_Texture* text1;
-  SDL_Texture* text2;
+  sdl_texture_pt text0;
+  sdl_texture_pt text1;
+  sdl_texture_pt text2;
 
-  TrGUIMenu* m_menu;
+  unique_ptr<TrGUIMenu> m_menu;
 
-  explicit TrMainMenuLoop(TrGame* game);
-
-  std::shared_ptr<TrMainMenuLoop> getptr() {
-    return std::enable_shared_from_this<TrMainMenuLoop>::shared_from_this();
-  }
+  explicit TrMainMenuLoop(TrGame *game);
 
   ~TrMainMenuLoop() override;
 
-  TrRenderLoop* update(TrGame* game) override;
-  void render(TrGame* game) override;
+  TrRenderLoop *update(TrGame *game) override;
+  void render(TrGame *game) override;
 };

@@ -21,19 +21,25 @@
 #include <memory>
 
 #include "TrMap/TrMap.hpp"
+#include "TrGraphics.hpp"
 
 using namespace std;
 
 class TrGameLoop;
 class TrMainMenuLoop;
 class TrRenderLoop;
+class TrEntitySystem;
 
 class TrGame {
  public:
-  SDL_Window* m_SDLWindow;
-  SDL_Renderer* m_SDLRenderer;
+  TrWindow m_SDLWindow;
 
-  TrMap* m_map;
+  TrRenderer m_SDLRenderer;
+
+  unique_ptr<TrMap> m_map;
+
+  unique_ptr<TrEntitySystem> m_entSystem;
+
   // setup for rendering loop
   SDL_Event m_SDLEvent;
   bool m_quit;
@@ -46,15 +52,14 @@ class TrGame {
   int m_mouseY;
 
   // create texture for map
-  SDL_Texture* m_mapTexture;
+  sdl_texture_pt m_mapTexture = TrSDL::null_texture();
 
-  TTF_Font* m_font;
-  TTF_Font* m_menuFont;
+  ttf_font_pt m_font = TrSDL::null_font();
+  ttf_font_pt m_menuFont = TrSDL::null_font();
 
   int m_xOff;
   int m_yOff;
   int m_speed;
-
 
   unique_ptr<TrRenderLoop> m_gameStateTransition;
   list<shared_ptr<TrRenderLoop>> m_gameStateStack;

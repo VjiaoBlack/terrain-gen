@@ -26,15 +26,11 @@
 #include "../TrGame.hpp"
 #include "../TrMap/TrMap.hpp"
 
-class TrRenderLoop : public std::enable_shared_from_this<TrRenderLoop> {
+class TrRenderLoop {
  public:
-  TrRenderLoop() = default;;
-  virtual ~TrRenderLoop() = default;;
+  TrRenderLoop() = default;
+  virtual ~TrRenderLoop() = default;
 
-  std::shared_ptr<TrRenderLoop> getptr() {
-    return shared_from_this();
-  }
-
-  inline virtual TrRenderLoop* update(TrGame* game) { return this; };
-  inline virtual void render(TrGame* game){};
+  inline virtual TrRenderLoop *update(TrGame *game) { return this; };
+  inline virtual void render(TrGame *game) {};
 };

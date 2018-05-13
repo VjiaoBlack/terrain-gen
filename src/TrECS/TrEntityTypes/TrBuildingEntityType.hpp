@@ -13,11 +13,11 @@
  */
 class TrBuildingEntityType : public TrEntityType {
  public:
-  TrFootprintComponent* m_footprint;
+  TrFootprintComponent *m_footprint;
 
-  TrBuildingEntityType(TrGraphicsComponent* graphics,
-                       TrFootprintComponent* footprint)
-      : TrEntityType(graphics), m_footprint(footprint){};
+  TrBuildingEntityType(TrGraphicsComponent *graphics,
+                       TrFootprintComponent *footprint)
+      : TrEntityType(graphics), m_footprint(footprint) {};
 
   ~TrBuildingEntityType() override { delete m_footprint; }
 };

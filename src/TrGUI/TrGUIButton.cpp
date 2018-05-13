@@ -3,18 +3,16 @@
  */
 
 #include "TrGUIButton.hpp"
-#include "../TrGame.hpp"
-
-TrGUIButton::TrGUIButton(TrGame* game, SDL_Rect rect, string name)
+TrGUIButton::TrGUIButton(TrGame *game, SDL_Rect rect, string name)
     : m_pressedInside(false),
       m_releasedInside(false),
       m_wasPressed(false),
-      m_label(name) {
+      m_label(std::move(std::move(name))) {
   this->m_game = game;
   this->m_rect = rect;
 
-  SDL_Surface* textSurface = TTF_RenderText_Solid(
-      game->m_menuFont, m_label.c_str(), {60, 55, 20, 255});
+  SDL_Surface *textSurface = TTF_RenderText_Solid(
+      game->m_menuFont.get(), m_label.c_str(), {60, 55, 20, 255});
 
   m_destRect.w = textSurface->w;
   m_destRect.h = textSurface->h;
@@ -25,7 +23,7 @@ TrGUIButton::TrGUIButton(TrGame* game, SDL_Rect rect, string name)
   m_srcRect.x = 0;
   m_srcRect.y = 0;
 
-  m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface);
+  m_texture.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface));
   SDL_FreeSurface(textSurface);
 }
 
@@ -39,7 +37,7 @@ void TrGUIButton::draw() {
   SDL_RenderFillRect(m_game->m_SDLRenderer, &m_rect);
 
   if (m_texture) {
-    SDL_RenderCopy(m_game->m_SDLRenderer, m_texture, &m_srcRect, &m_destRect);
+    SDL_RenderCopy(m_game->m_SDLRenderer, m_texture.get(), &m_srcRect, &m_destRect);
   }
 
   SDL_RenderSetScale(m_game->m_SDLRenderer, sx, sy);
@@ -69,9 +67,5 @@ void TrGUIButton::update() {
     m_activated = false;
   }
 
-  if (m_game->m_buttonsDown.count(SDL_BUTTON_LEFT)) {
-    m_wasPressed = true;
-  } else {
-    m_wasPressed = false;
-  }
+  m_wasPressed = m_game->m_buttonsDown.count(SDL_BUTTON_LEFT) != 0;
 }

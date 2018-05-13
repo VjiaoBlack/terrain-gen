@@ -3,7 +3,7 @@
 
 #include "TrMap.hpp"
 
-void TrWaterMap::rain(TrMap* map) {
+void TrWaterMap::rain(TrMap *map) {
   // this->experimentalRain(map);
   // return;
 
@@ -14,7 +14,7 @@ void TrWaterMap::rain(TrMap* map) {
   }
 }
 
-void TrWaterMap::update(TrMap* map) {
+void TrWaterMap::update(TrMap *map) {
   // this->experimentalUpdate(map);
   // return;
   //
@@ -22,7 +22,7 @@ void TrWaterMap::update(TrMap* map) {
     for (int j = 0; j < m_cols; j++) {
       map->m_water->m_water_avg->at(i, j) =
           map->m_water->m_water_avg->at(i, j) * 0.95 +
-          map->m_water->at(i, j) * 0.05;
+              map->m_water->at(i, j) * 0.05;
       // map->m_water->at(i, j);
 
       double m = map->m_height->get(i, j) + map->m_water->get(i, j);
@@ -57,7 +57,7 @@ void TrWaterMap::update(TrMap* map) {
 
       // diagonal
       if (m - (map->m_height->get(i + 1, j + 1) +
-               map->m_water->get(i + 1, j + 1)) >
+          map->m_water->get(i + 1, j + 1)) >
           (m - mh) * 1.4142) {
         mi = i + 1;
         mj = j + 1;
@@ -65,7 +65,7 @@ void TrWaterMap::update(TrMap* map) {
       }
 
       if (m - (map->m_height->get(i - 1, j - 1) +
-               map->m_water->get(i - 1, j - 1)) >
+          map->m_water->get(i - 1, j - 1)) >
           (m - mh) * 1.4142) {
         mi = i - 1;
         mj = j - 1;
@@ -73,7 +73,7 @@ void TrWaterMap::update(TrMap* map) {
       }
 
       if (m - (map->m_height->get(i + 1, j - 1) +
-               map->m_water->get(i + 1, j - 1)) >
+          map->m_water->get(i + 1, j - 1)) >
           (m - mh) * 1.4142) {
         mi = i + 1;
         mj = j - 1;
@@ -81,7 +81,7 @@ void TrWaterMap::update(TrMap* map) {
       }
 
       if (m - (map->m_height->get(i - 1, j + 1) +
-               map->m_water->get(i - 1, j + 1)) >
+          map->m_water->get(i - 1, j + 1)) >
           (m - mh) * 1.4142) {
         mi = i - 1;
         mj = j + 1;

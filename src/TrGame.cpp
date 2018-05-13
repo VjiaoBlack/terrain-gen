@@ -1,10 +1,12 @@
 
 #include "TrGame.hpp"
-#include "../include/fft/fft.h"
 #include "TrData/TrData.hpp"
 #include "TrRenderLoop/TrGameLoop.hpp"
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
-#include "TrRenderLoop/TrRenderLoop.hpp"
+#include "TrECS/TrSystems/TrEntitySystem.hpp"
+#include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
+
+#include <deque>
 
 void TrGame::setupSDL() {
   // Initialize
@@ -14,16 +16,16 @@ void TrGame::setupSDL() {
   }
 
   // Create window
-  m_SDLWindow = SDL_CreateWindow("athena", SDL_WINDOWPOS_UNDEFINED,
-                                 SDL_WINDOWPOS_UNDEFINED, sz(K_DISPLAY_SIZE_X),
-                                 sz(K_DISPLAY_SIZE_Y), SDL_WINDOW_SHOWN);
+  m_SDLWindow = TrWindow(SDL_CreateWindow("athena", SDL_WINDOWPOS_UNDEFINED,
+                                          SDL_WINDOWPOS_UNDEFINED, sz(K_DISPLAY_SIZE_X),
+                                          sz(K_DISPLAY_SIZE_Y), SDL_WINDOW_SHOWN));
   if (m_SDLWindow == nullptr) {
     printf("Window could not be created - SDL Error: %s\n", SDL_GetError());
     exit(1);
   }
 
   // Create renderer for window
-  m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, SDL_RENDERER_ACCELERATED);
+  m_SDLRenderer = TrRenderer(SDL_CreateRenderer(m_SDLWindow, -1, SDL_RENDERER_ACCELERATED));
   if (m_SDLRenderer == nullptr) {
     printf("Renderer could not be created - SDL Error: %s\n", SDL_GetError());
     exit(1);
@@ -54,16 +56,23 @@ TrGame::TrGame()
       m_xOff(0),
       m_yOff(0),
       m_speed(1) {
+
   TrData::loadData();
+
+
+
+
+
+
+
 
   this->setupSDL();
 
   // create texture for map
-  m_mapTexture =
-      SDL_CreateTexture(m_SDLRenderer, SDL_PIXELFORMAT_ARGB8888,
-                        SDL_TEXTUREACCESS_STATIC, K_MAP_SIZE_X, K_MAP_SIZE_Y);
+  m_mapTexture.reset(SDL_CreateTexture(m_SDLRenderer, SDL_PIXELFORMAT_ARGB8888,
+                                       SDL_TEXTUREACCESS_STATIC, K_MAP_SIZE_X, K_MAP_SIZE_Y));
 
-  m_map = new TrMap(K_MAP_SIZE_Y, K_MAP_SIZE_X);
+  m_map = std::make_unique<TrMap>(K_MAP_SIZE_Y, K_MAP_SIZE_X, this);
 
   m_xOff = 0;
   m_yOff = 0;
@@ -81,70 +90,171 @@ TrGame::TrGame()
   m_frames = 0;
   m_frameRate = 30;
 
-  m_font = TTF_OpenFont("anirb.ttf", 26);
+  m_font.reset(TTF_OpenFont("anirb.ttf", 26));
   if (!m_font) {
     printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
     exit(2);
   }
 
-  m_menuFont = TTF_OpenFont("anirb.ttf", 14);
+  m_menuFont.reset(TTF_OpenFont("anirb.ttf", 14));
   if (!m_menuFont) {
     printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
     exit(2);
   }
 
+  int cell_rad = 7;
+
+  // okay, are we going to set up some plants?
+  m_entSystem = std::move(make_unique<TrEntitySystem>());
+  int* indices = new int[(K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad)];
+
+  memset(indices, -1, sizeof(int) * (K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad));
+
+
+
+  int rows = K_MAP_SIZE_Y / cell_rad;
+  int cols = K_MAP_SIZE_X / cell_rad;
+
+//  for (int r = 0; r < rows; r++) {
+//    for (int c = 0; c < cols; c++) {
+////      cout << indices[r * cols + c] << endl;
+//    }
+//  }
+
+  // create initial plant
+  SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 3, 3};
+  rect.y += 100;
+
+  cout << rect.x << " " << rect.y << endl;
+  unique_ptr<TrPlantEntity> plant = make_unique<TrPlantEntity>(this, rect,
+       dynamic_cast<TrPlantEntityType*>(TrData::m_entityTypes["tree"]));
+  m_entSystem->m_plants.push_back(move(plant));
+
+  vector<int> active_list;
+
+  active_list.push_back(0);
+
+  int active_list_start = 0;
+
+
+  while (active_list_start < active_list.size()) {
+
+    int index = active_list[active_list_start++];
+
+    auto parent_rec = m_entSystem->m_plants[index]->m_rect;
+
+
+
+
+    for (int i = 0; i < 5; i++) {
+      rect = m_entSystem->m_plants[index]->m_rect;
+
+      int rad = rand() % cell_rad + cell_rad;
+      double theta = rand() % 360;
+      rect.x += round(rad * sin((theta / 180.0) * M_PI));
+      rect.y += round(rad * cos((theta / 180.0) * M_PI));
+
+      if (rect.x < 0 || rect.x >= K_MAP_SIZE_X ||
+          rect.y < 0 || rect.y >= K_MAP_SIZE_Y) {
+        cout << "cont1" << endl;
+
+        continue;
+      }
+
+      int t_r = rect.y / cell_rad;
+      int t_c = rect.x / cell_rad;
+
+      if (indices[t_r * cols + t_c] > -1) {
+        cout << "cont2 " << m_entSystem->m_plants[index]->m_rect.y / cell_rad << " " <<
+             m_entSystem->m_plants[index]->m_rect.x / cell_rad << " " <<
+             t_r << " " << t_c << endl;
+        continue;
+      }
+
+      // check collisions
+      bool valid = true;
+      for (int d_r = glm::max(t_r - 1, 0); d_r <= glm::min(t_r + 1, rows - 1); d_r++) {
+        if (!valid) {
+          break;
+        }
+        for (int d_c = glm::max(t_c - 1, 0); d_c <= glm::min(t_c + 1, cols - 1); d_c++) {
+          if (indices[d_r * cols + d_c] > -1) {
+            // make sure its far away enough
+            auto currec = m_entSystem->m_plants[indices[d_r * cols + d_c]]->m_rect;
+            if (glm::distance(vec2(rect.x, rect.y), vec2(currec.x, currec.y)) <= cell_rad) {
+              valid = false;
+              break;
+            }
+          }
+        }
+      }
+
+
+      if (valid) {
+        cout << " valid " << rect.x << " " << rect.y << endl;
+        plant = make_unique<TrPlantEntity>(this, rect,
+                                           dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
+        active_list.push_back(m_entSystem->m_plants.size());
+
+        m_entSystem->m_plants.push_back(move(plant));
+
+        indices[t_r * cols + t_c] = (int) m_entSystem->m_plants.size() - 1;
+      }
+    }
+  }
+
+
+  cout << "PLANTS " << m_entSystem->m_plants.size() << endl;
+  // remove plants that are over water
+  for (int i = m_entSystem->m_plants.size() - 1; i >= 0; i--) {
+    auto rect = m_entSystem->m_plants[i]->m_rect;
+
+
+    if (m_map->m_height->get(rect.y, rect.x) < 0.5 ||
+        m_map->m_height->get(rect.y, rect.x) > 0.65) {
+      m_entSystem->m_plants.erase(m_entSystem->m_plants.begin() + i);
+    }
+  }
+
+
+  cout << "ready" << endl;
   // setup game loop
-  m_gameStateStack.push_back(move(make_shared<TrMainMenuLoop>(this)));
+  auto tempmenu = make_shared<TrMainMenuLoop>(this);
+  m_gameStateStack.push_back(move(tempmenu));
+
+
+
+
+
 }
 
 TrGame::~TrGame() {
-  delete m_map;
 
-  SDL_DestroyTexture(m_mapTexture);
-  SDL_DestroyRenderer(m_SDLRenderer);
-  SDL_DestroyWindow(m_SDLWindow);
-
-  if (m_font) {
-    TTF_CloseFont(m_font);
-  }
-  if (m_menuFont) {
-    TTF_CloseFont(m_menuFont);
-  }
   while (!m_gameStateStack.empty()) {
-//    delete m_gameStateStack.back();
-//    m_gameStateStack.back().reset(nullptr);
     m_gameStateStack.pop_back();
   }
 
-  TTF_Quit();
-  SDL_Quit();
 }
 
 void TrGame::handleKey(int SDLKey) {
   switch (SDLKey) {
-    case SDLK_q:
-      m_quit = true;
+    case SDLK_q:m_quit = true;
       break;
-    case SDLK_LSHIFT:
-      m_speed = 10;
+    case SDLK_LSHIFT:m_speed = 10;
       break;
-    case SDLK_RSHIFT:
-      m_speed = 1;
+    case SDLK_RSHIFT:m_speed = 1;
       break;
-    case SDLK_UP:
-      m_yOff -= K_DISPLAY_SCALE * m_speed;
+    case SDLK_UP:m_yOff -= K_DISPLAY_SCALE * m_speed;
       break;
-    case SDLK_DOWN:
-      m_yOff += K_DISPLAY_SCALE * m_speed;
+    case SDLK_DOWN:m_yOff += K_DISPLAY_SCALE * m_speed;
       break;
-    case SDLK_LEFT:
-      m_xOff -= K_DISPLAY_SCALE * m_speed;
+    case SDLK_LEFT:m_xOff -= K_DISPLAY_SCALE * m_speed;
       break;
-    case SDLK_RIGHT:
-      m_xOff += K_DISPLAY_SCALE * m_speed;
+    case SDLK_RIGHT:m_xOff += K_DISPLAY_SCALE * m_speed;
       break;
+    default:break;
   }
 }
 
@@ -160,7 +270,7 @@ void TrGame::run() {
       handleKey(it);
     }
 
-    SDL_UpdateTexture(m_mapTexture, nullptr, m_map->m_color->m_data,
+    SDL_UpdateTexture(m_mapTexture.get(), nullptr, m_map->m_color->m_data,
                       K_MAP_SIZE_X * sizeof(uint32_t));
 
     // clear screen
@@ -169,14 +279,13 @@ void TrGame::run() {
 
     if (m_gameStateTransition) {
       m_gameStateTransition->render(this);
-      TrRenderLoop* loop = m_gameStateTransition->update(this);
-// TEST_UNIQUE_PTR
+      TrRenderLoop *loop = m_gameStateTransition->update(this);
       if (!loop) {
         m_gameStateTransition.reset(nullptr);
       }
     } else {
       m_gameStateStack.back()->render(this);
-      TrRenderLoop* loop = m_gameStateStack.back()->update(this);
+      TrRenderLoop *loop = m_gameStateStack.back()->update(this);
     }
 
     // update screen

@@ -1,4 +1,4 @@
 name,color,size,footprint
-wild plant,#800080,,
-wild reed,#845422,,
-tree,#008000,3x3,0x0;xxx;0x0
+wild plant,#800080,1;1,x
+wild reed,#845422,1;1,x
+tree,#008000,3;3,.x.;xxx;.x.

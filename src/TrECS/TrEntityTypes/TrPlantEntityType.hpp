@@ -13,11 +13,13 @@
  */
 class TrPlantEntityType : public TrEntityType {
  public:
-  TrFootprintComponent* m_footprint;
+  TrFootprintComponent *m_footprint;
+  using TrEntityType::m_graphics;
 
-  TrPlantEntityType(TrGraphicsComponent* graphics,
-                    TrFootprintComponent* footprint)
-      : TrEntityType(graphics), m_footprint(footprint){};
+
+  TrPlantEntityType(TrGraphicsComponent *graphics,
+                    TrFootprintComponent *footprint)
+      : TrEntityType(graphics), m_footprint(footprint) {};
 
   ~TrPlantEntityType() override = default;
 };

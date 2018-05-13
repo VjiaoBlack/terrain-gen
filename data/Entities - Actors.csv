@@ -1,3 +1,3 @@
 name,color,size,footprint
-human,#ffefb5,,
-sheep,#808080,,
+human,#ffefb5,1;1,x
+sheep,#808080,1;1,x

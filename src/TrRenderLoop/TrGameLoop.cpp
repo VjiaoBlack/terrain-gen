@@ -3,13 +3,12 @@
  */
 
 #include "TrGameLoop.hpp"
-#include "../TrGame.hpp"
 #include "TrMainMenuLoop.hpp"
 #include "TrTransitionLoop.hpp"
 
 class TrMainMenuLoop;
 
-TrGameLoop::TrGameLoop(TrGame* game) {
+TrGameLoop::TrGameLoop(TrGame *game) {
   vector<string> labels = {" ", " ", " ", " ", " ", " "};
   vector<string> sublabels = {"A", "B", "C", "D", "E", "F"};
   int numButtons = labels.size();
@@ -18,32 +17,32 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   // TODO: somehow fix the hardcoding
   m_menu = TrGUIMenu::MakeHorizontalMenu(
       game,
-      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 104 / 2),
-                 sz(K_DISPLAY_SIZE_Y / K_DISPLAY_SCALE - 32), sz(104), sz(24)},
+      (SDL_Rect) {sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 104 / 2),
+                  sz(K_DISPLAY_SIZE_Y / K_DISPLAY_SCALE - 32), sz(104), sz(24)},
       labels);
 
   m_menu->m_spacing = 8;
 
-  vector<TrGUIButton*> tempButtons(numButtons);
+  vector<unique_ptr<TrGUIButton>> tempButtons(numButtons);
 
   for (int i = 0; i < numButtons; i++) {
     delete m_menu->m_buttons[i];
     // TODO: make this spacing metric even over all of m_rect
-    tempButtons[i] = new TrGUIButton(
+    tempButtons[i] = make_unique<TrGUIButton>(TrGUIButton(
         game, {sz(8) + m_menu->m_rect.x +
-                   (i * (m_menu->m_rect.w + m_menu->m_spacing - sz(16)) /
-                    (numButtons)),
+            (i * (m_menu->m_rect.w + m_menu->m_spacing - sz(16)) /
+                (numButtons)),
                sz(8) + m_menu->m_rect.y, sz(8), sz(8)},
-        labels[i]);
+        labels[i]));
   }
 
-  SDL_Surface* image;
+  SDL_Surface *image;
   image = IMG_Load("res/icons.png");
   if (!image) {
     printf("IMG_Load: %s\n", IMG_GetError());
   }
 
-  m_map = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
+  m_map.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, image));
   SDL_FreeSurface(image);
 
   image = IMG_Load("res/game_toolbar.png");
@@ -51,7 +50,7 @@ TrGameLoop::TrGameLoop(TrGame* game) {
     printf("IMG_Load: %s\n", IMG_GetError());
   }
 
-  m_menu->m_texture = SDL_CreateTextureFromSurface(game->m_SDLRenderer, image);
+  m_menu->m_texture.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, image));
   m_menu->m_srcRect = {0, 0, 104, 24};
   m_menu->m_destRect = m_menu->m_rect;
 
@@ -73,8 +72,8 @@ TrGameLoop::TrGameLoop(TrGame* game) {
     tempButtons[i]->m_texture = m_map;
     tempButtons[i]->m_destRect = tempButtons[i]->m_rect;
 
-    TrGUIDropdownMenu* tempMenu = new TrGUIDropdownMenu(
-        game, tempButtons[i],
+    TrGUIDropdownMenu *tempMenu = new TrGUIDropdownMenu(
+        game, move(tempButtons[i]),
         TrGUIMenu::MakeHorizontalMenu(game, rect, sublabels));
 
     tempMenu->m_menu->m_texture = m_menu->m_texture;
@@ -85,7 +84,7 @@ TrGameLoop::TrGameLoop(TrGame* game) {
       tempMenu->m_menu->m_buttons[j]->m_rect = {
           sz(8) + tempMenu->m_menu->m_rect.x +
               (j * (rect.w + tempMenu->m_menu->m_spacing - sz(16)) /
-               (numButtons)),
+                  (numButtons)),
           sz(8) + rect.y, sz(8), sz(8)};
       tempMenu->m_menu->m_buttons[j]->m_destRect =
           tempMenu->m_menu->m_buttons[j]->m_rect;
@@ -94,22 +93,22 @@ TrGameLoop::TrGameLoop(TrGame* game) {
   }
 }
 
-TrGameLoop::~TrGameLoop() {
-  // SDL_DestroyTexture(m_map);
-  delete m_menu;
-}
+TrGameLoop::~TrGameLoop() = default;
 
-TrRenderLoop* TrGameLoop::update(TrGame* game) {
+TrRenderLoop *TrGameLoop::update(TrGame *game) {
   m_menu->update();
 
   game->m_map->update(game->m_keysDown);
 
   for (auto key : game->m_keysDown) {
     switch (key) {
-      case SDLK_v:
+      case SDLK_v:auto penu = game->m_gameStateStack.end();
+        penu--;
+        penu--;
+
+        game->m_gameStateTransition = TrTransitionLoop::makePopLoop(
+            game, game->m_gameStateStack.back(), *penu);
         game->m_gameStateStack.pop_back();
-        game->m_gameStateTransition.reset(TrTransitionLoop::makePopLoop(
-            game, this->getptr(), game->m_gameStateStack.back()));
 
         break;
     }
@@ -118,8 +117,8 @@ TrRenderLoop* TrGameLoop::update(TrGame* game) {
   return this;
 }
 
-void TrGameLoop::render(TrGame* game) {
-  renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture, game->m_xOff,
+void TrGameLoop::render(TrGame *game) {
+  renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture.get(), game->m_xOff,
                           game->m_yOff, K_DISPLAY_SCALE);
   m_menu->draw();
 }

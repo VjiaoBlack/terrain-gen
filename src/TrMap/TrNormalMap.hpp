@@ -10,5 +10,5 @@ class TrNormalMap : public TrMapData<dvec3> {
  public:
   TrNormalMap(int rows, int cols) : TrMapData<dvec3>(rows, cols) {}
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 };

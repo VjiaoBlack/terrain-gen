@@ -6,10 +6,9 @@
 
 #include <set>
 
-// #include "TrEntities.hpp"
 #include "../TrGame.hpp"
-class TrEntity;
 
+class TrEntity;
 using namespace std;
 
 /**
@@ -18,6 +17,6 @@ using namespace std;
  */
 class TrComponent {
  public:
-  virtual ~TrComponent() = default;;
-  virtual void update(TrGame* game, TrEntity* entity) = 0;
+  virtual ~TrComponent() = default;
+  virtual void update(TrGame *game, TrEntity *entity) = 0;
 };

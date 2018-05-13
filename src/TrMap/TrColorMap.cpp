@@ -1,8 +1,8 @@
 
-#include "TrColorMap.hpp"
-#include "../TrUtils/TrMath.hpp"
-#include "../TrUtils/TrSimulation.hpp"
-#include "TrMap.hpp"
+#include "TrGame.hpp"
+#include "TrECS/TrEntityTypes/TrEntityType.hpp"
+#include "../TrECS/TrSystems/TrEntitySystem.hpp"
+#include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
 int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)
@@ -15,28 +15,24 @@ TrColorMap::TrColorMap(int rows, int cols)
   m_day = 1;
   m_month = 6;
 }
-void TrColorMap::update(TrMap* map) {
+void TrColorMap::update(TrMap *map) {
   switch (map->m_renderState) {
-    case 0:
-      this->updateGrayscale(map);
+    case 0:this->updateGrayscale(map);
       break;
 
-    case 1:
-      this->updateHistogram(map);
+    case 1:this->updateHistogram(map);
       break;
 
-    case 2:
-      this->updateDisplay(map);
+    case 2:this->updateDisplay(map);
       break;
 
     case 3:
-    default:
-      this->updateMoistureDemo(map);
+    default:this->updateMoistureDemo(map);
       break;
   }
 }
 
-void TrColorMap::updateGrayscale(TrMap* map) {
+void TrColorMap::updateGrayscale(TrMap *map) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       // render land
@@ -47,7 +43,7 @@ void TrColorMap::updateGrayscale(TrMap* map) {
   }
 }
 
-void TrColorMap::updateHistogram(TrMap* map) {
+void TrColorMap::updateHistogram(TrMap *map) {
   // buffer counts in the top row, set to 0 later.
 
   for (int j = 0; j < m_cols; j++) {
@@ -65,11 +61,11 @@ void TrColorMap::updateHistogram(TrMap* map) {
 
   double cur_col = 0.0;
   for (int j = 0; j < m_cols; j++) {
-    double amt = (double)this->at(0, j) / (double)m_cols;
+    double amt = (double) this->at(0, j) / (double) m_cols;
     if (floor(cur_col + amt) > floor(cur_col)) {
       if (cur_col < m_cols) {
         for (int r = j * m_rows / m_cols; r < m_rows; r++) {
-          this->set(r, (int)floor(cur_col), 0xFFFFFFFF);
+          this->set(r, (int) floor(cur_col), 0xFFFFFFFF);
         }
       }
     }
@@ -82,7 +78,7 @@ void TrColorMap::updateHistogram(TrMap* map) {
   }
 }
 
-void TrColorMap::updateDisplay(TrMap* map) {
+void TrColorMap::updateDisplay(TrMap *map) {
   int threshold[9];
   // -: deep
   threshold[0] = 0.20 * 256;
@@ -193,13 +189,13 @@ void TrColorMap::updateDisplay(TrMap* map) {
               LdotN -= 0.25;
               break;
             } else if (-map->m_height->m_terrace.bilerp(ray2.y, ray2.x) * 32 >
-                           ray2.z ||
-                       -map->m_height->m_terrace.bilerp(ray2_a.y, ray2_a.x) *
-                               32 >
-                           ray2_a.z ||
-                       -map->m_height->m_terrace.bilerp(ray2_b.y, ray2_b.x) *
-                               32 >
-                           ray2_b.z) {
+                ray2.z ||
+                -map->m_height->m_terrace.bilerp(ray2_a.y, ray2_a.x) *
+                    32 >
+                    ray2_a.z ||
+                -map->m_height->m_terrace.bilerp(ray2_b.y, ray2_b.x) *
+                    32 >
+                    ray2_b.z) {
               LdotN += 0.3;
               break;
             }
@@ -271,8 +267,8 @@ void TrColorMap::updateDisplay(TrMap* map) {
               lerpColor(this->at(i, j), vecToColor(m_shallowWater), HdotN);
           wcolor += (m_mediumWater - wcolor) * HdotN;
 
-          half.x = (double)j / m_rows - 0.5 - m_light.x * 2.0;
-          half.y = (double)i / m_rows - 0.5 - m_light.y * 2.0;
+          half.x = (double) j / m_rows - 0.5 - m_light.x * 2.0;
+          half.y = (double) i / m_rows - 0.5 - m_light.y * 2.0;
           half.z = 0.5;
           half = normalize(half);
           HdotN = dot(half, norm);
@@ -287,12 +283,31 @@ void TrColorMap::updateDisplay(TrMap* map) {
         ocolor = clamp(wcolor + ocolor, 0.0, 256.0);
 
         this->at(i, j) = vecToColor(ocolor);
+
       }
+
+
+      // if theres a tree here, draw a special thing
+      if (map && map->m_game && map->m_game->m_entSystem) {
+        SDL_Point p = {j, i};
+        for (int ab = 0; ab < map->m_game->m_entSystem->m_plants.size(); ab++) {
+          auto rect = map->m_game->m_entSystem->m_plants[ab]->m_rect;
+          if (SDL_PointInRect(&p, &rect)) {
+
+            auto col = dynamic_cast<TrEntityType *>(
+                map->m_game->m_entSystem->m_plants[ab]->m_type)->m_graphics->m_color;
+
+            this->at(i, j) = vecToColor(dvec3((double)col.r , (double)col.g , (double)
+                col.b ));
+          }
+        }
+      }
+
     }
   }
 }
 
-void TrColorMap::updateMoistureDemo(TrMap* map) {
+void TrColorMap::updateMoistureDemo(TrMap *map) {
   // no initial water colors,just land.
   uint32_t c_wetdirt = 0xFF664433;
   uint32_t c_drydirt = 0xFFBB8866;

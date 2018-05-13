@@ -20,7 +20,7 @@ static class TrData {
   static void loadData();
   static void deleteData();
 
-  static map<string, TrEntityType*> m_entityTypes;
-  static map<string, TrFormula*> m_formulas;
-  static map<string, TrItem*> m_items;
+  static map<string, TrEntityType *> m_entityTypes;
+  static map<string, TrFormula *> m_formulas;
+  static map<string, TrItem *> m_items;
 };

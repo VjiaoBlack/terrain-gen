@@ -11,7 +11,7 @@ class TrGUIButton : public TrGUIObject {
   bool m_wasPressed;
   string m_label;
 
-  TrGUIButton(TrGame* game, SDL_Rect rect, string name);
+  TrGUIButton(TrGame *game, SDL_Rect rect, string name);
 
   void draw() override;
   void update() override;

@@ -28,14 +28,14 @@ class TrMap;
 
 class TrMapUpdatable {
  public:
-virtual void update(TrMap* map){};
+  virtual void update(TrMap *map) {};
 };
 
 // stores pixels and stuff
-template <class T>
+template<class T>
 class TrMapData : public TrMapUpdatable {
  public:
-  T* m_data;
+  T *m_data;
 
   int m_rows;
   int m_cols;
@@ -51,7 +51,7 @@ class TrMapData : public TrMapUpdatable {
   // defined at bottom of file.
   inline T get(int r, int c);
   inline void set(int r, int c, T p);
-  inline T& at(int r, int c);
+  inline T &at(int r, int c);
   inline T bilerp(double r, double c);
 
   inline T gauss(int r, int c);
@@ -60,7 +60,7 @@ class TrMapData : public TrMapUpdatable {
 
   inline bool isOut(double r, double c);
 
-  void update(TrMap* map) override {};
+  void update(TrMap *map) override {};
 
   void diamondSquare(int s, double level);
   void boxBlur();
@@ -69,7 +69,7 @@ class TrMapData : public TrMapUpdatable {
   void set(T t);
 };
 
-template <class T>
+template<class T>
 inline void TrMapData<T>::set(int r, int c, T p) {
   if (r < 0) r += m_rows;
   if (c < 0) c += m_cols;
@@ -80,7 +80,7 @@ inline void TrMapData<T>::set(int r, int c, T p) {
   m_data[r * m_cols + c] = p;
 }
 
-template <class T>
+template<class T>
 inline T TrMapData<T>::get(int r, int c) {
   if (r < 0) r += m_rows;
   if (c < 0) c += m_cols;
@@ -91,8 +91,8 @@ inline T TrMapData<T>::get(int r, int c) {
   return m_data[r * m_cols + c];
 }
 
-template <class T>
-inline T& TrMapData<T>::at(int r, int c) {
+template<class T>
+inline T &TrMapData<T>::at(int r, int c) {
   if (r < 0) r += m_rows;
   if (c < 0) c += m_cols;
 
@@ -102,7 +102,7 @@ inline T& TrMapData<T>::at(int r, int c) {
   return m_data[r * m_cols + c];
 }
 
-template <class T>
+template<class T>
 inline T TrMapData<T>::bilerp(double r, double c) {
   double r1 = floor(r);
   double r2 = ceil(r);
@@ -126,35 +126,35 @@ inline T TrMapData<T>::bilerp(double r, double c) {
              dvec2(r2 - r, r - r1));
 }
 
-template <class T>
+template<class T>
 inline T TrMapData<T>::gauss(int r, int c) {
   return 0.0625 * (4 * (this->at(r, c)) +
-                   2 * (this->at(r + 1, c) + this->at(r, c + 1) +
-                        this->at(r - 1, c) + this->at(r, c - 1)) +
-                   (this->at(r + 1, c + 1) + this->at(r + 1, c - 1) +
-                    this->at(r - 1 + 1) + this->at(r - 1, c - 1)));
+      2 * (this->at(r + 1, c) + this->at(r, c + 1) +
+          this->at(r - 1, c) + this->at(r, c - 1)) +
+      (this->at(r + 1, c + 1) + this->at(r + 1, c - 1) +
+          this->at(r - 1, c + 1) + this->at(r - 1, c - 1)));
 }
 
-template <class T>
+template<class T>
 inline T TrMapData<T>::gaussDx(int r, int c) {
   return 0.25 * (2 * (this->at(r, c + 1) - this->at(r, c - 1)) +
-                 (this->at(r + 1, c + 1) - this->at(r + 1, c - 1)) +
-                 (this->at(r - 1, c + 1) - this->at(r - 1, c - 1)));
+      (this->at(r + 1, c + 1) - this->at(r + 1, c - 1)) +
+      (this->at(r - 1, c + 1) - this->at(r - 1, c - 1)));
 }
 
-template <class T>
+template<class T>
 inline T TrMapData<T>::gaussDy(int r, int c) {
   return 0.25 * (2 * (this->at(r + 1, c) - this->at(r - 1, c)) +
-                 (this->at(r + 1, c + 1) - this->at(r - 1, c + 1)) +
-                 (this->at(r + 1, c - 1) - this->at(r - 1, c - 1)));
+      (this->at(r + 1, c + 1) - this->at(r - 1, c + 1)) +
+      (this->at(r + 1, c - 1) - this->at(r - 1, c - 1)));
 }
 
-template <class T>
+template<class T>
 inline bool TrMapData<T>::isOut(double r, double c) {
   return r < 0 || c < 0 || r >= m_rows - 1 || c >= m_cols - 1;
 }
 
-template <class T>
+template<class T>
 std::pair<T, T> TrMapData<T>::getMinMax() {
   T min = m_data[0];
   T max = m_data[0];
@@ -170,7 +170,7 @@ std::pair<T, T> TrMapData<T>::getMinMax() {
   return make_pair(min, max);
 }
 
-template <class T>
+template<class T>
 void TrMapData<T>::set(T t) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
@@ -180,7 +180,7 @@ void TrMapData<T>::set(T t) {
 }
 
 // Diamond Square algorithm.
-template <class T>
+template<class T>
 void TrMapData<T>::diamondSquare(int s, double level) {
   if (s < 1) {
     return;
@@ -221,22 +221,22 @@ void TrMapData<T>::diamondSquare(int s, double level) {
 // good enough small blur
 // even though it's technically incorrect since we immediately place back into
 // the grid
-template <class T>
+template<class T>
 void TrMapData<T>::boxBlur() {
   for (int i = 0; i < K_MAP_SIZE_Y; i++) {
     for (int j = 0; j < K_MAP_SIZE_X; j++) {
       T sum = (this->get(i - 1.0, j - 1.0) + this->get(i - 1.0, j) +
-               this->get(i - 1.0, j + 1.0) + this->get(i, j - 1.0) +
-               this->get(i, j) + this->get(i, j + 1.0) +
-               this->get(i + 1.0, j - 1.0) + this->get(i + 1.0, j) +
-               this->get(i + 1.0, j + 1.0));
+          this->get(i - 1.0, j + 1.0) + this->get(i, j - 1.0) +
+          this->get(i, j) + this->get(i, j + 1.0) +
+          this->get(i + 1.0, j - 1.0) + this->get(i + 1.0, j) +
+          this->get(i + 1.0, j + 1.0));
 
       this->at(i, j) = sum / 9.0;
     }
   }
 }
 
-template <class T>
+template<class T>
 void TrMapData<T>::perlinNoise(unsigned int s, int level, double size,
                                double magnitude) {
   // Create a PerlinNoise object with the reference permutation vector
@@ -253,8 +253,8 @@ void TrMapData<T>::perlinNoise(unsigned int s, int level, double size,
   //     for (unsigned int j = 0; j < s; ++j) {  // x
   for (unsigned int i = 0; i < m_rows; ++i) {    // y
     for (unsigned int j = 0; j < m_cols; ++j) {  // x
-      double x = (double)j / ((double)(s));
-      double y = (double)i / ((double)(s));
+      double x = (double) j / ((double) (s));
+      double y = (double) i / ((double) (s));
 
       // Typical Perlin noise
       double n = perlin.noise(1.0 + x * size, 1.0 + y * size, 0);

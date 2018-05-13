@@ -9,7 +9,6 @@
 #include <memory>
 class TrMap;
 
-
 // map
 // is this too much memory? make sure to check
 class TrColorMap : public TrMapData<uint32_t> {
@@ -33,14 +32,14 @@ class TrColorMap : public TrMapData<uint32_t> {
 
   TrColorMap(int rows, int cols);
 
-  ~TrColorMap() override {}
+  ~TrColorMap() override = default;
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 
   void updateLightAngle();
 
-  void updateGrayscale(TrMap* map);
-  void updateHistogram(TrMap* map);
-  void updateDisplay(TrMap* map);
-  void updateMoistureDemo(TrMap* map);
+  void updateGrayscale(TrMap *map);
+  void updateHistogram(TrMap *map);
+  void updateDisplay(TrMap *map);
+  void updateMoistureDemo(TrMap *map);
 };

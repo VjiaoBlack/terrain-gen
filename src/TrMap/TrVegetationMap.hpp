@@ -10,5 +10,5 @@ class TrVegetationMap : public TrMapData<double> {
  public:
   TrVegetationMap(int rows, int cols) : TrMapData<double>(rows, cols) {}
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 };

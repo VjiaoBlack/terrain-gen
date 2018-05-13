@@ -22,13 +22,13 @@ class TrWaterPoint {
   TrWaterPoint(double id, double tx, double ty)
       : _id(id), x(tx), y(ty), amt(0.001), vx(0), vy(0), dirt(0) {}
 
-  bool operator<(const TrWaterPoint& right) const { return _id < right._id; }
+  bool operator<(const TrWaterPoint &right) const { return _id < right._id; }
 
-  bool operator==(const TrWaterPoint& right) const { return _id == right._id; }
+  bool operator==(const TrWaterPoint &right) const { return _id == right._id; }
 
-  TrWaterPoint& operator=(const TrWaterPoint& right) = default;
+  TrWaterPoint &operator=(const TrWaterPoint &right) = default;
 
-  static TrWaterPoint Merge(const TrWaterPoint& a, const TrWaterPoint& b) {
+  static TrWaterPoint Merge(const TrWaterPoint &a, const TrWaterPoint &b) {
     if (a.amt < 0.00001 && b.amt < 0.00001) {
       // printf("    neone\n");
       return TrWaterPoint();
@@ -62,9 +62,9 @@ class TrWaterPoint {
 };
 
 namespace std {
-template <>
+template<>
 struct hash<TrWaterPoint> {
-  size_t operator()(const TrWaterPoint& obj) const {
+  size_t operator()(const TrWaterPoint &obj) const {
     return hash<double>()(obj._id);
   }
 };
@@ -74,14 +74,14 @@ class TrWaterTempMap : public TrMapData<double> {
  public:
   TrWaterTempMap(int rows, int cols) : TrMapData(rows, cols) {}
 
-  void update(TrMap* map) override {};
+  void update(TrMap *map) override {};
 };
 
 class TrWaterDataMap : public TrMapData<TrWaterPoint> {
  public:
   TrWaterDataMap(int rows, int cols) : TrMapData(rows, cols) {}
 
-  void update(TrMap* map) override {}
+  void update(TrMap *map) override {}
 };
 
 // map
@@ -92,9 +92,9 @@ class TrWaterMap : public TrMapData<double> {
 
   //
   // TrWaterDataMap* m_water_temp;
-  TrWaterTempMap* m_water_temp;
+  TrWaterTempMap *m_water_temp;
   // TrWaterDataMap* m_water_data;
-  TrWaterTempMap* m_water_avg;
+  TrWaterTempMap *m_water_avg;
 
   TrWaterMap(int rows, int cols)
       : TrMapData(rows, cols),
@@ -108,9 +108,9 @@ class TrWaterMap : public TrMapData<double> {
     delete m_water_avg;
   }
 
-  void update(TrMap* map) override;
-  void experimentalUpdate(TrMap* map);
+  void update(TrMap *map) override;
+  void experimentalUpdate(TrMap *map);
 
-  void rain(TrMap* map);
-  void experimentalRain(TrMap* map);
+  void rain(TrMap *map);
+  void experimentalRain(TrMap *map);
 };

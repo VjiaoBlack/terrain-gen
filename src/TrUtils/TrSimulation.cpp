@@ -211,21 +211,21 @@ dvec2 getMoonPos(int month, int day, double hour) {
   // Calculate Lunar perturbations in Longitude
   double LunarPLon =
       -1.274 * sin((M - 2 * DMoon) * deg2rad) +
-      .658 * sin(2 * DMoon * deg2rad) + -0.186 * sin(MSun * deg2rad) +
-      -0.059 * sin((2 * M - 2 * DMoon) * deg2rad) +
-      -0.057 * sin((M - 2 * DMoon + MSun) * deg2rad) +
-      .053 * sin((M + 2 * DMoon) * deg2rad) +
-      .046 * sin((2 * DMoon - MSun) * deg2rad) +
-      .041 * sin((M - MSun) * deg2rad) + -0.035 * sin(DMoon * deg2rad) +
-      -0.031 * sin((M + MSun) * deg2rad) +
-      -0.015 * sin((2 * FMoon - 2 * DMoon) * deg2rad) +
-      .011 * sin((M - 4 * DMoon) * deg2rad);
+          .658 * sin(2 * DMoon * deg2rad) + -0.186 * sin(MSun * deg2rad) +
+          -0.059 * sin((2 * M - 2 * DMoon) * deg2rad) +
+          -0.057 * sin((M - 2 * DMoon + MSun) * deg2rad) +
+          .053 * sin((M + 2 * DMoon) * deg2rad) +
+          .046 * sin((2 * DMoon - MSun) * deg2rad) +
+          .041 * sin((M - MSun) * deg2rad) + -0.035 * sin(DMoon * deg2rad) +
+          -0.031 * sin((M + MSun) * deg2rad) +
+          -0.015 * sin((2 * FMoon - 2 * DMoon) * deg2rad) +
+          .011 * sin((M - 4 * DMoon) * deg2rad);
   // Calculate Lunar perturbations in Latitude
   double LunarPLat = -0.173 * sin((FMoon - 2 * DMoon) * deg2rad) +
-                     -0.055 * sin((M - FMoon - 2 * DMoon) * deg2rad) +
-                     -0.046 * sin((M + FMoon - 2 * DMoon) * deg2rad) +
-                     +0.033 * sin((FMoon + 2 * DMoon) * deg2rad) +
-                     +0.017 * sin((2 * M + FMoon) * deg2rad);
+      -0.055 * sin((M - FMoon - 2 * DMoon) * deg2rad) +
+      -0.046 * sin((M + FMoon - 2 * DMoon) * deg2rad) +
+      +0.033 * sin((FMoon + 2 * DMoon) * deg2rad) +
+      +0.017 * sin((2 * M + FMoon) * deg2rad);
   // Calculate perturbations in Distance
   double LunarPDist =
       -0.58 * cos((M - 2 * DMoon) * deg2rad) + -0.46 * cos(2 * DMoon * deg2rad);
@@ -236,13 +236,13 @@ dvec2 getMoonPos(int month, int day, double hour) {
       M + (180.0 / M_PI) * e * sin(M * deg2rad) * (1 + e * cos(M * deg2rad));
   // Compute E1 and set it to E0 until the E1 == E0
   double E1 = E0 -
-              (E0 - (180.0 / M_PI) * e * sin(E0 * deg2rad) - M) /
-                  (1 - e * cos(E0 * deg2rad));
+      (E0 - (180.0 / M_PI) * e * sin(E0 * deg2rad) - M) /
+          (1 - e * cos(E0 * deg2rad));
   while (E1 - E0 > .000005) {
     E0 = E1;
     E1 = E0 -
-         (E0 - (180.0 / M_PI) * e * sin(E0 * deg2rad) - M) /
-             (1 - e * cos(E0 * deg2rad));
+        (E0 - (180.0 / M_PI) * e * sin(E0 * deg2rad) - M) /
+            (1 - e * cos(E0 * deg2rad));
   }
   double E = E1;
   // Compute rectangular coordinates (x,y) in the plane of the lunar orbit
@@ -254,10 +254,10 @@ dvec2 getMoonPos(int month, int day, double hour) {
   // Compute moon's position in ecliptic coordinates
   double xeclip =
       r * (cos(N * deg2rad) * cos((v + w) * deg2rad) -
-           sin(N * deg2rad) * sin((v + w) * deg2rad) * cos(i * deg2rad));
+          sin(N * deg2rad) * sin((v + w) * deg2rad) * cos(i * deg2rad));
   double yeclip =
       r * (sin(N * deg2rad) * cos((v + w) * deg2rad) +
-           cos(N * deg2rad) * sin(((v + w) * deg2rad)) * cos(i * deg2rad));
+          cos(N * deg2rad) * sin(((v + w) * deg2rad)) * cos(i * deg2rad));
   double zeclip = r * sin((v + w) * deg2rad) * sin(i * deg2rad);
   // Add the calculated lunar perturbation terms to increase model fidelity
   double eLon, eLat, eDist;
@@ -330,12 +330,12 @@ dvec2 getMoonPos(int month, int day, double hour) {
   // Find the h and AZ at the current LST
   double h =
       asin(sin(delta * deg2rad) * sin(lat * deg2rad) +
-           cos(delta * deg2rad) * cos(lat * deg2rad) * cos(HA * deg2rad)) *
-      (180.0 / M_PI);
+          cos(delta * deg2rad) * cos(lat * deg2rad) * cos(HA * deg2rad)) *
+          (180.0 / M_PI);
   double Az =
       acos((sin(delta * deg2rad) - sin(h * deg2rad) * sin(lat * deg2rad)) /
-           (cos(h * deg2rad) * cos(lat * deg2rad))) *
-      (180.0 / M_PI);
+          (cos(h * deg2rad) * cos(lat * deg2rad))) *
+          (180.0 / M_PI);
   // Add in the angle offset due to the specified site elevation
   // h = h + thetaDiff;
 

@@ -6,20 +6,13 @@
  * a test file for testing driving.
  */
 
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <sys/time.h>
-#include <unistd.h>
-#include <iostream>
-#include <set>
-
 #include "TrGame.hpp"
-#include "TrMap/TrMap.hpp"
 
-int main(int argv, char* argc[]) {
-  TrGame renderer;
-  renderer.run();
-
+int main(int argv, char *argc[]) {
+  shared_ptr<TrGame> renderer = make_shared<TrGame>();
+  renderer->run();
+  renderer.reset();
+  TTF_Quit();
+  SDL_Quit();
   return 0;
 }

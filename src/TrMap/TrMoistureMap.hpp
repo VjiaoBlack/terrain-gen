@@ -10,5 +10,5 @@ class TrMoistureMap : public TrMapData<double> {
  public:
   TrMoistureMap(int rows, int cols) : TrMapData<double>(rows, cols) {}
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 };

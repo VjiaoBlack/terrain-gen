@@ -12,5 +12,5 @@ class TrHeightMap : public TrMapData<double> {
   TrHeightMap(int rows, int cols)
       : TrMapData<double>(rows, cols), m_terrace(rows, cols) {}
 
-  void update(TrMap* map) override;
+  void update(TrMap *map) override;
 };

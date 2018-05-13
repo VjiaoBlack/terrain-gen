@@ -7,19 +7,18 @@
 #include "TrData.hpp"
 
 #include "../TrECS/TrComponents/TrFootprintComponent.hpp"
-#include "../TrECS/TrComponents/TrGraphicsComponent.hpp"
-#include "../TrECS/TrComponents/TrPhysicsComponent.hpp"
-#include "../TrECS/TrComponents/TrPlanningComponent.hpp"
 
 #include "../TrECS/TrEntityTypes/TrActorEntityType.hpp"
 #include "../TrECS/TrEntityTypes/TrBuildingEntityType.hpp"
 #include "../TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
-map<string, TrEntityType*> TrData::m_entityTypes = map<string, TrEntityType*>();
-map<string, TrFormula*> TrData::m_formulas = map<string, TrFormula*>();
-map<string, TrItem*> TrData::m_items = map<string, TrItem*>();
+#include <regex>
 
-inline static void trim(string& str) {
+map<string, TrEntityType *> TrData::m_entityTypes = map<string, TrEntityType *>();
+map<string, TrFormula *> TrData::m_formulas = map<string, TrFormula *>();
+map<string, TrItem *> TrData::m_items = map<string, TrItem *>();
+
+inline static void trim(string &str) {
   int start = 0;
   int end = str.size() - 1;
 
@@ -33,29 +32,30 @@ inline static void trim(string& str) {
   str = str.substr(start, end - start + 1);
 }
 
-inline static SDL_Color parseColor(const string& color) {
-  unsigned char r, g, b;
+inline static SDL_Color parseColor(const string &color) {
+  int r, g, b;
   stringstream ss;
-  ss << std::hex << color.substr(1, 2);
-  ss >> r;
+
+  ss << color.substr(1, 2);
+  ss >> std::hex >> r;
   ss.clear();
-  ss << std::hex << color.substr(3, 2);
-  ss >> g;
+  ss << color.substr(3, 2);
+  ss >> std::hex >> g;
   ss.clear();
-  ss << std::hex << color.substr(5, 2);
-  ss >> b;
+  ss << color.substr(5, 2);
+  ss >> std::hex >> b;
   ss.clear();
 
-  return (SDL_Color){0xFF, r, g, b};
+  return (SDL_Color) {(uint8_t)r, (uint8_t)g, (uint8_t)b, 0xFF};
 }
 
-inline static pair<int, int> parseSize(const string& size) {
-  size_t pos = size.find('x');
+inline static pair<int, int> parseSize(const string &size) {
+  size_t pos = size.find(';');
 
   return make_pair(stoi(size.substr(0, pos)), stoi(size.substr(pos + 1)));
 }
 
-inline static pair<int, string> parseIngredient(const string& ingredient) {
+inline static pair<int, string> parseIngredient(const string &ingredient) {
   int num;
   string name;
 
@@ -69,7 +69,7 @@ inline static pair<int, string> parseIngredient(const string& ingredient) {
 }
 
 inline static vector<pair<int, string>> parseIngredientList(
-    const string& ingredientList) {
+    const string &ingredientList) {
   vector<pair<int, string>> ans;
 
   size_t pos, lastPos = 0;
@@ -89,9 +89,29 @@ inline static vector<pair<int, string>> parseIngredientList(
   return ans;
 }
 
-inline static vector<string> parseTagList(const string& tagList) {}
+inline static vector<string> parseList(const string &tagList) {
+  vector<string> ret;
+  static const regex tagRgx("([^;]*);?");
+  smatch result;
+
+  auto curPos(tagList.cbegin());
+  if (regex_search(curPos, tagList.cend(), result, tagRgx)) {
+    curPos += result.position() + result.length();
+    // TODO: is this right? Why don't we push the first result?
+    ret.push_back(result[1]);
+    while (regex_search(curPos, tagList.cend(), result, tagRgx) &&
+        string(result[1]).size() > 0) {
+
+      ret.push_back(result[1]);
+      curPos += result.position() + result.length();
+    }
+  }
+
+  return ret;
+}
 
 void TrData::loadData() {
+
   // load Entities
   {
     string name;
@@ -106,12 +126,17 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        cout << name << endl;
+//        cout << name << endl;
+//        cout << "\t|" << color << endl;
+//        cout << "\t|" << size << endl;
+//        cout << "\t|" << footprint << endl;
+//        cout << endl;
 
-        TrGraphicsComponent* graphics =
+        TrGraphicsComponent *graphics =
             new TrGraphicsComponent(parseColor(color));
-        auto * physics = new TrPhysicsComponent(0, 0);
-        auto * planning = new TrPlanningComponent();
+        auto sizePair = parseSize(size);
+        auto *physics = new TrPhysicsComponent(sizePair.first, sizePair.second);
+        auto *planning = new TrPlanningComponent();
 
         TrData::m_entityTypes[name] =
             new TrActorEntityType(graphics, physics, planning);
@@ -126,15 +151,28 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        cout << name << endl;
-        TrGraphicsComponent* graphics =
-            new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
-        pair<int, int> footprintSize(1, 1);
-        if (!size.empty()) {
-          footprintSize = parseSize(size);
+//        cout << name << endl;
+//        cout << "\t|" << color << endl;
+//        cout << "\t|" << size << endl;
+//        cout << "\t|" << footprint << endl;
+//        cout << endl;
+
+        TrGraphicsComponent *graphics =
+            new TrGraphicsComponent(parseColor(color));
+        auto sizePair = parseSize(size);
+
+//        create footprint bool array;
+        vector<char> footprintVec(sizePair.first * sizePair.second);
+        auto footprintData = parseList(footprint);
+
+        for (int r = 0; r < sizePair.first; r++) {
+          for (int c = 0; c < sizePair.second; c++) {
+            footprintVec[r * sizePair.second + c] = footprintData[r][c];
+          }
         }
-        auto * footprintComponent = new TrFootprintComponent(
-            footprintSize.first, footprintSize.second, nullptr);
+
+        auto *footprintComponent = new TrFootprintComponent(
+            sizePair.first, sizePair.second, move(footprintVec));
 
         TrData::m_entityTypes[name] =
             new TrBuildingEntityType(graphics, footprintComponent);
@@ -149,15 +187,18 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        cout << name << endl;
-        TrGraphicsComponent* graphics =
-            new TrGraphicsComponent((SDL_Color){0, 0, 0, 0});
-        pair<int, int> footprintSize(1, 1);
-        if (!size.empty()) {
-          footprintSize = parseSize(size);
-        }
-        auto * footprintComponent = new TrFootprintComponent(
-            footprintSize.first, footprintSize.second, nullptr);
+//        cout << name << endl;
+//        cout << "\t|" << color << endl;
+//        cout << "\t|" << size << endl;
+//        cout << "\t|" << footprint << endl;
+//        cout << endl;
+
+        TrGraphicsComponent *graphics =
+            new TrGraphicsComponent(parseColor(color));
+        pair<int, int> footprintSize = parseSize(size);
+
+        auto *footprintComponent = new TrFootprintComponent(
+            footprintSize.first, footprintSize.second);
 
         TrData::m_entityTypes[name] =
             new TrPlantEntityType(graphics, footprintComponent);
@@ -177,7 +218,11 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        cout << name << endl;
+//        cout << name << endl;
+//        cout << "\t|" << tags << endl;
+//        cout << "\t|" << attributes << endl;
+//        cout << endl;
+
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -189,7 +234,11 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        cout << name << endl;
+//        cout << name << endl;
+//        cout << "\t|" << tags << endl;
+//        cout << "\t|" << attributes << endl;
+//        cout << endl;
+
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -201,7 +250,11 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        cout << name << endl;
+//        cout << name << endl;
+//        cout << "\t|" << tags << endl;
+//        cout << "\t|" << attributes << endl;
+//        cout << endl;
+
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -213,7 +266,11 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        cout << name << endl;
+//        cout << name << endl;
+//        cout << "\t|" << tags << endl;
+//        cout << "\t|" << attributes << endl;
+//        cout << endl;
+
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -234,7 +291,12 @@ void TrData::loadData() {
 
       while (in.read_row(labor, inputs, outputs, byproducts)) {
         // do stuff with the data
-        cout << outputs << endl;
+//        cout << outputs << endl;
+//        cout << "\t|" << labor << endl;
+//        cout << "\t|" << inputs << endl;
+//        cout << "\t|" << byproducts << endl;
+//        cout << endl;
+
         parseIngredientList(inputs);
         parseIngredientList(outputs);
         parseIngredientList(byproducts);
@@ -249,7 +311,11 @@ void TrData::loadData() {
 
       while (in.read_row(labor, inputs, outputs, byproducts)) {
         // do stuff with the data
-        cout << outputs << endl;
+//        cout << outputs << endl;
+//        cout << "\t|" << labor << endl;
+//        cout << "\t|" << inputs << endl;
+//        cout << "\t|" << byproducts << endl;
+//        cout << endl;
       }
     }
   }

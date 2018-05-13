@@ -2,7 +2,7 @@
 #include "TrMoistureMap.hpp"
 #include "TrMap.hpp"
 
-void TrMoistureMap::update(TrMap* map) {
+void TrMoistureMap::update(TrMap *map) {
   // for (int j = 0; j < m_cols; j++) {
   //   for (int i = 0; i < m_rows; i++) {
   //     if (map->m_water->at(i,j) + m_height->at(i,j) < 0.458) {

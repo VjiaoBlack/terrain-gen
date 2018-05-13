@@ -6,7 +6,7 @@
 
 #include "../TrEntities.hpp"
 
-void TrGraphicsComponent::update(TrGame* game, TrEntity* entity) {
+void TrGraphicsComponent::update(TrGame *game, TrEntity *entity) {
   float sx, sy;
 
   SDL_RenderGetScale(game->m_SDLRenderer, &sx, &sy);

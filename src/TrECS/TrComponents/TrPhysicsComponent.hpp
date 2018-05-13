@@ -1,4 +1,3 @@
-
 #pragma once
 
 /**
@@ -28,5 +27,5 @@ class TrPhysicsComponent : public TrComponent {
   /**
    * @brief calculates the physics stuffs
    */
-  void update(TrGame* game, TrEntity* entity) override;
+  void update(TrGame *game, TrEntity *entity) override;
 };

@@ -11,9 +11,9 @@ class TrFootprintComponent;
  */
 class TrEntityType {
  public:
-  TrGraphicsComponent* m_graphics;
+  TrGraphicsComponent *m_graphics;
 
-  explicit TrEntityType(TrGraphicsComponent* graphics) : m_graphics(graphics){};
+  explicit TrEntityType(TrGraphicsComponent *graphics) : m_graphics(graphics) {};
 
   virtual ~TrEntityType() { delete m_graphics; }
 };
