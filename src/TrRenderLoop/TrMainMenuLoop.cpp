@@ -64,7 +64,7 @@ void TrMainMenuLoop::render(TrGame *game) {
                           game->m_yOff, K_DISPLAY_SCALE);
   // draw plants
   for (auto const& tree : game->m_entSystem->m_plants) {
-    dynamic_cast<TrEntityType*>(tree->m_type)->m_graphics->update(game, tree.get());
+    tree->m_type->m_graphics->update(game, tree.get());
   }
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};

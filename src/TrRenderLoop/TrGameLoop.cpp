@@ -127,7 +127,7 @@ void TrGameLoop::render(TrGame *game) {
 
   // draw plants
   for (auto const& tree : game->m_entSystem->m_plants) {
-    dynamic_cast<TrEntityType*>(tree->m_type)->m_graphics->update(game, tree.get());
+    tree->m_type->m_graphics->update(game, tree.get());
   }
 
 
