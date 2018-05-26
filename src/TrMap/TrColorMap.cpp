@@ -36,9 +36,9 @@ void TrColorMap::updateGrayscale(TrMap *map) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       // render land
-      this->set(i, j, multiplyColor(0xFFFFFFFF, map->m_height->at(i, j),
+      this->at(i,j) = multiplyColor(0xFFFFFFFF, map->m_height->at(i, j),
                                     map->m_height->at(i, j),
-                                    map->m_height->at(i, j)));
+                                    map->m_height->at(i, j));
     }
   }
 }
@@ -47,7 +47,7 @@ void TrColorMap::updateHistogram(TrMap *map) {
   // buffer counts in the top row, set to 0 later.
 
   for (int j = 0; j < m_cols; j++) {
-    this->set(0, j, 0);
+    this->at(0, j) = 0;
   }
 
   for (int i = 1; i < m_rows; i++) {
@@ -65,7 +65,7 @@ void TrColorMap::updateHistogram(TrMap *map) {
     if (floor(cur_col + amt) > floor(cur_col)) {
       if (cur_col < m_cols) {
         for (int r = j * m_rows / m_cols; r < m_rows; r++) {
-          this->set(r, (int) floor(cur_col), 0xFFFFFFFF);
+          this->at(r, (int) floor(cur_col)) = 0xFFFFFFFF;
         }
       }
     }
@@ -74,7 +74,7 @@ void TrColorMap::updateHistogram(TrMap *map) {
   }
 
   for (int j = 0; j < m_cols; j++) {
-    this->set(0, j, 0xFF000000);
+    this->at(0, j) = 0xFF000000;
   }
 }
 
@@ -120,13 +120,13 @@ void TrColorMap::updateDisplay(TrMap *map) {
       // render land
 
       for (int c = 0; c < 9; c++) {
-        if (map->m_height->get(i, j) * 255 < threshold[c]) {
-          this->set(i, j, colors[c]);
+        if (map->m_height->at(i, j) * 255 < threshold[c]) {
+          this->at(i, j) = colors[c];
           break;
         }
 
-        if (map->m_height->get(i, j) * 255 >= threshold[8]) {
-          this->set(i, j, 0xFFEEEEEE);
+        if (map->m_height->at(i, j) * 255 >= threshold[8]) {
+          this->at(i, j) = 0xFFEEEEEE;
           break;
         }
       }

@@ -212,8 +212,8 @@ TrGame::TrGame()
     auto rect = m_entSystem->m_plants[i]->m_rect;
 
 
-    if (m_map->m_height->get(rect.y, rect.x) < 0.5 ||
-        m_map->m_height->get(rect.y, rect.x) > 0.65) {
+    if (m_map->m_height->at(rect.y, rect.x) < 0.5 ||
+        m_map->m_height->at(rect.y, rect.x) > 0.65) {
       m_entSystem->m_plants.erase(m_entSystem->m_plants.begin() + i);
     }
   }

@@ -25,67 +25,67 @@ void TrWaterMap::update(TrMap *map) {
               map->m_water->at(i, j) * 0.05;
       // map->m_water->at(i, j);
 
-      double m = map->m_height->get(i, j) + map->m_water->get(i, j);
+      double m = map->m_height->at(i, j) + map->m_water->at(i, j);
       int mi = i;
       int mj = j;
       double mh = m;
 
       // straight
-      if (map->m_height->get(i + 1, j) + map->m_water->get(i + 1, j) < mh) {
+      if (map->m_height->at(i + 1, j) + map->m_water->at(i + 1, j) < mh) {
         mi = i + 1;
         mj = j;
-        mh = map->m_height->get(i + 1, j) + map->m_water->get(i + 1, j);
+        mh = map->m_height->at(i + 1, j) + map->m_water->at(i + 1, j);
       }
 
-      if (map->m_height->get(i - 1, j) + map->m_water->get(i - 1, j) < mh) {
+      if (map->m_height->at(i - 1, j) + map->m_water->at(i - 1, j) < mh) {
         mi = i - 1;
         mj = j;
-        mh = map->m_height->get(i - 1, j) + map->m_water->get(i - 1, j);
+        mh = map->m_height->at(i - 1, j) + map->m_water->at(i - 1, j);
       }
 
-      if (map->m_height->get(i, j + 1) + map->m_water->get(i, j + 1) < mh) {
+      if (map->m_height->at(i, j + 1) + map->m_water->at(i, j + 1) < mh) {
         mi = i;
         mj = j + 1;
-        mh = map->m_height->get(i, j + 1) + map->m_water->get(i, j + 1);
+        mh = map->m_height->at(i, j + 1) + map->m_water->at(i, j + 1);
       }
 
-      if (map->m_height->get(i, j - 1) + map->m_water->get(i, j - 1) < mh) {
+      if (map->m_height->at(i, j - 1) + map->m_water->at(i, j - 1) < mh) {
         mi = i;
         mj = j - 1;
-        mh = map->m_height->get(i, j - 1) + map->m_water->get(i, j - 1);
+        mh = map->m_height->at(i, j - 1) + map->m_water->at(i, j - 1);
       }
 
       // diagonal
-      if (m - (map->m_height->get(i + 1, j + 1) +
-          map->m_water->get(i + 1, j + 1)) >
+      if (m - (map->m_height->at(i + 1, j + 1) +
+          map->m_water->at(i + 1, j + 1)) >
           (m - mh) * 1.4142) {
         mi = i + 1;
         mj = j + 1;
-        mh = map->m_height->get(i + 1, j + 1) + map->m_water->get(i + 1, j + 1);
+        mh = map->m_height->at(i + 1, j + 1) + map->m_water->at(i + 1, j + 1);
       }
 
-      if (m - (map->m_height->get(i - 1, j - 1) +
-          map->m_water->get(i - 1, j - 1)) >
+      if (m - (map->m_height->at(i - 1, j - 1) +
+          map->m_water->at(i - 1, j - 1)) >
           (m - mh) * 1.4142) {
         mi = i - 1;
         mj = j - 1;
-        mh = map->m_height->get(i - 1, j - 1) + map->m_water->get(i - 1, j - 1);
+        mh = map->m_height->at(i - 1, j - 1) + map->m_water->at(i - 1, j - 1);
       }
 
-      if (m - (map->m_height->get(i + 1, j - 1) +
-          map->m_water->get(i + 1, j - 1)) >
+      if (m - (map->m_height->at(i + 1, j - 1) +
+          map->m_water->at(i + 1, j - 1)) >
           (m - mh) * 1.4142) {
         mi = i + 1;
         mj = j - 1;
-        mh = map->m_height->get(i + 1, j - 1) + map->m_water->get(i + 1, j - 1);
+        mh = map->m_height->at(i + 1, j - 1) + map->m_water->at(i + 1, j - 1);
       }
 
-      if (m - (map->m_height->get(i - 1, j + 1) +
-          map->m_water->get(i - 1, j + 1)) >
+      if (m - (map->m_height->at(i - 1, j + 1) +
+          map->m_water->at(i - 1, j + 1)) >
           (m - mh) * 1.4142) {
         mi = i - 1;
         mj = j + 1;
-        mh = map->m_height->get(i - 1, j + 1) + map->m_water->get(i - 1, j + 1);
+        mh = map->m_height->at(i - 1, j + 1) + map->m_water->at(i - 1, j + 1);
       }
 
       if (mh < m - 0.0001) {
@@ -93,9 +93,9 @@ void TrWaterMap::update(TrMap *map) {
         diff *= 0.5;
 
         // prevents water from cutting too deep
-        diff *= 1.0 - map->m_water->get(i, j);
-        if (diff > map->m_water->get(i, j)) {
-          diff = map->m_water->get(i, j);
+        diff *= 1.0 - map->m_water->at(i, j);
+        if (diff > map->m_water->at(i, j)) {
+          diff = map->m_water->at(i, j);
         }
 
         m_water_temp->at(mi, mj) += diff;

@@ -49,8 +49,8 @@ class TrMapData : public TrMapUpdatable {
   virtual ~TrMapData() { delete[] m_data; }
 
   // defined at bottom of file.
-  inline T get(int r, int c);
-  inline void set(int r, int c, T p);
+//  inline T get(int r, int c);
+//  inline void set(int r, int c, T p);
   inline T &at(int r, int c);
   inline T bilerp(double r, double c);
 
@@ -68,28 +68,28 @@ class TrMapData : public TrMapUpdatable {
   std::pair<T, T> getMinMax();
   void set(T t);
 };
-
-template<class T>
-inline void TrMapData<T>::set(int r, int c, T p) {
-  if (r < 0) r += m_rows;
-  if (c < 0) c += m_cols;
-
-  if (r >= m_rows) r -= m_rows;
-  if (c >= m_cols) c -= m_cols;
-
-  m_data[r * m_cols + c] = p;
-}
-
-template<class T>
-inline T TrMapData<T>::get(int r, int c) {
-  if (r < 0) r += m_rows;
-  if (c < 0) c += m_cols;
-
-  if (r >= m_rows) r -= m_rows;
-  if (c >= m_cols) c -= m_cols;
-
-  return m_data[r * m_cols + c];
-}
+//
+//template<class T>
+//inline void TrMapData<T>::set(int r, int c, T p) {
+//  if (r < 0) r += m_rows;
+//  if (c < 0) c += m_cols;
+//
+//  if (r >= m_rows) r -= m_rows;
+//  if (c >= m_cols) c -= m_cols;
+//
+//  m_data[r * m_cols + c] = p;
+//}
+//
+//template<class T>
+//inline T TrMapData<T>::get(int r, int c) {
+//  if (r < 0) r += m_rows;
+//  if (c < 0) c += m_cols;
+//
+//  if (r >= m_rows) r -= m_rows;
+//  if (c >= m_cols) c -= m_cols;
+//
+//  return m_data[r * m_cols + c];
+//}
 
 template<class T>
 inline T &TrMapData<T>::at(int r, int c) {
@@ -225,11 +225,11 @@ template<class T>
 void TrMapData<T>::boxBlur() {
   for (int i = 0; i < K_MAP_SIZE_Y; i++) {
     for (int j = 0; j < K_MAP_SIZE_X; j++) {
-      T sum = (this->get(i - 1.0, j - 1.0) + this->get(i - 1.0, j) +
-          this->get(i - 1.0, j + 1.0) + this->get(i, j - 1.0) +
-          this->get(i, j) + this->get(i, j + 1.0) +
-          this->get(i + 1.0, j - 1.0) + this->get(i + 1.0, j) +
-          this->get(i + 1.0, j + 1.0));
+      T sum = (this->at(i - 1.0, j - 1.0) + this->at(i - 1.0, j) +
+          this->at(i - 1.0, j + 1.0) + this->at(i, j - 1.0) +
+          this->at(i, j) + this->at(i, j + 1.0) +
+          this->at(i + 1.0, j - 1.0) + this->at(i + 1.0, j) +
+          this->at(i + 1.0, j + 1.0));
 
       this->at(i, j) = sum / 9.0;
     }

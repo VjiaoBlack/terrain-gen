@@ -195,12 +195,12 @@ void TrMap::printSimpleHeightMatrix() {
     for (int j = 0; j < m_cols; j++) {
       // render land
       for (int c = 0; c < 9; c++) {
-        if (m_height->get(i, j) * 255 < threshold[c]) {
+        if (m_height->at(i, j) * 255 < threshold[c]) {
           std::cout << simpleHeights[c] << " ";
           break;
         }
 
-        if (m_height->get(i, j) * 255 >= threshold[8]) {
+        if (m_height->at(i, j) * 255 >= threshold[8]) {
           std::cout << 9 << " ";
           break;
         }
