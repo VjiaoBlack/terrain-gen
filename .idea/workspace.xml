@@ -12,16 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64696227-2e1e-4253-9e7b-cb33f0d460bf" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/TrMap/TrMapDataUtils.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TrMap/TrMapDataUtils.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake_install.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/fft/fft.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/fft/fft.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrGame.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrMap/TrMapData.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrMapData.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrMap/TrNormalMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrNormalMap.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
@@ -35,11 +26,12 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TrMapData.hpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TrMapData.hpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapData.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="87" column="28" lean-forward="true" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+            <state relative-caret-position="476">
+              <caret line="236" column="7" selection-start-line="236" selection-start-column="7" selection-end-line="236" selection-end-column="7" />
+              <caret line="237" column="9" selection-start-line="237" selection-start-column="9" selection-end-line="237" selection-end-column="9" />
               <folding>
                 <element signature="e#89#110#0" expanded="true" />
                 <element signature="e#1391#1400#0" expanded="true" />
@@ -74,7 +66,7 @@
         <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapDataUtils.hpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="6">
-              <caret line="24" column="28" lean-forward="true" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+              <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
               <folding>
                 <element signature="e#126#135#0" expanded="true" />
                 <element signature="e#207#223#0" expanded="true" />
@@ -95,7 +87,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrColorMap.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TrColorMap.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="386">
@@ -126,11 +118,11 @@
       <find>m_map</find>
       <find>p</find>
       <find>push_back</find>
-      <find />
+      <find>int indices[</find>
       <find>m_entSystem-&gt;m_plats</find>
       <find>active_list</find>
       <find>erase</find>
-      <find />
+      <find>cout &lt;&lt;</find>
       <find>rand</find>
       <find>render</find>
       <find>gamestatestack</find>
@@ -147,7 +139,7 @@
     </findStrings>
     <replaceStrings>
       <replace>TrGame*</replace>
-      <replace />
+      <replace>TrGame *</replace>
       <replace>;</replace>
     </replaceStrings>
   </component>
@@ -205,9 +197,9 @@
         <option value="$PROJECT_DIR$/src/TrMap/TrMapDataUtils.hpp" />
         <option value="$PROJECT_DIR$/src/TrGame.cpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrMapDataUtils.cpp" />
-        <option value="$PROJECT_DIR$/src/TrMap/TrMapData.hpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrNormalMap.cpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" />
+        <option value="$PROJECT_DIR$/src/TrMap/TrMapData.hpp" />
       </list>
     </option>
   </component>
@@ -366,12 +358,12 @@
       <workItem from="1526942632385" duration="10272000" />
       <workItem from="1527361894519" duration="1343000" />
       <workItem from="1527369836952" duration="35000" />
-      <workItem from="1527369912040" duration="25400000" />
+      <workItem from="1527369912040" duration="26329000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140919000" />
+    <option name="totallyTimeSpent" value="141848000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -735,16 +727,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapDataUtils.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
-          <folding>
-            <element signature="e#105#134#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrGame.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1250">
@@ -755,35 +737,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrNormalMap.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="11" column="64" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapData.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="87" column="28" lean-forward="true" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
-          <folding>
-            <element signature="e#89#110#0" expanded="true" />
-            <element signature="e#1391#1400#0" expanded="true" />
-            <element signature="e#1409#1418#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapDataUtils.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6">
-          <caret line="24" column="28" lean-forward="true" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
           <folding>
             <element signature="e#126#135#0" expanded="true" />
             <element signature="e#207#223#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="247" column="56" selection-start-line="247" selection-start-column="56" selection-end-line="247" selection-end-column="56" />
+          <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/game_toolbar.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/include/fft/fft.h">
       <provider selected="true" editor-type-id="text-editor">
@@ -795,14 +769,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/game_toolbar.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrNormalMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="247" column="56" selection-start-line="247" selection-start-column="56" selection-end-line="247" selection-end-column="56" />
-          <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
+        <state relative-caret-position="220">
+          <caret line="11" column="64" selection-start-line="11" selection-start-column="64" selection-end-line="11" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapDataUtils.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+          <folding>
+            <element signature="e#105#134#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapData.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="236" column="7" selection-start-line="236" selection-start-column="7" selection-end-line="236" selection-end-column="7" />
+          <caret line="237" column="9" selection-start-line="237" selection-start-column="9" selection-end-line="237" selection-end-column="9" />
+          <folding>
+            <element signature="e#89#110#0" expanded="true" />
+            <element signature="e#1391#1400#0" expanded="true" />
+            <element signature="e#1409#1418#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

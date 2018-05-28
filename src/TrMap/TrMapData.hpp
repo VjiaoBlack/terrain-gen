@@ -53,6 +53,10 @@ class TrMapData : public TrMapUpdatable {
   inline T &at(int r, int c);
   inline T get(int r, int c) const;
 
+  // force float truncating to occur at parameter-passing time.
+  T &at(double r, double c) = delete;
+  T get(double r, double c) = delete;
+
   template<class K>
   inline T sample(int r, int c);
 
@@ -107,10 +111,10 @@ inline T TrMapData<T>::bilerp(double r, double c) {
     c2++;
   }
 
-  T vtl = this->at(floor(r), floor(c));
-  T vtr = this->at(floor(r), ceil(c));
-  T vbl = this->at(ceil(r), floor(c));
-  T vbr = this->at(ceil(r), ceil(c));
+  T vtl = this->at((int)floor(r), (int)floor(c));
+  T vtr = this->at((int)floor(r), (int)ceil(c));
+  T vbl = this->at((int)ceil(r), (int)floor(c));
+  T vbr = this->at((int)ceil(r), (int)ceil(c));
 
   // using formula on https://en.wikipedia.org/wiki/Bilinear_interpolation
   return dot(dvec2(c2 - c, c - c1) * dmat2(vtl, vtr, vbl, vbr),
@@ -204,11 +208,11 @@ template<class T>
 void TrMapData<T>::boxBlur() {
   for (int i = 0; i < K_MAP_SIZE_Y; i++) {
     for (int j = 0; j < K_MAP_SIZE_X; j++) {
-      T sum = (this->at(i - 1.0, j - 1.0) + this->at(i - 1.0, j) +
-          this->at(i - 1.0, j + 1.0) + this->at(i, j - 1.0) +
-          this->at(i, j) + this->at(i, j + 1.0) +
-          this->at(i + 1.0, j - 1.0) + this->at(i + 1.0, j) +
-          this->at(i + 1.0, j + 1.0));
+      T sum = (this->at(i - 1, j - 1) + this->at(i - 1, j) +
+          this->at(i - 1, j + 1) + this->at(i, j - 1) +
+          this->at(i, j) + this->at(i, j + 1) +
+          this->at(i + 1, j - 1) + this->at(i + 1, j) +
+          this->at(i + 1, j + 1));
 
       this->at(i, j) = sum / 9.0;
     }
@@ -230,8 +234,8 @@ void TrMapData<T>::perlinNoise(unsigned int s, int level, double size,
   // noise
   // for (unsigned int i = 0; i < s; ++i) {      // y
   //     for (unsigned int j = 0; j < s; ++j) {  // x
-  for (unsigned int i = 0; i < m_rows; ++i) {    // y
-    for (unsigned int j = 0; j < m_cols; ++j) {  // x
+  for (int i = 0; i < m_rows; ++i) {    // y
+    for (int j = 0; j < m_cols; ++j) {  // x
       double x = (double) j / ((double) (s));
       double y = (double) i / ((double) (s));
 
