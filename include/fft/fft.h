@@ -36,6 +36,10 @@ struct vertex_ocean {
     };
   }
 
+  vertex_ocean operator+=(vertex_ocean v) {
+    return (*this = *this + v);
+  }
+
 };
 
 inline vertex_ocean operator*(vertex_ocean v, float m) {

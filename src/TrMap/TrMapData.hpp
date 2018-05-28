@@ -21,6 +21,7 @@
 
 #include "../Perlin.hpp"
 #include "../Utils.hpp"
+#include "TrMapDataUtils.hpp"
 
 using namespace glm;
 
@@ -49,14 +50,13 @@ class TrMapData : public TrMapUpdatable {
   virtual ~TrMapData() { delete[] m_data; }
 
   // defined at bottom of file.
-//  inline T get(int r, int c);
-//  inline void set(int r, int c, T p);
   inline T &at(int r, int c);
-  inline T bilerp(double r, double c);
+  inline T get(int r, int c) const;
 
-  inline T gauss(int r, int c);
-  inline T gaussDx(int r, int c);
-  inline T gaussDy(int r, int c);
+  template<class K>
+  inline T sample(int r, int c);
+
+  inline T bilerp(double r, double c);
 
   inline bool isOut(double r, double c);
 
@@ -68,36 +68,27 @@ class TrMapData : public TrMapUpdatable {
   std::pair<T, T> getMinMax();
   void set(T t);
 };
-//
-//template<class T>
-//inline void TrMapData<T>::set(int r, int c, T p) {
-//  if (r < 0) r += m_rows;
-//  if (c < 0) c += m_cols;
-//
-//  if (r >= m_rows) r -= m_rows;
-//  if (c >= m_cols) c -= m_cols;
-//
-//  m_data[r * m_cols + c] = p;
-//}
-//
-//template<class T>
-//inline T TrMapData<T>::get(int r, int c) {
-//  if (r < 0) r += m_rows;
-//  if (c < 0) c += m_cols;
-//
-//  if (r >= m_rows) r -= m_rows;
-//  if (c >= m_cols) c -= m_cols;
-//
-//  return m_data[r * m_cols + c];
-//}
+
+template<class T>
+template<class K>
+inline T TrMapData<T>::sample(int r, int c) {
+  T sum = {};
+  static_assert(K::size % 2 == 1, "TrMapData::sample only supports odd sized kernels.");
+  for (int kr = 0; kr < K::size; kr++) {
+    for (int kc = 0; kc < K::size; kc++) {
+      sum += this->at(r+kr-K::size/2, c+kc-K::size/2) * K::data[kr*K::size+kc];
+    }
+  }
+  return sum;
+}
 
 template<class T>
 inline T &TrMapData<T>::at(int r, int c) {
-  if (r < 0) r += m_rows;
-  if (c < 0) c += m_cols;
+  while (r < 0) r += m_rows;
+  while (c < 0) c += m_cols;
 
-  if (r >= m_rows) r -= m_rows;
-  if (c >= m_cols) c -= m_cols;
+  while (r >= m_rows) r -= m_rows;
+  while (c >= m_cols) c -= m_cols;
 
   return m_data[r * m_cols + c];
 }
@@ -127,26 +118,14 @@ inline T TrMapData<T>::bilerp(double r, double c) {
 }
 
 template<class T>
-inline T TrMapData<T>::gauss(int r, int c) {
-  return 0.0625 * (4 * (this->at(r, c)) +
-      2 * (this->at(r + 1, c) + this->at(r, c + 1) +
-          this->at(r - 1, c) + this->at(r, c - 1)) +
-      (this->at(r + 1, c + 1) + this->at(r + 1, c - 1) +
-          this->at(r - 1, c + 1) + this->at(r - 1, c - 1)));
-}
+inline T TrMapData<T>::get(int r, int c) const {
+  while (r < 0) r += m_rows;
+  while (c < 0) c += m_cols;
 
-template<class T>
-inline T TrMapData<T>::gaussDx(int r, int c) {
-  return 0.25 * (2 * (this->at(r, c + 1) - this->at(r, c - 1)) +
-      (this->at(r + 1, c + 1) - this->at(r + 1, c - 1)) +
-      (this->at(r - 1, c + 1) - this->at(r - 1, c - 1)));
-}
+  while (r >= m_rows) r -= m_rows;
+  while (c >= m_cols) c -= m_cols;
 
-template<class T>
-inline T TrMapData<T>::gaussDy(int r, int c) {
-  return 0.25 * (2 * (this->at(r + 1, c) - this->at(r - 1, c)) +
-      (this->at(r + 1, c + 1) - this->at(r - 1, c + 1)) +
-      (this->at(r + 1, c - 1) - this->at(r - 1, c - 1)));
+  return m_data[r * m_cols + c];
 }
 
 template<class T>
@@ -193,22 +172,22 @@ void TrMapData<T>::diamondSquare(int s, double level) {
   int hs = s / 2;
   for (int i = hs; i < K_MAP_SIZE_Y + hs; i += s) {
     for (int j = hs; j < K_MAP_SIZE_X + hs; j += s) {
-      double a = this->get(i - hs, j - hs);
-      double b = this->get(i + hs, j - hs);
-      double c = this->get(i - hs, j + hs);
-      double d = this->get(i + hs, j + hs);
+      double a = this->at(i - hs, j - hs);
+      double b = this->at(i + hs, j - hs);
+      double c = this->at(i - hs, j + hs);
+      double d = this->at(i + hs, j + hs);
       this->at(i, j) = (a + b + c + d) / 4.0 + dist(eg);
     }
   }
 
   for (int i = 0; i < K_MAP_SIZE_Y; i += s) {
     for (int j = 0; j < K_MAP_SIZE_X; j += s) {
-      double a = this->get(i, j);
-      double b = this->get(i + s, j);
-      double c = this->get(i + hs, j - hs);
-      double d = this->get(i + hs, j + hs);
-      double f = this->get(i - hs, j + hs);
-      double k = this->get(i, j + s);
+      double a = this->at(i, j);
+      double b = this->at(i + s, j);
+      double c = this->at(i + hs, j - hs);
+      double d = this->at(i + hs, j + hs);
+      double f = this->at(i - hs, j + hs);
+      double k = this->at(i, j + s);
 
       this->at(i + hs, j) = (a + b + c + d) / 4.0 + dist(eg);
       this->at(i, j + hs) = (f + d + a + k) / 4.0 + dist(eg);

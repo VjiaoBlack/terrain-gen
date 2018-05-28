@@ -158,7 +158,7 @@ TrGame::TrGame()
 
       if (rect.x < 0 || rect.x >= K_MAP_SIZE_X ||
           rect.y < 0 || rect.y >= K_MAP_SIZE_Y) {
-        cout << "cont1" << endl;
+//        cout << "cont1" << endl;
 
         continue;
       }
@@ -167,9 +167,9 @@ TrGame::TrGame()
       int t_c = rect.x / cell_rad;
 
       if (indices[t_r * cols + t_c] > -1) {
-        cout << "cont2 " << m_entSystem->m_plants[index]->m_rect.y / cell_rad << " " <<
-             m_entSystem->m_plants[index]->m_rect.x / cell_rad << " " <<
-             t_r << " " << t_c << endl;
+//        cout << "cont2 " << m_entSystem->m_plants[index]->m_rect.y / cell_rad << " " <<
+//             m_entSystem->m_plants[index]->m_rect.x / cell_rad << " " <<
+//             t_r << " " << t_c << endl;
         continue;
       }
 
@@ -193,7 +193,7 @@ TrGame::TrGame()
 
 
       if (valid) {
-        cout << " valid " << rect.x << " " << rect.y << endl;
+//        cout << " valid " << rect.x << " " << rect.y << endl;
         plant = make_unique<TrPlantEntity>(this, rect,
                                            dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
         active_list.push_back(m_entSystem->m_plants.size());
@@ -206,7 +206,7 @@ TrGame::TrGame()
   }
 
 
-  cout << "PLANTS " << m_entSystem->m_plants.size() << endl;
+//  cout << "PLANTS " << m_entSystem->m_plants.size() << endl;
   // remove plants that are over water
   for (int i = m_entSystem->m_plants.size() - 1; i >= 0; i--) {
     auto rect = m_entSystem->m_plants[i]->m_rect;
@@ -219,7 +219,7 @@ TrGame::TrGame()
   }
 
 
-  cout << "ready" << endl;
+//  cout << "ready" << endl;
   // setup game loop
   auto tempmenu = make_shared<TrMainMenuLoop>(this);
   m_gameStateStack.push_back(move(tempmenu));

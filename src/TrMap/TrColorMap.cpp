@@ -245,9 +245,9 @@ void TrColorMap::updateDisplay(TrMap *map) {
         if (m_light.z > 0) {
           // construct fake "normal" of the water surface
           norm.x =
-              deriv * ocean->vertices->gaussDx(i % ocean->N, j % ocean->N).nz;
+              deriv * ocean->vertices->sample<TrGaussDx>(i % ocean->N, j % ocean->N).nz;
           norm.y =
-              deriv * ocean->vertices->gaussDy(i % ocean->N, j % ocean->N).nz;
+              deriv * ocean->vertices->sample<TrGaussDy>(i % ocean->N, j % ocean->N).nz;
           norm.z = 1.0;
 
           // modulate wave intensity by water depth
