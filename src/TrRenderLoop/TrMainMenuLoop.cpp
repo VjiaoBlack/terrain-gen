@@ -7,10 +7,8 @@
 #include "TrTransitionLoop.hpp"
 #include "../TrECS/TrSystems/TrEntitySystem.hpp"
 #include "../TrECS/TrEntities.hpp"
-#include "../TrECS/TrEntityTypes/TrEntityType.hpp"
-#include "../TrECS/TrEntities/TrPlantEntity.hpp"
-#include "../TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
+#include "../TrECS/MyEntities.hpp"
 TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   int score = 10;
 
@@ -64,7 +62,7 @@ void TrMainMenuLoop::render(TrGame *game) {
                           game->m_yOff, K_DISPLAY_SCALE);
   // draw plants
   for (auto plant : game->m_entSystem->m_plants) {
-//    plant->update(game);
+    plant->update(game);
   }
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};

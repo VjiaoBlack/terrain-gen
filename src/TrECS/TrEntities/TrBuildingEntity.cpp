@@ -1,4 +1,0 @@
-/**
- * TrBuildingEntity.cpp
- */
-

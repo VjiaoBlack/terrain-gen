@@ -37,3 +37,8 @@ class TrPlanningComponent : public MyComponent {
   template<class C>
   void update(TrGame *game, C *entity);
 };
+
+// TODO: something
+template<class C>
+void TrPlanningComponent::update(TrGame *game, C *entity) {}
+

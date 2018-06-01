@@ -8,13 +8,11 @@
 
 #include "../TrECS/TrComponents/TrFootprintComponent.hpp"
 
-#include "../TrECS/TrEntityTypes/TrActorEntityType.hpp"
-#include "../TrECS/TrEntityTypes/TrBuildingEntityType.hpp"
-#include "../TrECS/TrEntityTypes/TrPlantEntityType.hpp"
-
 #include <regex>
 
-map<string, TrEntityType *> TrData::m_entityTypes = map<string, TrEntityType *>();
+map<string, MyActorEntityType *> TrData::m_actorTypes = map<string, MyActorEntityType *>();
+map<string, MyBuildingEntityType *> TrData::m_buildingTypes = map<string, MyBuildingEntityType *>();
+map<string, MyPlantEntityType *> TrData::m_plantTypes = map<string, MyPlantEntityType *>();
 map<string, TrFormula *> TrData::m_formulas = map<string, TrFormula *>();
 map<string, TrItem *> TrData::m_items = map<string, TrItem *>();
 
@@ -126,14 +124,13 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        TrGraphicsComponent *graphics =
-            new TrGraphicsComponent(parseColor(color));
+        TrGraphicsComponent graphics = TrGraphicsComponent(parseColor(color));
         auto sizePair = parseSize(size);
-        auto *physics = new TrPhysicsComponent(sizePair.first, sizePair.second);
-        auto *planning = new TrPlanningComponent();
+        auto physics = TrPhysicsComponent(sizePair.first, sizePair.second);
+        auto planning = TrPlanningComponent();
 
-        TrData::m_entityTypes[name] =
-            new TrActorEntityType(graphics, physics, planning);
+        TrData::m_actorTypes[name] =
+            new MyActorEntityType(name, graphics, physics, planning);
       }
     }
 
@@ -145,8 +142,8 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        TrGraphicsComponent *graphics =
-            new TrGraphicsComponent(parseColor(color));
+        TrGraphicsComponent graphics =
+             TrGraphicsComponent(parseColor(color));
         auto sizePair = parseSize(size);
 
         vector<char> footprintVec(sizePair.first * sizePair.second);
@@ -158,11 +155,11 @@ void TrData::loadData() {
           }
         }
 
-        auto *footprintComponent = new TrFootprintComponent(
+        auto footprintComponent = TrFootprintComponent(
             sizePair.first, sizePair.second, move(footprintVec));
 
-        TrData::m_entityTypes[name] =
-            new TrBuildingEntityType(graphics, footprintComponent);
+        TrData::m_buildingTypes[name] =
+            new MyBuildingEntityType(name, graphics, footprintComponent);
       }
     }
 
@@ -174,15 +171,15 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-        TrGraphicsComponent *graphics =
-            new TrGraphicsComponent(parseColor(color));
+        TrGraphicsComponent graphics =
+            TrGraphicsComponent(parseColor(color));
         pair<int, int> footprintSize = parseSize(size);
 
-        auto *footprintComponent = new TrFootprintComponent(
+        auto footprintComponent =  TrFootprintComponent(
             footprintSize.first, footprintSize.second);
 
-        TrData::m_entityTypes[name] =
-            new TrPlantEntityType(graphics, footprintComponent);
+        TrData::m_plantTypes[name] =
+            new MyPlantEntityType(name, graphics, footprintComponent);
       }
     }
   }

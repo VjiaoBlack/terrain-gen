@@ -4,10 +4,11 @@
 #include "TrRenderLoop/TrGameLoop.hpp"
 #include "TrRenderLoop/TrMainMenuLoop.hpp"
 #include "TrECS/TrSystems/TrEntitySystem.hpp"
-#include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
 #include <deque>
-#include <TrECS/TrEntityTypes.hpp>
+//#include <TrECS/TrEntityTypes.hpp>
+#include <TrECS/TrEntities.hpp>
+#include "TrECS/MyEntities.hpp"
 
 void TrGame::setupSDL() {
   // Initialize
@@ -136,12 +137,7 @@ TrGame::TrGame()
 
   cout << rect.x << " " << rect.y << endl;
 
-//  shared_ptr<TrPlantEntity> plant =
-//  unique_ptr<TrPlantEntity> plant = make_unique<TrPlantEntity>(this, rect,
-//       dynamic_cast<TrPlantEntityType*>(TrData::m_entityTypes["tree"]));
-//  m_entSystem->m_plants.push_back(move(plant));
-  // TODO: set up MyPlantEntityType
-  auto plant = MyPlantEntityType::make();
+  auto plant = TrData::m_plantTypes["tree"]->make();
   plant->m_rect = rect;
   m_entSystem->m_plants.push_back(move(plant));
 
@@ -206,10 +202,10 @@ TrGame::TrGame()
 //        cout << " valid " << rect.x << " " << rect.y << endl;
 //        plant = make_unique<TrPlantEntity>(this, rect,
 //                                           dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
-//        active_list.push_back(m_entSystem->m_plants.size());
+        active_list.push_back(m_entSystem->m_plants.size());
 
 //        m_entSystem->m_plants.push_back(move(plant));
-        auto plant = MyPlantEntityType::make();
+        auto plant = TrData::m_plantTypes["tree"]->make();
         plant->m_rect = rect;
         m_entSystem->m_plants.push_back(std::move(plant));
 

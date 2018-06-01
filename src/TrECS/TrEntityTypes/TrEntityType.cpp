@@ -1,4 +1,0 @@
-/**
- * TrEntityType.cpp
- */
-

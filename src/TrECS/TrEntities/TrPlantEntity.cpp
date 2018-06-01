@@ -1,4 +1,0 @@
-/**
- * TrPlantEntity.cpp
- */
-

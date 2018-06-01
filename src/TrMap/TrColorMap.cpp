@@ -1,8 +1,6 @@
 
 #include "TrGame.hpp"
-#include "TrECS/TrEntityTypes/TrEntityType.hpp"
 #include "../TrECS/TrSystems/TrEntitySystem.hpp"
-#include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
 int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)

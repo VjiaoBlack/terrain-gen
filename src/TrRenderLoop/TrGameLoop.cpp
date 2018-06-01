@@ -2,13 +2,13 @@
  * TrGameLoop.cpp
  */
 
-#include "TrECS/TrEntityTypes/TrEntityType.hpp"
-#include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 #include "TrGameLoop.hpp"
 #include "TrMainMenuLoop.hpp"
 #include "TrTransitionLoop.hpp"
 #include "../TrECS/TrSystems/TrEntitySystem.hpp"
-#include "../TrECS/TrEntities/TrPlantEntity.hpp"
+#include "../TrECS/TrEntities.hpp"
+
+#include "../TrECS/MyEntities.hpp"
 
 class TrMainMenuLoop;
 
@@ -126,8 +126,9 @@ void TrGameLoop::render(TrGame *game) {
                           game->m_yOff, K_DISPLAY_SCALE);
 
   // draw plants
-  for (auto const& tree : game->m_entSystem->m_plants) {
-//    tree->m_type->m_graphics->update(game, tree.get());
+  for (auto plant : game->m_entSystem->m_plants) {
+    plant->update(game);
+    cout << plant->m_rect.x << endl;
   }
 
 

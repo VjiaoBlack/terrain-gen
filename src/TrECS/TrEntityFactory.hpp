@@ -75,6 +75,9 @@
 #include <type_traits>
 #include <memory>
 #include <vector>
+//#include <TrData/TrData.hpp>
+
+#include <TrData/TrData.hpp>
 
 #include "TrEntities.hpp"
 //#include "../TrGame.hpp"
@@ -86,48 +89,6 @@ using std::enable_if_t;
 using std::shared_ptr;
 using std::make_shared;
 
-
-
-//class MyDummyEntityType;
-//
-//
-//template<class Parent = MyDummyEntityType>
-//class MyEntity;
-//
-//template<class Child, class...Components>
-//class MyEntityType;
-
-
-
-/**
- * Sadly, CLion doesn't support constexpr.
- * Otherwise, you could implement this with just a constexpr.
- */
-template<int I, class...Ts>
-enable_if_t<I + 1 == sizeof...(Ts), void> tup_print(tuple<Ts...> &tuple) {
-  std::cout << I << " " << std::get<I>(tuple) << std::endl;
-};
-
-template<int I, class...Ts>
-enable_if_t<I + 1 < sizeof...(Ts), void> tup_print(tuple<Ts...> &tuple) {
-  std::cout << I << " " << std::get<I>(tuple) << std::endl;
-  tup_print<I + 1, Ts...>(tuple);
-};
-
-template<int I, class Child, class...Ts>
-enable_if_t<I + 1 == sizeof...(Ts), void> tup_update(tuple<Ts...> &tuple, TrGame *game,
-                                                     MyEntity<MyEntityType<Child, Ts...>>
-                                                     *entity) {
-  std::get<I>(tuple).template update<MyEntity<MyEntityType<Child, Ts...>>>(game, entity);
-};
-
-template<int I, class Child, class...Ts>
-enable_if_t<I + 1 < sizeof...(Ts), void> tup_update(tuple<Ts...> &tuple, TrGame *game,
-                                                    MyEntity<MyEntityType<Child, Ts...>>
-                                                    *entity) {
-  std::get<I>(tuple).template update<MyEntity<MyEntityType<Child, Ts...>>>(game, entity);
-  tup_update<I + 1, Child, Ts...>(tuple, game, entity);
-};
 
 /**
  * How can we force TrEntity to have the right data members and right TrComponents?
@@ -150,38 +111,16 @@ enable_if_t<I + 1 < sizeof...(Ts), void> tup_update(tuple<Ts...> &tuple, TrGame 
  * but this allows us to store components more easily.
  */
 
-
-
 template<class Parent>
 class MyEntity {
  public:
+  string m_typeName; // refers to type name
   SDL_Rect m_rect;
-  MyEntity() {}
+  MyEntity(string name) : m_typeName(name) {}
 
   void update(TrGame *game) {
-    cout << "Updating entity with data == " << endl;
-    Parent::update(game, this);
+    TrData::m_plantTypes[m_typeName]->update(game, this);
   }
 };
-
-template<class Child, class...Components>
-class MyEntityType {
- public:
-  static tuple<Components...> components;
-
-  MyEntityType() {}
-
-  static void update(TrGame *game, MyEntity<MyEntityType<Child, Components...>> *entity) {
-    tup_update<0, Child, Components...>(components, game, entity);
-  }
-
-  static shared_ptr<Child> make() {
-    return make_shared<Child>();
-  }
-};
-
-template<class Child, class...Components>
-tuple<Components...> MyEntityType<Child, Components...>::components;
-
 
 

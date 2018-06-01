@@ -1,4 +1,0 @@
-/**
- * TrActorEntityType.cpp
- */
-
