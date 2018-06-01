@@ -5,22 +5,17 @@
  */
 
 #include <vector>
-
-#include "../TrEntities/TrPlantEntity.hpp"
-#include "../TrEntities/TrActorEntity.hpp"
-#include "../TrEntities/TrBuildingEntity.hpp"
+#include <TrECS/TrEntityTypes.hpp>
 
 class TrEntitySystem {
  public:
 // TODO: figure out more efficient system
-  std::vector<unique_ptr<TrPlantEntity>> m_plants;
-  std::vector<unique_ptr<TrActorEntity>> m_actors;
-  std::vector<unique_ptr<TrBuildingEntity>> m_buildings;
+  std::vector<shared_ptr<MyPlantEntity>> m_plants;
+  std::vector<shared_ptr<MyActorEntity>> m_actors;
+  std::vector<shared_ptr<MyBuildingEntity>> m_buildings;
 
   TrEntitySystem() {
 
   }
-
-
 
 };

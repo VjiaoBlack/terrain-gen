@@ -24,7 +24,7 @@ struct tr_target_t {
 /**
  * @brief interface for all planning components
  */
-class TrPlanningComponent : public TrComponent {
+class TrPlanningComponent : public MyComponent {
  public:
   set<tr_target_t> m_targets;
 
@@ -34,5 +34,6 @@ class TrPlanningComponent : public TrComponent {
   /**
    * @brief based on the game and entity state, figure out something to do
    */
-  void update(TrGame *game, TrEntity *entity) override;
+  template<class C>
+  void update(TrGame *game, C *entity);
 };

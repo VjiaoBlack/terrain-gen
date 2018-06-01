@@ -126,12 +126,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << color << endl;
-//        cout << "\t|" << size << endl;
-//        cout << "\t|" << footprint << endl;
-//        cout << endl;
-
         TrGraphicsComponent *graphics =
             new TrGraphicsComponent(parseColor(color));
         auto sizePair = parseSize(size);
@@ -151,17 +145,10 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << color << endl;
-//        cout << "\t|" << size << endl;
-//        cout << "\t|" << footprint << endl;
-//        cout << endl;
-
         TrGraphicsComponent *graphics =
             new TrGraphicsComponent(parseColor(color));
         auto sizePair = parseSize(size);
 
-//        create footprint bool array;
         vector<char> footprintVec(sizePair.first * sizePair.second);
         auto footprintData = parseList(footprint);
 
@@ -187,12 +174,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << color << endl;
-//        cout << "\t|" << size << endl;
-//        cout << "\t|" << footprint << endl;
-//        cout << endl;
-
         TrGraphicsComponent *graphics =
             new TrGraphicsComponent(parseColor(color));
         pair<int, int> footprintSize = parseSize(size);
@@ -218,11 +199,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << tags << endl;
-//        cout << "\t|" << attributes << endl;
-//        cout << endl;
-
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -234,11 +210,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << tags << endl;
-//        cout << "\t|" << attributes << endl;
-//        cout << endl;
-
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -250,11 +221,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << tags << endl;
-//        cout << "\t|" << attributes << endl;
-//        cout << endl;
-
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -266,11 +232,6 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-//        cout << name << endl;
-//        cout << "\t|" << tags << endl;
-//        cout << "\t|" << attributes << endl;
-//        cout << endl;
-
         TrData::m_items[name] = new TrItem(name);
       }
     }
@@ -291,12 +252,6 @@ void TrData::loadData() {
 
       while (in.read_row(labor, inputs, outputs, byproducts)) {
         // do stuff with the data
-//        cout << outputs << endl;
-//        cout << "\t|" << labor << endl;
-//        cout << "\t|" << inputs << endl;
-//        cout << "\t|" << byproducts << endl;
-//        cout << endl;
-
         parseIngredientList(inputs);
         parseIngredientList(outputs);
         parseIngredientList(byproducts);
@@ -311,11 +266,6 @@ void TrData::loadData() {
 
       while (in.read_row(labor, inputs, outputs, byproducts)) {
         // do stuff with the data
-//        cout << outputs << endl;
-//        cout << "\t|" << labor << endl;
-//        cout << "\t|" << inputs << endl;
-//        cout << "\t|" << byproducts << endl;
-//        cout << endl;
       }
     }
   }

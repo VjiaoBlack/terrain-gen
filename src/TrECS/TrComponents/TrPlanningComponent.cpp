@@ -5,4 +5,5 @@
 #include "TrPlanningComponent.hpp"
 
 // TODO: something
-void TrPlanningComponent::update(TrGame *game, TrEntity *entity) {}
+template<class C>
+void TrPlanningComponent::update(TrGame *game, C *entity) {}

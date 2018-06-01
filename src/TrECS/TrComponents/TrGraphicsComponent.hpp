@@ -15,7 +15,7 @@ using namespace std;
 /**
  * @brief interface for all graphics components
  */
-class TrGraphicsComponent : public TrComponent {
+class TrGraphicsComponent : public MyComponent {
  public:
   SDL_Texture *m_texture;
   SDL_Color m_color;
@@ -30,5 +30,8 @@ class TrGraphicsComponent : public TrComponent {
   /**
    * @brief draws the given entity
    */
-  void update(TrGame *game, TrEntity *entity) override;
+  template<class C>
+  void update(TrGame *game, C *entity);
 };
+
+

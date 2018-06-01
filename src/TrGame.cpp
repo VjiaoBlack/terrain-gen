@@ -7,6 +7,7 @@
 #include "TrECS/TrEntityTypes/TrPlantEntityType.hpp"
 
 #include <deque>
+#include <TrECS/TrEntityTypes.hpp>
 
 void TrGame::setupSDL() {
   // Initialize
@@ -60,9 +61,15 @@ TrGame::TrGame()
   TrData::loadData();
 
 
+  /**
+   * Test area: test game functions
+   */
 
-
-
+  cout << "### Testing ECS ###" << endl;
+//  MyEntityAType EntityAType;
+//  MyEntityA john;
+//  john.update(NULL);
+  cout << "### Done testing ECS ###" << endl;
 
 
 
@@ -128,8 +135,14 @@ TrGame::TrGame()
   rect.y += 100;
 
   cout << rect.x << " " << rect.y << endl;
-  unique_ptr<TrPlantEntity> plant = make_unique<TrPlantEntity>(this, rect,
-       dynamic_cast<TrPlantEntityType*>(TrData::m_entityTypes["tree"]));
+
+//  shared_ptr<TrPlantEntity> plant =
+//  unique_ptr<TrPlantEntity> plant = make_unique<TrPlantEntity>(this, rect,
+//       dynamic_cast<TrPlantEntityType*>(TrData::m_entityTypes["tree"]));
+//  m_entSystem->m_plants.push_back(move(plant));
+  // TODO: set up MyPlantEntityType
+  auto plant = MyPlantEntityType::make();
+  plant->m_rect = rect;
   m_entSystem->m_plants.push_back(move(plant));
 
   vector<int> active_list;
@@ -144,9 +157,6 @@ TrGame::TrGame()
     int index = active_list[active_list_start++];
 
     auto parent_rec = m_entSystem->m_plants[index]->m_rect;
-
-
-
 
     for (int i = 0; i < 5; i++) {
       rect = m_entSystem->m_plants[index]->m_rect;
@@ -194,11 +204,14 @@ TrGame::TrGame()
 
       if (valid) {
 //        cout << " valid " << rect.x << " " << rect.y << endl;
-        plant = make_unique<TrPlantEntity>(this, rect,
-                                           dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
-        active_list.push_back(m_entSystem->m_plants.size());
+//        plant = make_unique<TrPlantEntity>(this, rect,
+//                                           dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
+//        active_list.push_back(m_entSystem->m_plants.size());
 
-        m_entSystem->m_plants.push_back(move(plant));
+//        m_entSystem->m_plants.push_back(move(plant));
+        auto plant = MyPlantEntityType::make();
+        plant->m_rect = rect;
+        m_entSystem->m_plants.push_back(std::move(plant));
 
         indices[t_r * cols + t_c] = (int) m_entSystem->m_plants.size() - 1;
       }

@@ -63,8 +63,8 @@ void TrMainMenuLoop::render(TrGame *game) {
   renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture.get(), game->m_xOff,
                           game->m_yOff, K_DISPLAY_SCALE);
   // draw plants
-  for (auto const& tree : game->m_entSystem->m_plants) {
-    tree->m_type->m_graphics->update(game, tree.get());
+  for (auto plant : game->m_entSystem->m_plants) {
+//    plant->update(game);
   }
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};
