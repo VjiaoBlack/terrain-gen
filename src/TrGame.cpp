@@ -112,16 +112,8 @@ TrGame::TrGame()
 
   memset(indices, -1, sizeof(int) * (K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad));
 
-
-
   int rows = K_MAP_SIZE_Y / cell_rad;
   int cols = K_MAP_SIZE_X / cell_rad;
-
-//  for (int r = 0; r < rows; r++) {
-//    for (int c = 0; c < cols; c++) {
-////      cout << indices[r * cols + c] << endl;
-//    }
-//  }
 
   // create initial plant
   SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 3, 3};
