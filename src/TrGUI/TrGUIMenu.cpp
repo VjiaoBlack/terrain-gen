@@ -62,7 +62,7 @@ void TrGUIMenu::draw() {
     SDL_RenderCopy(m_game->m_SDLRenderer, m_texture.get(), &m_srcRect, &m_destRect);
 
   }
-  
+
   for (auto button : m_buttons) {
     button->draw();
   }

@@ -65,6 +65,8 @@ class TrMap {
   shared_ptr<TrWaterMap> m_water;
   shared_ptr<TrWindMap> m_wind;
 
+  shared_ptr<TrMapData<double>> m_objectHeight;
+
   int m_renderState;
   int m_erosionState;
 
