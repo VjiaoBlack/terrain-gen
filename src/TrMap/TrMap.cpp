@@ -8,6 +8,8 @@
 
 #include "TrMap.hpp"
 #include "../TrGame.hpp"
+#include "TrECS/TrSystems/TrEntitySystem.hpp"
+#include "TrECS/MyEntities.hpp"
 
 TrMap::TrMap(int rows, int cols, TrGame* game)
     : m_rows(rows),
@@ -179,6 +181,11 @@ void TrMap::update(set<int> keysDown) {
         break;
       default:break;
     }
+  }
+
+  // draw plants
+  for (auto plant : m_game->m_entSystem->m_plants) {
+    plant->update(m_game);
   }
 
   for (auto mapdata : m_toUpdate) {

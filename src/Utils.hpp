@@ -141,12 +141,12 @@ inline uint32_t shiftColor(uint32_t color, int r, int g, int b) {
 
 inline SDL_Color convertColorType(uint32_t color) {
   return (SDL_Color)
-      {static_cast<Uint8>((color >> 24) & 0xFF),
-       static_cast<Uint8>((color >> 16) & 0xFF),
+      {static_cast<Uint8>((color >> 16) & 0xFF),
        static_cast<Uint8>((color >> 8) & 0xFF),
-       static_cast<Uint8>((color & 0xFF))};
+       static_cast<Uint8>((color) & 0xFF),
+       static_cast<Uint8>((color >> 24) & 0xFF)};
 }
 
 inline uint32_t convertColorType(SDL_Color color) {
-  return color.r << 24 | color.g << 16 | color.b << 8 | color.a;
+  return color.a << 24 | color.r << 16 | color.g << 8 | color.b;
 }

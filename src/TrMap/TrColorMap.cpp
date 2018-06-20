@@ -281,7 +281,11 @@ void TrColorMap::updateDisplay(TrMap *map) {
         ocolor = clamp(wcolor + ocolor, 0.0, 256.0);
 
         this->at(i, j) = vecToColor(ocolor);
-
+      }
+      if (map->m_entityColor->at(i, j) & K_A_MASK) {
+        vec3 ocolor = colorToVec(map->m_entityColor->at(i, j));
+        ocolor *= colorToVec(this->at(i, j)) / (256.0);
+        this->at(i, j) = vecToColor(ocolor);
       }
     }
   }
