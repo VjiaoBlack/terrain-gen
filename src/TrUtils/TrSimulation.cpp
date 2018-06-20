@@ -299,6 +299,7 @@ dvec2 getMoonPos(int month, int day, double hour) {
 
   // dvec3solmsl = sol - xyzsl;
 
+
   // Find the Angle Between sea level coordinate vector and the moon vector
   // double theta1 = 180.0 -
   //                 acos(xyzsl.dot(solmsl) /

@@ -66,14 +66,6 @@ TrGame::TrGame()
    * Test area: test game functions
    */
 
-  cout << "### Testing ECS ###" << endl;
-//  MyEntityAType EntityAType;
-//  MyEntityA john;
-//  john.update(NULL);
-  cout << "### Done testing ECS ###" << endl;
-
-
-
   this->setupSDL();
 
   // create texture for map
@@ -134,8 +126,6 @@ TrGame::TrGame()
   // create initial plant
   SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 3, 3};
   rect.y += 100;
-
-  cout << rect.x << " " << rect.y << endl;
 
   auto plant = TrData::m_plantTypes["tree"]->make();
   plant->m_rect = rect;
@@ -199,12 +189,8 @@ TrGame::TrGame()
 
 
       if (valid) {
-//        cout << " valid " << rect.x << " " << rect.y << endl;
-//        plant = make_unique<TrPlantEntity>(this, rect,
-//                                           dynamic_cast<TrPlantEntityType *>(TrData::m_entityTypes["tree"]));
         active_list.push_back(m_entSystem->m_plants.size());
 
-//        m_entSystem->m_plants.push_back(move(plant));
         auto plant = TrData::m_plantTypes["tree"]->make();
         plant->m_rect = rect;
         m_entSystem->m_plants.push_back(std::move(plant));
@@ -214,9 +200,6 @@ TrGame::TrGame()
     }
   }
 
-
-//  cout << "PLANTS " << m_entSystem->m_plants.size() << endl;
-  // remove plants that are over water
   for (int i = m_entSystem->m_plants.size() - 1; i >= 0; i--) {
     auto rect = m_entSystem->m_plants[i]->m_rect;
 
@@ -227,25 +210,16 @@ TrGame::TrGame()
     }
   }
 
-
-//  cout << "ready" << endl;
   // setup game loop
   auto tempmenu = make_shared<TrMainMenuLoop>(this);
   m_gameStateStack.push_back(move(tempmenu));
-
-
-
-
-
 }
 
 
 TrGame::~TrGame() {
-
   while (!m_gameStateStack.empty()) {
     m_gameStateStack.pop_back();
   }
-
 }
 
 void TrGame::handleKey(int SDLKey) {

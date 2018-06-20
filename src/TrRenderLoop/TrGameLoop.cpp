@@ -128,9 +128,7 @@ void TrGameLoop::render(TrGame *game) {
   // draw plants
   for (auto plant : game->m_entSystem->m_plants) {
     plant->update(game);
-    cout << plant->m_rect.x << endl;
   }
-
 
   m_menu->draw();
 }

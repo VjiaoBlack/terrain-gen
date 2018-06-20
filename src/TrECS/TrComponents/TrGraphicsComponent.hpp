@@ -39,10 +39,6 @@ template<class C>
 void TrGraphicsComponent::update(TrGame *game, C *entity) {
   float sx, sy;
 
-//  cout << "DRAW " << (int)m_color.r << " " << (int)m_color.g << " " << entity->m_rect.x << " "<<
-//                                entity->m_rect
-//      .y << endl;
-
   SDL_RenderGetScale(game->m_SDLRenderer, &sx, &sy);
   SDL_RenderSetScale(game->m_SDLRenderer, sz(K_DISPLAY_SCALE),
                      sz(K_DISPLAY_SCALE));
