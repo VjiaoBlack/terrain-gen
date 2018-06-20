@@ -12,10 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64696227-2e1e-4253-9e7b-cb33f0d460bf" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/TrGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrMap/TrMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrMap.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrMap/TrMap.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrMap.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrRenderLoop/TrGameLoop.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrRenderLoop/TrGameLoop.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrRenderLoop/TrMainMenuLoop.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrRenderLoop/TrMainMenuLoop.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
@@ -54,19 +52,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrMap.hpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
-              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TrColorMap.hpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.hpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-66" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrMap.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="383">
+              <caret line="68" column="48" selection-start-line="68" selection-start-column="48" selection-end-line="68" selection-end-column="48" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrMap.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="66">
+              <caret line="25" column="56" lean-forward="true" selection-start-line="25" selection-start-column="56" selection-end-line="25" selection-end-column="56" />
+            </state>
           </provider>
         </entry>
       </file>
@@ -163,11 +170,11 @@
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrGraphicsComponent.hpp" />
         <option value="$PROJECT_DIR$/src/TrUtils/TrSimulation.cpp" />
         <option value="$PROJECT_DIR$/src/TrGUI/TrGUIMenu.cpp" />
-        <option value="$PROJECT_DIR$/src/TrMap/TrMap.cpp" />
         <option value="$PROJECT_DIR$/src/TrGame.cpp" />
         <option value="$PROJECT_DIR$/src/TrRenderLoop/TrMainMenuLoop.cpp" />
         <option value="$PROJECT_DIR$/src/TrRenderLoop/TrGameLoop.cpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrMap.hpp" />
+        <option value="$PROJECT_DIR$/src/TrMap/TrMap.cpp" />
       </list>
     </option>
   </component>
@@ -307,18 +314,18 @@
       <workItem from="1527369836952" duration="35000" />
       <workItem from="1527369912040" duration="65273000" />
       <workItem from="1527802105849" duration="34437000" />
-      <workItem from="1529457499376" duration="2656000" />
+      <workItem from="1529457499376" duration="2798000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="217885000" />
+    <option name="totallyTimeSpent" value="218027000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.19137466" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.19137466" />
       <window_info anchor="bottom" id="TODO" order="12" />
       <window_info anchor="bottom" id="Messages" order="1" visible="true" weight="0.32889345" />
       <window_info anchor="bottom" id="CMake" order="5" weight="0.32991803" />
@@ -542,13 +549,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="161" column="9" lean-forward="true" selection-start-line="161" selection-start-column="9" selection-end-line="161" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrECS/MyEntities.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -607,11 +607,6 @@
         <state relative-caret-position="-528" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -622,10 +617,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-66" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
-          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+          <caret line="68" column="48" selection-start-line="68" selection-start-column="48" selection-end-line="68" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="25" column="56" lean-forward="true" selection-start-line="25" selection-start-column="56" selection-end-line="25" selection-end-column="56" />
         </state>
       </provider>
     </entry>

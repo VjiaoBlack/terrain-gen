@@ -22,7 +22,8 @@ TrMap::TrMap(int rows, int cols, TrGame* game)
       m_vegetation(new TrVegetationMap(rows, cols)),
       m_water(new TrWaterMap(rows, cols)),
       m_wind(new TrWindMap(rows, cols)),
-      m_entityHeight(new TrMapData<double>(rows, cols)) {
+      m_entityHeight(new TrMapData<double>(rows, cols)),
+      m_entityColor(new TrMapData<uint32_t>(rows, cols)) {
   m_xrandEngine = std::default_random_engine(m_xrandDevice());
   m_yrandEngine = std::default_random_engine(m_yrandDevice());
 
