@@ -40,7 +40,6 @@ void TrGraphicsComponent::update(TrGame *game, C *entity) {
   // TODO: consider OpenGL pipeline (or blending) for shading, etc.
 
   // go through rect and mark those pixels into the TrMap's m_entityColor.
-
   for (int r = entity->m_rect.y; r < entity->m_rect.y + entity->m_rect.h; r++) {
     for (int c = entity->m_rect.x; c < entity->m_rect.x + entity->m_rect.w; c++) {
       game->m_map->m_entityColor->at(r, c) = convertColorType(m_color);

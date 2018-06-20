@@ -25,7 +25,8 @@ TrMap::TrMap(int rows, int cols, TrGame* game)
       m_water(new TrWaterMap(rows, cols)),
       m_wind(new TrWindMap(rows, cols)),
       m_entityHeight(new TrMapData<double>(rows, cols)),
-      m_entityColor(new TrMapData<uint32_t>(rows, cols)) {
+      m_entityColor(new TrMapData<uint32_t>(rows, cols)),
+      m_entityNormal(new TrMapData<dvec3>(rows, cols)) {
   m_xrandEngine = std::default_random_engine(m_xrandDevice());
   m_yrandEngine = std::default_random_engine(m_yrandDevice());
 
@@ -183,9 +184,29 @@ void TrMap::update(set<int> keysDown) {
     }
   }
 
-  // draw plants
+  // draw plants into entity color buffer
   for (auto plant : m_game->m_entSystem->m_plants) {
     plant->update(m_game);
+
+    // draw plants into entity height buffer
+    for (int r = plant->m_rect.y; r < plant->m_rect.y + plant->m_rect.h; r++) {
+      for (int c = plant->m_rect.x; c < plant->m_rect.x + plant->m_rect.w; c++) {
+        m_entityHeight->at(r, c) = 0.03125;
+      }
+    }
+  }
+
+  // update entity normal buffer
+  for (int i = 0; i < m_rows; i++) {
+    for (int j = 0; j < m_cols; j++) {
+      // l->r
+      dvec3 lr(2.0, 0.0, 255.0 * m_entityHeight->sample<TrGaussDx>(i, j));
+      // u->d
+      dvec3 ud(0.0, 2.0, 255.0 * m_entityHeight->sample<TrGaussDy>(i, j));
+
+      m_entityNormal->at(i, j) = cross(lr, ud);
+      m_entityNormal->at(i, j) = normalize(m_entityNormal->at(i, j));
+    }
   }
 
   for (auto mapdata : m_toUpdate) {

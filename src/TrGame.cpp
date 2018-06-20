@@ -117,6 +117,8 @@ TrGame::TrGame()
 
   // create initial plant
   SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 3, 3};
+  rect.w = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_w;
+  rect.h = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_h;
   rect.y += 100;
 
   auto plant = TrData::m_plantTypes["tree"]->make();

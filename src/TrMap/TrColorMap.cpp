@@ -116,23 +116,31 @@ void TrColorMap::updateDisplay(TrMap *map) {
   for (int i = 1; i < m_rows - 1; i++) {
     for (int j = 1; j < m_cols - 1; j++) {
       // render land
+      double height = map->m_height->at(i, j);
+      uint32_t color = 0;
+      dvec3 norm = map->m_normal->at(i, j);
 
       for (int c = 0; c < 9; c++) {
         if (map->m_height->at(i, j) * 255 < threshold[c]) {
-          this->at(i, j) = colors[c];
+          color = colors[c];
           break;
         }
 
         if (map->m_height->at(i, j) * 255 >= threshold[8]) {
-          this->at(i, j) = 0xFFEEEEEE;
+          color = 0xFFEEEEEE;
           break;
         }
       }
 
+      // override terrain details with plant details if there is plant
+      if (map->m_entityColor->at(i, j) & K_A_MASK) {
+        color = map->m_entityColor->at(i, j);
+        height += map->m_entityHeight->at(i, j);
+        norm = map->m_entityNormal->at(i, j);
+      }
+
       double ambient = 0.4;
       double directional = 0.6;
-
-      dvec3 norm = map->m_normal->at(i, j);
 
       if (m_terrace) {
         norm.z += 2.0;
@@ -209,11 +217,12 @@ void TrColorMap::updateDisplay(TrMap *map) {
             }
           }
         } else {
-          vec3 ray(j, i, map->m_height->at(i, j) * 256);
+          vec3 ray(j, i, height * 256);
 
           for (int step = 0; step < 32; step += 1) {
             ray += m_light * 1.0;
-            if (map->m_height->bilerp(ray.y, ray.x) * 256 > ray.z) {
+            if ((map->m_height->bilerp(ray.y, ray.x) +
+                 map->m_entityHeight->bilerp(ray.y, ray.x)) * 256 > ray.z) {
               LdotN = 0.0;
               break;
             }
@@ -224,7 +233,7 @@ void TrColorMap::updateDisplay(TrMap *map) {
       directional *= clamp(LdotN + MdotN, -ambient, 2.0);
 
       this->at(i, j) =
-          multiplyColor(this->at(i, j), directional + ambient,
+          multiplyColor(color, directional + ambient,
                         directional + ambient, directional + ambient);
 
       // render water
@@ -280,11 +289,6 @@ void TrColorMap::updateDisplay(TrMap *map) {
         ocolor = clamp(ocolor * (1.0 - alpha), 0.0, 256.0);
         ocolor = clamp(wcolor + ocolor, 0.0, 256.0);
 
-        this->at(i, j) = vecToColor(ocolor);
-      }
-      if (map->m_entityColor->at(i, j) & K_A_MASK) {
-        vec3 ocolor = colorToVec(map->m_entityColor->at(i, j));
-        ocolor *= colorToVec(this->at(i, j)) / (256.0);
         this->at(i, j) = vecToColor(ocolor);
       }
     }
