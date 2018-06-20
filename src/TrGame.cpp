@@ -172,8 +172,7 @@ TrGame::TrGame()
           }
         }
       }
-
-
+      
       if (valid) {
         active_list.push_back(m_entSystem->m_plants.size());
 

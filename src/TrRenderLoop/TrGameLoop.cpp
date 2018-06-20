@@ -126,6 +126,7 @@ void TrGameLoop::render(TrGame *game) {
                           game->m_yOff, K_DISPLAY_SCALE);
 
   // draw plants
+  // TODO: refactor into drawMap system
   for (auto plant : game->m_entSystem->m_plants) {
     plant->update(game);
   }
