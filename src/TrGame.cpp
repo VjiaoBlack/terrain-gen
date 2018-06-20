@@ -129,7 +129,6 @@ TrGame::TrGame()
 
   int active_list_start = 0;
 
-
   while (active_list_start < active_list.size()) {
 
     int index = active_list[active_list_start++];
@@ -146,8 +145,6 @@ TrGame::TrGame()
 
       if (rect.x < 0 || rect.x >= K_MAP_SIZE_X ||
           rect.y < 0 || rect.y >= K_MAP_SIZE_Y) {
-//        cout << "cont1" << endl;
-
         continue;
       }
 
@@ -155,9 +152,6 @@ TrGame::TrGame()
       int t_c = rect.x / cell_rad;
 
       if (indices[t_r * cols + t_c] > -1) {
-//        cout << "cont2 " << m_entSystem->m_plants[index]->m_rect.y / cell_rad << " " <<
-//             m_entSystem->m_plants[index]->m_rect.x / cell_rad << " " <<
-//             t_r << " " << t_c << endl;
         continue;
       }
 
