@@ -67,6 +67,7 @@ class TrMap {
 
   shared_ptr<TrMapData<double>> m_entityHeight;
   shared_ptr<TrMapData<uint32_t>> m_entityColor;
+  shared_ptr<TrMapData<dvec3>> m_entityNormal;
 
   int m_renderState;
   int m_erosionState;
