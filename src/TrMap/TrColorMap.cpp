@@ -12,6 +12,8 @@ TrColorMap::TrColorMap(int rows, int cols)
   m_hour = 6;
   m_day = 1;
   m_month = 6;
+
+  ocean->render(0, true);
 }
 void TrColorMap::update(TrMap *map) {
   switch (map->m_renderState) {
@@ -100,7 +102,8 @@ void TrColorMap::updateDisplay(TrMap *map) {
   clock_t endFrame = clock();
   double calcMs = clockToMilliseconds(endFrame);
 
-  ocean->render(calcMs / 1000, true);
+  // calculate water "waves"
+//  ocean->render(calcMs / 1000, true);
 
   double deriv = 200.0 / LENGTH;
 
