@@ -11,7 +11,7 @@
 #include "TrECS/TrSystems/TrEntitySystem.hpp"
 #include "TrECS/MyEntities.hpp"
 
-TrMap::TrMap(int rows, int cols, TrGame* game)
+TrMap::TrMap(int rows, int cols, TrGame *game)
     : m_rows(rows),
       m_cols(cols),
       m_game(game),
@@ -122,13 +122,13 @@ void TrMap::update(set<int> keysDown) {
         usleep(100000);
         break;
 
-      case SDLK_w:
-        // animate water engine
-        for (int i = 0; i < m_speed; i++) {
-          m_water->update(this);
-        }
-        m_toUpdate.insert(m_color);
-        break;
+//      case SDLK_w:
+//        // animate water engine
+//        for (int i = 0; i < m_speed; i++) {
+//          m_water->update(this);
+//        }
+//        m_toUpdate.insert(m_color);
+//        break;
       case SDLK_n:
         // reclaculate normals
         m_toUpdate.insert(m_height);
@@ -159,18 +159,18 @@ void TrMap::update(set<int> keysDown) {
         // Save the map: color and heightmap
         this->saveMap();
         break;
-      case SDLK_t:m_color->m_hour += 0.06;
-        if (m_color->m_hour > 24) {
-          m_color->m_hour -= 24;
-          m_color->m_day += 1;
-        }
-        if (m_color->m_month > 12) {
-          m_color->m_month -= 12;
-        }
-
-        m_color->updateLightAngle();
-        m_toUpdate.insert(m_color);
-        break;
+//      case SDLK_t:m_color->m_hour += 0.06;
+//        if (m_color->m_hour > 24) {
+//          m_color->m_hour -= 24;
+//          m_color->m_day += 1;
+//        }
+//        if (m_color->m_month > 12) {
+//          m_color->m_month -= 12;
+//        }
+//
+//        m_color->updateLightAngle();
+//        m_toUpdate.insert(m_color);
+//        break;
       case SDLK_y:m_color->m_raytrace = !m_color->m_raytrace;
         m_toUpdate.insert(m_color);
         break;
@@ -184,6 +184,25 @@ void TrMap::update(set<int> keysDown) {
     }
   }
 
+  // animate water engine
+  for (int i = 0; i < m_speed; i++) {
+    m_water->update(this);
+  }
+  m_toUpdate.insert(m_color);
+
+  // animate time
+  m_color->m_hour += 0.005;
+  if (m_color->m_hour > 24) {
+    m_color->m_hour -= 24;
+    m_color->m_day += 1;
+  }
+  if (m_color->m_month > 12) {
+    m_color->m_month -= 12;
+  }
+
+  m_color->updateLightAngle();
+  m_toUpdate.insert(m_color);
+
   // draw plants into entity color buffer
   for (auto plant : m_game->m_entSystem->m_plants) {
     plant->update(m_game);
@@ -191,6 +210,18 @@ void TrMap::update(set<int> keysDown) {
     // draw plants into entity height buffer
     for (int r = plant->m_rect.y; r < plant->m_rect.y + plant->m_rect.h; r++) {
       for (int c = plant->m_rect.x; c < plant->m_rect.x + plant->m_rect.w; c++) {
+        m_entityHeight->at(r, c) = 3.0 / 256.0;
+      }
+    }
+  }
+
+  // draw entities into entity color buffer
+  for (auto actor : m_game->m_entSystem->m_actors) {
+    actor->update(m_game);
+
+    // draw plants into entity height buffer
+    for (int r = actor->m_rect.y; r < actor->m_rect.y + actor->m_rect.h; r++) {
+      for (int c = actor->m_rect.x; c < actor->m_rect.x + actor->m_rect.w; c++) {
         m_entityHeight->at(r, c) = 3.0 / 256.0;
       }
     }

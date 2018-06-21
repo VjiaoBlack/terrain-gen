@@ -129,8 +129,20 @@ void TrData::loadData() {
         auto physics = TrPhysicsComponent(sizePair.first, sizePair.second);
         auto planning = TrPlanningComponent();
 
+        vector<char> footprintVec(sizePair.first * sizePair.second);
+        auto footprintData = parseList(footprint);
+
+        for (int r = 0; r < sizePair.first; r++) {
+          for (int c = 0; c < sizePair.second; c++) {
+            footprintVec[r * sizePair.second + c] = footprintData[r][c];
+          }
+        }
+
+        auto footprintComponent = TrFootprintComponent(
+            sizePair.first, sizePair.second, move(footprintVec));
+
         TrData::m_actorTypes[name] =
-            new MyActorEntityType(name, graphics, physics, planning);
+            new MyActorEntityType(name, graphics, physics, planning, footprintComponent);
       }
     }
 

@@ -115,26 +115,32 @@ TrGame::TrGame()
   int rows = K_MAP_SIZE_Y / cell_rad;
   int cols = K_MAP_SIZE_X / cell_rad;
 
+  // create initial few humans?
+  for (int i = 0; i < 10; i++) {
+    SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 0, 0};
+    rect.w = get<TrFootprintComponent>(TrData::m_actorTypes["human"]->m_components).m_w;
+    rect.h = get<TrFootprintComponent>(TrData::m_actorTypes["human"]->m_components).m_h;
+
+    auto actor = TrData::m_actorTypes["human"]->make();
+    actor->m_rect = rect;
+    m_entSystem->m_actors.push_back(move(actor));
+  }
+
   // create initial plant
-  SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 3, 3};
+  SDL_Rect rect = {rand() % (K_MAP_SIZE_X - 2), rand() % (K_MAP_SIZE_Y - 2), 0, 0};
   rect.w = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_w;
   rect.h = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_h;
-  rect.y += 100;
 
   auto plant = TrData::m_plantTypes["tree"]->make();
   plant->m_rect = rect;
   m_entSystem->m_plants.push_back(move(plant));
 
   vector<int> active_list;
-
   active_list.push_back(0);
-
   int active_list_start = 0;
 
   while (active_list_start < active_list.size()) {
-
     int index = active_list[active_list_start++];
-
     auto parent_rec = m_entSystem->m_plants[index]->m_rect;
 
     for (int i = 0; i < 5; i++) {

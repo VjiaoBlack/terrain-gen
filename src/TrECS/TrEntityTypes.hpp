@@ -77,7 +77,8 @@ class MyEntityType {
 using MyActorEntityType = MyEntityType<MyActorEntity,
                                        TrGraphicsComponent,
                                        TrPhysicsComponent,
-                                       TrPlanningComponent>;
+                                       TrPlanningComponent,
+                                       TrFootprintComponent>;
 using MyBuildingEntityType = MyEntityType<MyBuildingEntity,
                                           TrGraphicsComponent,
                                           TrFootprintComponent>;

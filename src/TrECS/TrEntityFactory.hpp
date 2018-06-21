@@ -111,6 +111,20 @@ using std::make_shared;
  * but this allows us to store components more easily.
  */
 
+template<class T, class Parent>
+enable_if_t<is_same<Parent, MyPlantEntityType>::value, void> _entityUpdate(TrGame
+                                                                           *game,
+                                                                           T *ent) {
+  TrData::m_plantTypes[ent->m_typeName]->update(game, ent);
+}
+
+template<class T, class Parent>
+enable_if_t<is_same<Parent, MyActorEntityType>::value, void> _entityUpdate(TrGame
+                                                                           *game,
+                                                                           T *ent) {
+  TrData::m_actorTypes[ent->m_typeName]->update(game, ent);
+}
+
 template<class Parent>
 class MyEntity {
  public:
@@ -119,8 +133,7 @@ class MyEntity {
   MyEntity(string name) : m_typeName(name) {}
 
   void update(TrGame *game) {
-    TrData::m_plantTypes[m_typeName]->update(game, this);
+    _entityUpdate<MyEntity<Parent>, Parent>(game, this);
   }
 };
-
 
