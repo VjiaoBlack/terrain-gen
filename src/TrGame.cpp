@@ -123,6 +123,8 @@ TrGame::TrGame()
 
     auto actor = TrData::m_actorTypes["human"]->make();
     actor->m_rect = rect;
+    actor->m_x = rect.x;
+    actor->m_y = rect.y;
     m_entSystem->m_actors.push_back(move(actor));
   }
 

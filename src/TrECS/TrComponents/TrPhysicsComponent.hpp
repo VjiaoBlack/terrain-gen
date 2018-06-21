@@ -17,12 +17,11 @@ using namespace std;
  */
 class TrPhysicsComponent : public MyComponent {
  public:
-  float m_x, m_y;
   float m_vx, m_vy;
   float m_ax, m_ay;
 
   TrPhysicsComponent(float x, float y)
-      : m_x(x), m_y(y), m_vx(0), m_vy(0), m_ax(0), m_ay(0) {}
+      : m_vx(0), m_vy(0), m_ax(0), m_ay(0) {}
   TrPhysicsComponent() : TrPhysicsComponent(0, 0) {}
 
   /**
@@ -37,6 +36,9 @@ void TrPhysicsComponent::update(TrGame *game, C *entity) {
   m_vx += m_ax;
   m_vy += m_ay;
 
-  m_x += m_vx;
-  m_y += m_vy;
+  entity->m_x += m_vx;
+  entity->m_y += m_vy;
+
+  entity->m_rect.x = round(entity->m_x);
+  entity->m_rect.y = round(entity->m_y);
 }

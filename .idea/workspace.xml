@@ -12,6 +12,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64696227-2e1e-4253-9e7b-cb33f0d460bf" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrMap/TrMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrMap/TrMap.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -29,33 +34,22 @@
       <file leaf-file-name="TrEntityFactory.hpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="117" column="10" selection-start-line="117" selection-start-column="10" selection-end-line="117" selection-end-column="10" />
+            <state relative-caret-position="394">
+              <caret line="135" selection-start-line="135" selection-end-line="135" />
               <folding>
                 <element signature="e#2926#2954#0" expanded="true" />
-                <element signature="e#3747#3761#0" expanded="true" />
+                <element signature="e#3747#3770#0" expanded="true" />
+                <element signature="e#4091#4114#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Entities - Plants.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/Entities - Plants.csv">
+      <file leaf-file-name="TrEntityTypes.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TrGame.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TrGame.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="109" column="7" selection-start-line="109" selection-start-column="7" selection-end-line="109" selection-end-column="7" />
-              <folding>
-                <element signature="e#1#22#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="460">
+              <caret line="73" column="3" selection-start-line="73" selection-start-column="3" selection-end-line="73" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -63,22 +57,10 @@
       <file leaf-file-name="TrEntities.hpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntities.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="14" selection-start-line="14" selection-end-line="27" />
+            <state relative-caret-position="-112">
+              <caret column="12" selection-start-column="8" selection-end-column="12" />
               <folding>
                 <element signature="e#41#65#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TrComponents.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
-              <folding>
-                <element signature="e#43#57#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,7 +69,7 @@
       <file leaf-file-name="MyEntities.hpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrECS/MyEntities.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
+            <state relative-caret-position="174">
               <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
               <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
               <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
@@ -98,35 +80,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrData.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TrData/TrData.cpp">
+      <file leaf-file-name="TrPlanningComponent.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="260" column="55" selection-start-line="260" selection-start-column="55" selection-end-line="260" selection-end-column="55" />
+            <state relative-caret-position="462">
+              <caret line="41" column="17" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
               <folding>
-                <element signature="e#23#41#0" expanded="true" />
+                <element signature="e#636#645#0" expanded="true" />
+                <element signature="e#717#726#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrData.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TrData/TrData.hpp">
+      <file leaf-file-name="TrColorMap.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="308">
+              <caret line="94" column="2" lean-forward="true" selection-start-line="94" selection-start-column="2" selection-end-line="97" />
               <folding>
-                <element signature="e#82#101#0" expanded="true" />
+                <element signature="e#1#22#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrMap.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TrMap.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="193" column="36" selection-start-line="193" selection-start-column="36" selection-end-line="193" selection-end-column="36" />
+            <state relative-caret-position="3300">
+              <caret line="204" selection-start-line="204" selection-end-line="204" />
               <folding>
                 <element signature="e#74#94#0" expanded="true" />
               </folding>
@@ -134,11 +117,37 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrEntityTypes.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp">
+      <file leaf-file-name="TrGame.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrGame.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="60" column="23" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="35" />
+            <state relative-caret-position="386">
+              <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
+              <folding>
+                <element signature="e#1#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrPhysicsComponent.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+              <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+              <folding>
+                <element signature="e#520#529#0" expanded="true" />
+                <element signature="e#582#591#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrMap.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="12" selection-start-column="12" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -147,10 +156,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>long</find>
-      <find>entityAt</find>
-      <find>MyEntity&lt;&gt;</find>
-      <find>entityAtype</find>
       <find />
       <find>tup_update</find>
       <find>make()</find>
@@ -176,7 +181,11 @@
       <find>tree</find>
       <find>height</find>
       <find>.height</find>
+      <find>ent</find>
       <find>m_entityH</find>
+      <find>enable_if</find>
+      <find>enable_</find>
+      <find>m_game</find>
     </findStrings>
     <replaceStrings>
       <replace>TrGame*</replace>
@@ -194,7 +203,6 @@
         <option value="$PROJECT_DIR$/src/TrRenderLoop/TrTransitionLoop.hpp" />
         <option value="$PROJECT_DIR$/src/TrGUI/TrGUIButton.cpp" />
         <option value="$PROJECT_DIR$/src/TrRenderLoop/TrRenderLoop.hpp" />
-        <option value="$PROJECT_DIR$/data/Entities - Actors.csv" />
         <option value="$PROJECT_DIR$/data/Entities - Buildings.csv" />
         <option value="$PROJECT_DIR$/src/TrECS/TrSystems/TrEntitySystem.cpp" />
         <option value="$PROJECT_DIR$/src/TrGraphics.cpp" />
@@ -217,12 +225,10 @@
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrGraphicsComponent.cpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrEntityTypes.cpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.cpp" />
-        <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.cpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.hpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrEntityFactory.cpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrEntities/TrBuildingEntity.hpp" />
-        <option value="$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp" />
         <option value="$PROJECT_DIR$/src/TrData/TrData.hpp" />
         <option value="$PROJECT_DIR$/src/TrECS/MyEntities.hpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents.hpp" />
@@ -234,13 +240,16 @@
         <option value="$PROJECT_DIR$/src/Utils.hpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrMap.hpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrGraphicsComponent.hpp" />
-        <option value="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" />
-        <option value="$PROJECT_DIR$/src/TrData/TrData.cpp" />
         <option value="$PROJECT_DIR$/src/TrECS/TrEntities.hpp" />
-        <option value="$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp" />
-        <option value="$PROJECT_DIR$/src/TrGame.cpp" />
         <option value="$PROJECT_DIR$/data/Entities - Plants.csv" />
+        <option value="$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp" />
+        <option value="$PROJECT_DIR$/src/TrData/TrData.cpp" />
         <option value="$PROJECT_DIR$/src/TrMap/TrMap.cpp" />
+        <option value="$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp" />
+        <option value="$PROJECT_DIR$/data/Entities - Actors.csv" />
+        <option value="$PROJECT_DIR$/src/TrGame.cpp" />
+        <option value="$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp" />
+        <option value="$PROJECT_DIR$/src/TrMap/TrColorMap.cpp" />
       </list>
     </option>
   </component>
@@ -255,7 +264,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
+    <option name="x" value="-1855" />
     <option name="y" value="-4" />
     <option name="width" value="1855" />
     <option name="height" value="1084" />
@@ -388,12 +397,12 @@
       <workItem from="1527369912040" duration="65273000" />
       <workItem from="1527802105849" duration="34437000" />
       <workItem from="1529457499376" duration="5091000" />
-      <workItem from="1529526431362" duration="12903000" />
+      <workItem from="1529526431362" duration="21810000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="233223000" />
+    <option name="totallyTimeSpent" value="242130000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -441,12 +450,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrFormulas/TrFormula.cpp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrFootprintComponent.cpp" />
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrGraphicsComponent.cpp" />
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.cpp" />
     <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.cpp" />
     <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityTypes.cpp" />
     <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityFactory.cpp" />
@@ -456,17 +459,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TrGUI/TrGUIDropdownMenu.hpp">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
-          <folding>
-            <element signature="e#520#529#0" expanded="true" />
-            <element signature="e#582#591#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Perlin.cpp">
       <provider selected="true" editor-type-id="text-editor" />
@@ -518,28 +510,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrSystems/TrEntitySystem.hpp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrMapData.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-528" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
-          <folding>
-            <element signature="e#636#645#0" expanded="true" />
-            <element signature="e#717#726#0" expanded="true" />
-          </folding>
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TrRenderLoop/TrMainMenuLoop.cpp">
@@ -548,26 +521,6 @@
           <caret line="62" selection-start-line="62" selection-end-line="62" />
           <folding>
             <element signature="e#31#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrGame.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-          <folding>
-            <element signature="e#14#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrRenderLoop/TrGameLoop.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="116" column="5" selection-start-line="116" selection-start-column="5" selection-end-line="116" selection-end-column="5" />
-          <folding>
-            <element signature="e#27#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -588,27 +541,10 @@
     <entry file="file://$PROJECT_DIR$/src/TrUtils/TrMath.hpp">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2124">
-          <caret line="224" column="60" selection-start-line="224" selection-start-column="60" selection-end-line="224" selection-end-column="60" />
-          <folding>
-            <element signature="e#1#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrHeightMap.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="636">
-          <caret line="69" column="29" selection-start-line="69" selection-start-column="29" selection-end-line="69" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -621,6 +557,70 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data/Formulas - Buildings.csv">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrData/TrData.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="e#82#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Entities - Plants.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrWindMap.cpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrRenderLoop/TrGameLoop.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2464">
+          <caret line="112" column="18" selection-start-line="112" selection-start-column="18" selection-end-line="112" selection-end-column="18" />
+          <folding>
+            <element signature="e#27#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrGame.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="30" column="14" selection-start-line="30" selection-start-column="14" selection-end-line="30" selection-end-column="14" />
+          <folding>
+            <element signature="e#14#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrSystems/TrEntitySystem.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/6.4.0/tuple">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="1293" column="13" selection-start-line="1293" selection-start-column="13" selection-end-line="1293" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrData/TrData.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2816">
+          <caret line="128" column="36" selection-start-line="128" selection-start-column="36" selection-end-line="128" selection-end-column="36" />
+          <folding>
+            <element signature="e#23#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrGraphicsComponent.hpp">
       <provider selected="true" editor-type-id="text-editor">
@@ -643,47 +643,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrData/TrData.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#82#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="60" column="23" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="117" column="10" selection-start-line="117" selection-start-column="10" selection-end-line="117" selection-end-column="10" />
-          <folding>
-            <element signature="e#2926#2954#0" expanded="true" />
-            <element signature="e#3747#3761#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntities.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" selection-start-line="14" selection-end-line="27" />
-          <folding>
-            <element signature="e#41#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
+        <state relative-caret-position="22">
           <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
           <folding>
             <element signature="e#43#57#0" expanded="true" />
@@ -691,9 +653,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Entities - Actors.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="9" lean-forward="true" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Entities - Buildings.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntities.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-112">
+          <caret column="12" selection-start-column="8" selection-end-column="12" />
+          <folding>
+            <element signature="e#41#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityTypes.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="73" column="3" selection-start-line="73" selection-start-column="3" selection-end-line="73" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrGame.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="126" column="24" selection-start-line="126" selection-start-column="24" selection-end-line="126" selection-end-column="24" />
+          <folding>
+            <element signature="e#1#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/TrECS/MyEntities.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
+        <state relative-caret-position="174">
           <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
           <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
           <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
@@ -703,39 +705,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/Entities - Plants.csv">
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPlanningComponent.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrData/TrData.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="260" column="55" selection-start-line="260" selection-start-column="55" selection-end-line="260" selection-end-column="55" />
+        <state relative-caret-position="462">
+          <caret line="41" column="17" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
           <folding>
-            <element signature="e#23#41#0" expanded="true" />
+            <element signature="e#636#645#0" expanded="true" />
+            <element signature="e#717#726#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TrGame.cpp">
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrEntityFactory.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="109" column="7" selection-start-line="109" selection-start-column="7" selection-end-line="109" selection-end-column="7" />
+        <state relative-caret-position="394">
+          <caret line="135" selection-start-line="135" selection-end-line="135" />
           <folding>
-            <element signature="e#1#22#0" expanded="true" />
+            <element signature="e#2926#2954#0" expanded="true" />
+            <element signature="e#3747#3770#0" expanded="true" />
+            <element signature="e#4091#4114#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrECS/TrComponents/TrPhysicsComponent.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+          <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+          <folding>
+            <element signature="e#520#529#0" expanded="true" />
+            <element signature="e#582#591#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="12" selection-start-column="12" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TrMap/TrMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="193" column="36" selection-start-line="193" selection-start-column="36" selection-end-line="193" selection-end-column="36" />
+        <state relative-caret-position="3300">
+          <caret line="204" selection-start-line="204" selection-end-line="204" />
           <folding>
             <element signature="e#74#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TrMap/TrColorMap.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="94" column="2" lean-forward="true" selection-start-line="94" selection-start-column="2" selection-end-line="97" />
+          <folding>
+            <element signature="e#1#22#0" expanded="true" />
           </folding>
         </state>
       </provider>

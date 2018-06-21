@@ -96,6 +96,7 @@ void TrColorMap::updateDisplay(TrMap *map) {
                         0xFFEEDDBB, 0xFF77BC49, 0xFF58A327,
                         0xFF28771F, 0xFF210E04, 0xFF5B3F31};
 
+
   clock_t endFrame = clock();
   double calcMs = clockToMilliseconds(endFrame);
 

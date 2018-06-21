@@ -130,6 +130,10 @@ class MyEntity {
  public:
   string m_typeName; // refers to type name
   SDL_Rect m_rect;
+
+  double m_x;
+  double m_y;
+
   MyEntity(string name) : m_typeName(name) {}
 
   void update(TrGame *game) {

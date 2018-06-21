@@ -203,6 +203,14 @@ void TrMap::update(set<int> keysDown) {
   m_color->updateLightAngle();
   m_toUpdate.insert(m_color);
 
+  // clear entity buffers
+  for (int r = 0; r < m_rows; r++) {
+    for (int c = 0; c < m_cols; c++) {
+      m_entityColor->at(r, c) = 0;
+      m_entityHeight->at(r, c) = 0;
+    }
+  }
+
   // draw plants into entity color buffer
   for (auto plant : m_game->m_entSystem->m_plants) {
     plant->update(m_game);
