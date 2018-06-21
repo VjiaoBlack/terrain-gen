@@ -191,7 +191,7 @@ void TrMap::update(set<int> keysDown) {
     // draw plants into entity height buffer
     for (int r = plant->m_rect.y; r < plant->m_rect.y + plant->m_rect.h; r++) {
       for (int c = plant->m_rect.x; c < plant->m_rect.x + plant->m_rect.w; c++) {
-        m_entityHeight->at(r, c) = 0.03125;
+        m_entityHeight->at(r, c) = 3.0 / 256.0;
       }
     }
   }
