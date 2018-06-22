@@ -1,1 +1,0 @@
-/usr/bin/clang++   -std=c++11 -g  -rdynamic CMakeFiles/Athena.dir/src/TrGame.cpp.o  -o Athena -Wl,-Bstatic -lSDL2main -Wl,-Bdynamic -lSDL2 -lpthread -lSDL2_image -lSDL2_ttf 

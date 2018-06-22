@@ -203,6 +203,22 @@ void TrMap::update(set<int> keysDown) {
   m_color->updateLightAngle();
   m_toUpdate.insert(m_color);
 
+  // update entities??
+  // TODO: refactor entity system
+  // including: allow special classes for humans or special animals
+  // (note that that would in the current case also require not only new
+  //  MyHumanActorEntity but also MyHumanActorEntityType)
+  // including: make the I/O more robust (and add more data to I/O)
+
+  // hardcode actors to move towards mouse
+  for (auto actor : m_game->m_entSystem->m_actors) {
+    double dx = m_game->m_mouseX - actor->m_x;
+    double dy = m_game->m_mouseY - actor->m_y;
+    double dd = sqrt(dx * dx + dy * dy);
+    actor->m_vx = 0.1 * dx / dd;
+    actor->m_vy = 0.1 * dy / dd;
+  }
+
   // clear entity buffers
   for (int r = 0; r < m_rows; r++) {
     for (int c = 0; c < m_cols; c++) {

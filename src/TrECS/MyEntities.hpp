@@ -12,9 +12,11 @@
 
 class MyActorEntity : public MyEntity<MyActorEntityType> {
  public:
-  float m_hunger;
-  float m_energy;
-  float m_social;
+  double m_hunger;
+  double m_energy;
+  double m_social;
+
+
 
   MyActorEntity(string name) : MyEntity<MyActorEntityType>(name),
                                m_hunger(0.0), m_energy(0.0),

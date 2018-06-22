@@ -1,6 +1,0 @@
-/home/vjiaoblack/Compsci/clion-2018.1.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -G "CodeBlocks - Unix Makefiles" /home/vjiaoblack/Compsci/Athena
-<FindSDL2.cmake>
-</FindSDL2.cmake>
--- Configuring done
--- Generating done
--- Build files have been written to: /home/vjiaoblack/Compsci/Athena

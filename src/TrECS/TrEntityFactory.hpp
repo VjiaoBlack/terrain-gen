@@ -133,6 +133,8 @@ class MyEntity {
 
   double m_x;
   double m_y;
+  double m_vx;
+  double m_vy;
 
   MyEntity(string name) : m_typeName(name) {}
 
