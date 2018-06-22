@@ -210,15 +210,6 @@ void TrMap::update(set<int> keysDown) {
   //  MyHumanActorEntity but also MyHumanActorEntityType)
   // including: make the I/O more robust (and add more data to I/O)
 
-  // hardcode actors to move towards mouse
-  for (auto actor : m_game->m_entSystem->m_actors) {
-    double dx = m_game->m_mouseX - actor->m_x;
-    double dy = m_game->m_mouseY - actor->m_y;
-    double dd = sqrt(dx * dx + dy * dy);
-    actor->m_vx = 0.1 * dx / dd;
-    actor->m_vy = 0.1 * dy / dd;
-  }
-
   // clear entity buffers
   for (int r = 0; r < m_rows; r++) {
     for (int c = 0; c < m_cols; c++) {
@@ -243,7 +234,7 @@ void TrMap::update(set<int> keysDown) {
   for (auto actor : m_game->m_entSystem->m_actors) {
     actor->update(m_game);
 
-    // draw plants into entity height buffer
+    // draw actors into entity height buffer
     for (int r = actor->m_rect.y; r < actor->m_rect.y + actor->m_rect.h; r++) {
       for (int c = actor->m_rect.x; c < actor->m_rect.x + actor->m_rect.w; c++) {
         m_entityHeight->at(r, c) = 3.0 / 256.0;

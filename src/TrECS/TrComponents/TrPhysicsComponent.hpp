@@ -16,7 +16,13 @@ using namespace std;
 class TrPhysicsComponent : public TrComponent {
  public:
 
-  TrPhysicsComponent(float x, float y) {}
+  double m_x;
+  double m_y;
+  double m_vx;
+  double m_vy;
+
+  TrPhysicsComponent(double x, double y) : m_x(x), m_y(y),
+                                           m_vx(0), m_vy(0) {}
   TrPhysicsComponent() : TrPhysicsComponent(0, 0) {}
 
   /**
@@ -28,12 +34,16 @@ class TrPhysicsComponent : public TrComponent {
 
 template<class C>
 void TrPhysicsComponent::update(TrGame *game, C *entity) {
-//  entity->m_vx += m_ax;
-//  entity->m_vy += m_ay;
+  double dx = game->m_mouseX - m_x;
+  double dy = game->m_mouseY - m_y;
+  double dd = sqrt(dx * dx + dy * dy);
 
-  entity->m_x += entity->m_vx;
-  entity->m_y += entity->m_vy;
+  m_vx = 0.05 * dx / dd;
+  m_vy = 0.05 * dy / dd;
 
-  entity->m_rect.x = round(entity->m_x);
-  entity->m_rect.y = round(entity->m_y);
+  m_x += m_vx;
+  m_y += m_vy;
+
+  entity->m_rect.x = round(m_x);
+  entity->m_rect.y = round(m_y);
 }

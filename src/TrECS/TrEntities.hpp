@@ -12,17 +12,17 @@
 
 class TrActorEntity : public TrEntity<TrActorEntityType> {
  public:
-  TrActorEntity(string name) : TrEntity<TrActorEntityType>(name) {}
+  TrActorEntity(TrGame* game, string name) : TrEntity<TrActorEntityType>(game, name) {}
 
 };
 
 class TrBuildingEntity : public TrEntity<TrBuildingEntityType> {
  public:
-  TrBuildingEntity(string name) : TrEntity<TrBuildingEntityType>(name) {}
+  TrBuildingEntity(TrGame* game, string name) : TrEntity<TrBuildingEntityType>(game, name) {}
 
 };
 
 class TrPlantEntity : public TrEntity<TrPlantEntityType> {
  public:
-  TrPlantEntity(string name) : TrEntity<TrPlantEntityType>(name) {}
+  TrPlantEntity(TrGame* game, string name) : TrEntity<TrPlantEntityType>(game, name) {}
 };

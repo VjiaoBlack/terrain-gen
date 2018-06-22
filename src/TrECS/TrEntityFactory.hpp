@@ -111,17 +111,18 @@ using std::make_shared;
  */
 
 template<class T, class Parent>
-enable_if_t<is_same<Parent, TrPlantEntityType>::value, void> _entityUpdate(TrGame
-                                                                           *game,
-                                                                           T *ent) {
-  TrData::m_plantTypes[ent->m_typeName]->update(game, ent);
+enable_if_t<is_same<Parent, TrPlantEntityType>::value, void> _entSetParent(T *ent) {
+  ent->m_type = *TrData::m_plantTypes[ent->m_typeName];
 }
 
 template<class T, class Parent>
-enable_if_t<is_same<Parent, TrActorEntityType>::value, void> _entityUpdate(TrGame
-                                                                           *game,
-                                                                           T *ent) {
-  TrData::m_actorTypes[ent->m_typeName]->update(game, ent);
+enable_if_t<is_same<Parent, TrActorEntityType>::value, void> _entSetParent(T *ent) {
+  ent->m_type = *TrData::m_actorTypes[ent->m_typeName];
+}
+
+template<class T, class Parent>
+enable_if_t<is_same<Parent, TrBuildingEntityType>::value, void> _entSetParent(T *ent) {
+  ent->m_type = *TrData::m_buildingTypes[ent->m_typeName];
 }
 
 template<class Parent>
@@ -129,16 +130,14 @@ class TrEntity {
  public:
   string m_typeName; // refers to type name
   SDL_Rect m_rect;
+  Parent m_type;
 
-  double m_x;
-  double m_y;
-  double m_vx;
-  double m_vy;
-
-  TrEntity(string name) : m_typeName(name) {}
+  TrEntity(TrGame* game, string name) : m_typeName(name) {
+    _entSetParent<TrEntity<Parent>, Parent>(this);
+  }
 
   void update(TrGame *game) {
-    _entityUpdate<TrEntity<Parent>, Parent>(game, this);
+    m_type.update(game, this);
   }
 };
 

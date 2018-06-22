@@ -60,6 +60,7 @@ class TrEntityType {
   string m_typeName;
   tuple<Components...> m_components;
 
+  TrEntityType() {}
   TrEntityType(string name) {}
   TrEntityType(string name, Components... cs) : m_typeName(name) {
     m_components = tuple<Components...>(cs...);
@@ -69,8 +70,8 @@ class TrEntityType {
     tup_update<0, Child, Components...>(m_components, game, entity);
   }
 
-  shared_ptr<Child> make() {
-    return make_shared<Child>(m_typeName);
+  shared_ptr<Child> make(TrGame* game) {
+    return make_shared<Child>(game, m_typeName);
   }
 };
 

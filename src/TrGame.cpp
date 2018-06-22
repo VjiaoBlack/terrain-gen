@@ -107,7 +107,7 @@ TrGame::TrGame()
 
   // okay, are we going to set up some plants?
   m_entSystem = std::move(make_unique<TrEntitySystem>());
-  int* indices = new int[(K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad)];
+  int *indices = new int[(K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad)];
 
   memset(indices, -1, sizeof(int) * (K_MAP_SIZE_X / cell_rad) * (K_MAP_SIZE_Y / cell_rad));
 
@@ -120,10 +120,11 @@ TrGame::TrGame()
     rect.w = get<TrFootprintComponent>(TrData::m_actorTypes["human"]->m_components).m_w;
     rect.h = get<TrFootprintComponent>(TrData::m_actorTypes["human"]->m_components).m_h;
 
-    auto actor = TrData::m_actorTypes["human"]->make();
+    auto actor = TrData::m_actorTypes["human"]->make(this);
     actor->m_rect = rect;
-    actor->m_x = rect.x;
-    actor->m_y = rect.y;
+    get<TrPhysicsComponent>(actor->m_type.m_components).m_x = rect.x;
+    get<TrPhysicsComponent>(actor->m_type.m_components).m_y = rect.y;
+
     m_entSystem->m_actors.push_back(move(actor));
   }
 
@@ -132,7 +133,7 @@ TrGame::TrGame()
   rect.w = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_w;
   rect.h = get<TrFootprintComponent>(TrData::m_plantTypes["tree"]->m_components).m_h;
 
-  auto plant = TrData::m_plantTypes["tree"]->make();
+  auto plant = TrData::m_plantTypes["tree"]->make(this);
   plant->m_rect = rect;
   m_entSystem->m_plants.push_back(move(plant));
 
@@ -181,11 +182,11 @@ TrGame::TrGame()
           }
         }
       }
-      
+
       if (valid) {
         active_list.push_back(m_entSystem->m_plants.size());
 
-        auto plant = TrData::m_plantTypes["tree"]->make();
+        auto plant = TrData::m_plantTypes["tree"]->make(this);
         plant->m_rect = rect;
         m_entSystem->m_plants.push_back(std::move(plant));
 
@@ -197,7 +198,6 @@ TrGame::TrGame()
   for (int i = m_entSystem->m_plants.size() - 1; i >= 0; i--) {
     auto rect = m_entSystem->m_plants[i]->m_rect;
 
-
     if (m_map->m_height->at(rect.y, rect.x) < 0.5 ||
         m_map->m_height->at(rect.y, rect.x) > 0.65) {
       m_entSystem->m_plants.erase(m_entSystem->m_plants.begin() + i);
@@ -208,7 +208,6 @@ TrGame::TrGame()
   auto tempmenu = make_shared<TrMainMenuLoop>(this);
   m_gameStateStack.push_back(move(tempmenu));
 }
-
 
 TrGame::~TrGame() {
   while (!m_gameStateStack.empty()) {
