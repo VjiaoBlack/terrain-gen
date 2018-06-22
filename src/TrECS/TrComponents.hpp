@@ -10,22 +10,22 @@
 
 using std::string;
 
-class MyDummyEntityType {
+class TrDummyEntityType {
  public:
   const string msg = "Dummy Entity Type";
 };
 
-template<class Parent = MyDummyEntityType>
-class MyEntity;
+template<class Parent = TrDummyEntityType>
+class TrEntity;
 
 template<class Child, class...Components>
-class MyEntityType;
+class TrEntityType;
 
 
-class MyComponent {
+class TrComponent {
  public:
-  virtual ~MyComponent() = default;
-  void update(TrGame* game, MyEntity<> *entity) {
+  virtual ~TrComponent() = default;
+  void update(TrGame* game, TrEntity<> *entity) {
     std::cout << "Abstract Component" << std::endl;
   }
 };

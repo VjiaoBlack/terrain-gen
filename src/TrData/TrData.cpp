@@ -10,9 +10,9 @@
 
 #include <regex>
 
-map<string, MyActorEntityType *> TrData::m_actorTypes = map<string, MyActorEntityType *>();
-map<string, MyBuildingEntityType *> TrData::m_buildingTypes = map<string, MyBuildingEntityType *>();
-map<string, MyPlantEntityType *> TrData::m_plantTypes = map<string, MyPlantEntityType *>();
+map<string, TrActorEntityType *> TrData::m_actorTypes = map<string, TrActorEntityType *>();
+map<string, TrBuildingEntityType *> TrData::m_buildingTypes = map<string, TrBuildingEntityType *>();
+map<string, TrPlantEntityType *> TrData::m_plantTypes = map<string, TrPlantEntityType *>();
 map<string, TrFormula *> TrData::m_formulas = map<string, TrFormula *>();
 map<string, TrItem *> TrData::m_items = map<string, TrItem *>();
 
@@ -142,7 +142,7 @@ void TrData::loadData() {
             sizePair.first, sizePair.second, move(footprintVec));
 
         TrData::m_actorTypes[name] =
-            new MyActorEntityType(name, graphics, physics, planning, footprintComponent);
+            new TrActorEntityType(name, graphics, physics, planning, footprintComponent);
       }
     }
 
@@ -171,7 +171,7 @@ void TrData::loadData() {
             sizePair.first, sizePair.second, move(footprintVec));
 
         TrData::m_buildingTypes[name] =
-            new MyBuildingEntityType(name, graphics, footprintComponent);
+            new TrBuildingEntityType(name, graphics, footprintComponent);
       }
     }
 
@@ -191,7 +191,7 @@ void TrData::loadData() {
             footprintSize.first, footprintSize.second);
 
         TrData::m_plantTypes[name] =
-            new MyPlantEntityType(name, graphics, footprintComponent);
+            new TrPlantEntityType(name, graphics, footprintComponent);
       }
     }
   }

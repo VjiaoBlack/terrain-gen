@@ -6,7 +6,7 @@
  * @brief Buildings have variable footprints, this keeps track of them
  */
 
-class TrFootprintComponent : public MyComponent {
+class TrFootprintComponent : public TrComponent {
  public:
   int m_w;
   int m_h;

@@ -111,21 +111,21 @@ using std::make_shared;
  */
 
 template<class T, class Parent>
-enable_if_t<is_same<Parent, MyPlantEntityType>::value, void> _entityUpdate(TrGame
+enable_if_t<is_same<Parent, TrPlantEntityType>::value, void> _entityUpdate(TrGame
                                                                            *game,
                                                                            T *ent) {
   TrData::m_plantTypes[ent->m_typeName]->update(game, ent);
 }
 
 template<class T, class Parent>
-enable_if_t<is_same<Parent, MyActorEntityType>::value, void> _entityUpdate(TrGame
+enable_if_t<is_same<Parent, TrActorEntityType>::value, void> _entityUpdate(TrGame
                                                                            *game,
                                                                            T *ent) {
   TrData::m_actorTypes[ent->m_typeName]->update(game, ent);
 }
 
 template<class Parent>
-class MyEntity {
+class TrEntity {
  public:
   string m_typeName; // refers to type name
   SDL_Rect m_rect;
@@ -135,10 +135,10 @@ class MyEntity {
   double m_vx;
   double m_vy;
 
-  MyEntity(string name) : m_typeName(name) {}
+  TrEntity(string name) : m_typeName(name) {}
 
   void update(TrGame *game) {
-    _entityUpdate<MyEntity<Parent>, Parent>(game, this);
+    _entityUpdate<TrEntity<Parent>, Parent>(game, this);
   }
 };
 

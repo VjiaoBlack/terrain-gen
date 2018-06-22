@@ -10,9 +10,9 @@
 class TrEntitySystem {
  public:
 // TODO: figure out more efficient system
-  std::vector<shared_ptr<MyPlantEntity>> m_plants;
-  std::vector<shared_ptr<MyActorEntity>> m_actors;
-  std::vector<shared_ptr<MyBuildingEntity>> m_buildings;
+  std::vector<shared_ptr<TrPlantEntity>> m_plants;
+  std::vector<shared_ptr<TrActorEntity>> m_actors;
+  std::vector<shared_ptr<TrBuildingEntity>> m_buildings;
 
   TrEntitySystem() {
 

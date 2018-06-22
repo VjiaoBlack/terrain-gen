@@ -27,9 +27,9 @@ static class TrData {
   static void loadData();
   static void deleteData();
 
-  static map<string, MyActorEntityType *> m_actorTypes;
-  static map<string, MyBuildingEntityType *> m_buildingTypes;
-  static map<string, MyPlantEntityType *> m_plantTypes;
+  static map<string, TrActorEntityType *> m_actorTypes;
+  static map<string, TrBuildingEntityType *> m_buildingTypes;
+  static map<string, TrPlantEntityType *> m_plantTypes;
 
   static map<string, TrFormula *> m_formulas;
   static map<string, TrItem *> m_items;

@@ -9,7 +9,7 @@
 #include "TrMap.hpp"
 #include "../TrGame.hpp"
 #include "TrECS/TrSystems/TrEntitySystem.hpp"
-#include "TrECS/MyEntities.hpp"
+#include "TrECS/TrEntities.hpp"
 
 TrMap::TrMap(int rows, int cols, TrGame *game)
     : m_rows(rows),

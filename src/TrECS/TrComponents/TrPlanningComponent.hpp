@@ -8,8 +8,6 @@
 
 #include "../TrComponents.hpp"
 
-class TrEntity;
-
 using namespace std;
 
 /**
@@ -25,7 +23,7 @@ struct tr_target_t {
 /**
  * @brief interface for all planning components
  */
-class TrPlanningComponent : public MyComponent {
+class TrPlanningComponent : public TrComponent {
  public:
     //  set<tr_target_t> m_targets;
 

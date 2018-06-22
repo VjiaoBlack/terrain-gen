@@ -8,14 +8,12 @@
 
 #include "../TrComponents.hpp"
 
-class TrEntity;
-
 using namespace std;
 
 /**
  * @brief interface for all physics components
  */
-class TrPhysicsComponent : public MyComponent {
+class TrPhysicsComponent : public TrComponent {
  public:
 
   TrPhysicsComponent(float x, float y) {}

@@ -7,7 +7,7 @@
 #include "TrTransitionLoop.hpp"
 #include "../TrECS/TrSystems/TrEntitySystem.hpp"
 
-#include "../TrECS/MyEntities.hpp"
+#include "TrECS/TrEntities.hpp"
 
 class TrMainMenuLoop;
 

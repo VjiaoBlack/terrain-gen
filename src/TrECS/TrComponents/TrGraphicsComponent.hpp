@@ -8,14 +8,12 @@
 
 #include "../TrComponents.hpp"
 
-class TrEntity;
-
 using namespace std;
 
 /**
  * @brief interface for all graphics components
  */
-class TrGraphicsComponent : public MyComponent {
+class TrGraphicsComponent : public TrComponent {
  public:
   SDL_Texture *m_texture;
   SDL_Color m_color;

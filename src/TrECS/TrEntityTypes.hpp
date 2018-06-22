@@ -34,38 +34,38 @@ enable_if_t<I + 1 < sizeof...(Ts), void> tup_print(tuple<Ts...> &tuple) {
 
 template<int I, class Child, class...Ts>
 enable_if_t<I + 1 == sizeof...(Ts), void> tup_update(tuple<Ts...> &tuple, TrGame *game,
-                                                     MyEntity<MyEntityType<Child, Ts...>>
+                                                     TrEntity<TrEntityType<Child, Ts...>>
                                                      *entity) {
-  std::get<I>(tuple).template update<MyEntity<MyEntityType<Child, Ts...>>>(game, entity);
+  std::get<I>(tuple).template update<TrEntity<TrEntityType<Child, Ts...>>>(game, entity);
 };
 
 template<int I, class Child, class...Ts>
 enable_if_t<I + 1 < sizeof...(Ts), void> tup_update(tuple<Ts...> &tuple, TrGame *game,
-                                                    MyEntity<MyEntityType<Child, Ts...>>
+                                                    TrEntity<TrEntityType<Child, Ts...>>
                                                     *entity) {
-  std::get<I>(tuple).template update<MyEntity<MyEntityType<Child, Ts...>>>(game, entity);
+  std::get<I>(tuple).template update<TrEntity<TrEntityType<Child, Ts...>>>(game, entity);
   tup_update<I + 1, Child, Ts...>(tuple, game, entity);
 };
 
 
 
-class MyActorEntity;
-class MyBuildingEntity;
-class MyPlantEntity;
+class TrActorEntity;
+class TrBuildingEntity;
+class TrPlantEntity;
 
 
 template<class Child, class...Components>
-class MyEntityType {
+class TrEntityType {
  public:
   string m_typeName;
   tuple<Components...> m_components;
 
-  MyEntityType(string name) {}
-  MyEntityType(string name, Components... cs) : m_typeName(name) {
+  TrEntityType(string name) {}
+  TrEntityType(string name, Components... cs) : m_typeName(name) {
     m_components = tuple<Components...>(cs...);
   }
 
-  void update(TrGame *game, MyEntity<MyEntityType<Child, Components...>> *entity) {
+  void update(TrGame *game, TrEntity<TrEntityType<Child, Components...>> *entity) {
     tup_update<0, Child, Components...>(m_components, game, entity);
   }
 
@@ -74,15 +74,15 @@ class MyEntityType {
   }
 };
 
-using MyActorEntityType = MyEntityType<MyActorEntity,
+using TrActorEntityType = TrEntityType<TrActorEntity,
                                        TrGraphicsComponent,
                                        TrPhysicsComponent,
                                        TrPlanningComponent,
                                        TrFootprintComponent>;
-using MyBuildingEntityType = MyEntityType<MyBuildingEntity,
+using TrBuildingEntityType = TrEntityType<TrBuildingEntity,
                                           TrGraphicsComponent,
                                           TrFootprintComponent>;
-using MyPlantEntityType = MyEntityType<MyPlantEntity,
+using TrPlantEntityType = TrEntityType<TrPlantEntity,
                                        TrGraphicsComponent,
                                        TrFootprintComponent>;
 
