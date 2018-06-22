@@ -1,6 +1,5 @@
 
 #include "TrGame.hpp"
-#include "../TrECS/TrSystems/TrEntitySystem.hpp"
 
 int LENGTH = 400;
 TrColorMap::TrColorMap(int rows, int cols)
@@ -36,9 +35,9 @@ void TrColorMap::updateGrayscale(TrMap *map) {
   for (int i = 0; i < m_rows; i++) {
     for (int j = 0; j < m_cols; j++) {
       // render land
-      this->at(i,j) = multiplyColor(0xFFFFFFFF, map->m_height->at(i, j),
-                                    map->m_height->at(i, j),
-                                    map->m_height->at(i, j));
+      this->at(i, j) = multiplyColor(0xFFFFFFFF, map->m_height->at(i, j),
+                                     map->m_height->at(i, j),
+                                     map->m_height->at(i, j));
     }
   }
 }
@@ -80,7 +79,6 @@ void TrColorMap::updateHistogram(TrMap *map) {
 
 void TrColorMap::updateDisplay(TrMap *map) {
   int threshold[9];
-  // -: deep
   threshold[0] = 0.20 * 256;
   threshold[1] = 0.40 * 256;
   threshold[2] = 0.45 * 256;  // sand
@@ -91,19 +89,15 @@ void TrColorMap::updateDisplay(TrMap *map) {
   threshold[7] = 0.70 * 256;
   threshold[8] = 0.80 * 256;
 
-  // 1: snow
-
-  // uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
   uint32_t colors[9] = {0xFFBB8866, 0xFFBB8866, 0xFFBB8866,
                         0xFFEEDDBB, 0xFF90BC49, 0xFF689727,
                         0xFF3A571F, 0xFF321A0E, 0xFF5B3F31};
-
 
   clock_t endFrame = clock();
   double calcMs = clockToMilliseconds(endFrame);
 
   // calculate water "waves"
-//  ocean->render(calcMs / 1000, true);
+  // ocean->render(calcMs / 1000, true);
 
   double deriv = 200.0 / LENGTH;
 
@@ -226,7 +220,7 @@ void TrColorMap::updateDisplay(TrMap *map) {
           for (int step = 0; step < 32; step += 1) {
             ray += m_light * 1.0;
             if ((map->m_height->bilerp(ray.y, ray.x) +
-                 map->m_entityHeight->bilerp(ray.y, ray.x)) * 256 > ray.z) {
+                map->m_entityHeight->bilerp(ray.y, ray.x)) * 256 > ray.z) {
               LdotN = 0.0;
               break;
             }
