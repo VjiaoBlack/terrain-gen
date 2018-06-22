@@ -7,7 +7,6 @@
 
 #include <deque>
 //#include <TrECS/TrEntityTypes.hpp>
-#include <TrECS/TrEntities.hpp>
 #include "TrECS/MyEntities.hpp"
 
 void TrGame::setupSDL() {

@@ -79,7 +79,6 @@
 
 #include <TrData/TrData.hpp>
 
-#include "TrEntities.hpp"
 //#include "../TrGame.hpp"
 
 class TrGame;
