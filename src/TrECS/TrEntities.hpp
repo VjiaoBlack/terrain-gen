@@ -12,15 +12,7 @@
 
 class TrActorEntity : public TrEntity<TrActorEntityType> {
  public:
-  double m_hunger;
-  double m_energy;
-  double m_social;
-
-
-
-  TrActorEntity(string name) : TrEntity<TrActorEntityType>(name),
-                               m_hunger(0.0), m_energy(0.0),
-                               m_social(0.0) {}
+  TrActorEntity(string name) : TrEntity<TrActorEntityType>(name) {}
 
 };
 
