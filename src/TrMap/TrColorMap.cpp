@@ -95,8 +95,8 @@ void TrColorMap::updateDisplay(TrMap *map) {
 
   // uint32_t colors[9] = {0xFF1A2B56, 0xFF253C78, 0xFF3A5BAA,
   uint32_t colors[9] = {0xFFBB8866, 0xFFBB8866, 0xFFBB8866,
-                        0xFFEEDDBB, 0xFF77BC49, 0xFF58A327,
-                        0xFF28771F, 0xFF210E04, 0xFF5B3F31};
+                        0xFFEEDDBB, 0xFF90BC49, 0xFF689727,
+                        0xFF3A571F, 0xFF321A0E, 0xFF5B3F31};
 
 
   clock_t endFrame = clock();
