@@ -151,7 +151,7 @@ void TrColorMap::updateDisplay(TrMap *map) {
         norm = normalize(norm);
       }
 
-      double LdotN = clamp(dot(m_light, norm), 0.0, 1.0);
+      double LdotN = glm::clamp(dot(m_light, norm), 0.0, 1.0);
       double MdotN = 0;
 
       if (temp_light.z > -0.1 && temp_light.z <= 0) {
@@ -234,7 +234,7 @@ void TrColorMap::updateDisplay(TrMap *map) {
         }
       }
 
-      directional *= clamp(LdotN + MdotN, -ambient, 2.0);
+      directional *= glm::clamp(LdotN + MdotN, -ambient, 2.0);
 
       this->at(i, j) =
           multiplyColor(color, directional + ambient,
@@ -247,8 +247,8 @@ void TrColorMap::updateDisplay(TrMap *map) {
 
         double alpha =
             lerp5(0.6, 1.0, 0.001, map->m_water->m_water_avg->at(i, j), 0.10);
-        // alpha = clamp(0.6, alpha, 1.0);
-        alpha = clamp(alpha, 0.6, 1.0);
+        // alpha = glm::clamp(0.6, alpha, 1.0);
+        alpha = glm::clamp(alpha, 0.6, 1.0);
 
         dvec3 ocolor = colorToVec(this->at(i, j));
         dvec3 wcolor = m_deepWater;
@@ -289,9 +289,9 @@ void TrColorMap::updateDisplay(TrMap *map) {
           wcolor += (dvec3(0xFF) - wcolor) * HdotN;
         }
 
-        wcolor = clamp(wcolor * alpha, 0.0, 256.0);
-        ocolor = clamp(ocolor * (1.0 - alpha), 0.0, 256.0);
-        ocolor = clamp(wcolor + ocolor, 0.0, 256.0);
+        wcolor = glm::clamp(wcolor * alpha, 0.0, 256.0);
+        ocolor = glm::clamp(ocolor * (1.0 - alpha), 0.0, 256.0);
+        ocolor = glm::clamp(wcolor + ocolor, 0.0, 256.0);
 
         this->at(i, j) = vecToColor(ocolor);
       }
