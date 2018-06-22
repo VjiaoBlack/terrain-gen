@@ -3,3 +3,4 @@ Athena.cbp
 CMakeCache.txt
 CMakeFiles/
 .idea/
+Makefile
