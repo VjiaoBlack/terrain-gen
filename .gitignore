@@ -3,9 +3,5 @@ Athena.cbp
 CMakeCache.txt
 CMakeFiles/
 .idea/
-<<<<<<< HEAD
-=======
-
 cmake_install.cmake
->>>>>>> c6df2bbf3f395b6b863d28e8fa242f2b16dc7b91
 Makefile
