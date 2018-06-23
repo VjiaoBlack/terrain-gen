@@ -19,4 +19,8 @@ class TrGUIButton : public TrGUIObject {
 
  private:
   SDL_Rect m_innerBevelRect;
+  SDL_Rect m_lightRect;
+  SDL_Rect m_shadowRect;
+
+  void setMainButtonDrawColor();
 };

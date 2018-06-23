@@ -11,7 +11,9 @@ TrGUIButton::TrGUIButton(TrGame *game, SDL_Rect rect, string name)
       m_label(std::move(std::move(name))) {
   this->m_game = game;
   this->m_rect = rect;
-  this->m_innerBevelRect = insetRect(rect, 0, 0, 1, 1);
+  this->m_shadowRect = insetRect(rect, 1, 1, 0, 0);
+  this->m_lightRect = insetRect(rect, 0, 0, 1, 1);
+  this->m_innerBevelRect = insetRect(rect, 1, 1, 1, 1);
   SDL_Surface *textSurface = TTF_RenderText_Solid(
       game->m_menuFont.get(), m_label.c_str(), {60, 55, 20, 255});
 
@@ -28,24 +30,39 @@ TrGUIButton::TrGUIButton(TrGame *game, SDL_Rect rect, string name)
   SDL_FreeSurface(textSurface);
 }
 
+void TrGUIButton::setMainButtonDrawColor() {
+  if (m_mouseInside) {
+    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xFF, 0xE9, 0xBC, 0xFF);
+  } else {
+    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xAA, 0x88, 0x44, 0xFF);
+  }
+}
+
 void TrGUIButton::draw() {
   float sx, sy;
 
   SDL_RenderGetScale(m_game->m_SDLRenderer, &sx, &sy);
   SDL_RenderSetScale(m_game->m_SDLRenderer, sz(K_DISPLAY_SCALE),
                      sz(K_DISPLAY_SCALE));
-  if (m_mouseInside) {
-    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xAA, 0x88, 0x44, 0xFF);
-  } else {
-    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0x58, 0x3E, 0x09, 0xFF);
-  }
 
+  setMainButtonDrawColor();
   SDL_RenderFillRect(m_game->m_SDLRenderer, &m_rect);
+
   if (m_mouseInside) {
-    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xFF, 0xE9, 0xBC, 0xFF);
+    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xAA, 0x88, 0x44, 0x88);
   } else {
-    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xAA, 0x88, 0x44, 0xFF);
+    SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0x58, 0x3E, 0x09, 0x88);
   }
+  SDL_RenderFillRect(m_game->m_SDLRenderer, &m_shadowRect);
+
+  if (m_mouseInside) {
+      SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xFF, 0xFF, 0xDC, 0x88);
+  } else {
+      SDL_SetRenderDrawColor(m_game->m_SDLRenderer, 0xFF, 0xE9, 0xBC, 0x88);
+  }
+  SDL_RenderFillRect(m_game->m_SDLRenderer, &m_lightRect);
+  
+  setMainButtonDrawColor();
   SDL_RenderFillRect(m_game->m_SDLRenderer, &m_innerBevelRect);
 
   if (m_texture) {
