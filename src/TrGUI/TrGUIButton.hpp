@@ -18,9 +18,8 @@ class TrGUIButton : public TrGUIObject {
   void update() override;
 
  private:
-  SDL_Rect m_innerBevelRect;
-  SDL_Rect m_lightRect;
-  SDL_Rect m_shadowRect;
-
+  /// Set the color to use in drawing the main part of the button
+  /// as the SDL render draw color. This changes based on whether
+  /// or not the button is highlighted.
   void setMainButtonDrawColor();
 };
