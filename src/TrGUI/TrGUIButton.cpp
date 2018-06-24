@@ -15,10 +15,10 @@ TrGUIButton::TrGUIButton(TrGame *game, SDL_Rect rect, string name)
       game->m_menuFont.get(), m_label.c_str(), {60, 55, 20, 255});
   m_destRect.w = textSurface->w;
   m_destRect.h = textSurface->h;
-  
+
   // Calculate based on this inner bevel rect so that text doesn't overlap
   // the bevel
-  SDL_Rect innerBevelRect = insetRect(m_rect, 1, 1, 1, 1);
+  SDL_Rect innerBevelRect = makeInsetRect(m_rect, 1, 1, 1, 1);
   m_destRect.x = innerBevelRect.x + (innerBevelRect.w - m_destRect.w) / 2;
   m_destRect.y = innerBevelRect.y + (innerBevelRect.h - m_destRect.h) / 2;
 
@@ -40,9 +40,9 @@ void TrGUIButton::setMainButtonDrawColor() {
 
 void TrGUIButton::draw() {
   float sx, sy;
-  SDL_Rect m_shadowRect = insetRect(m_rect, 1, 1, 0, 0);
-  SDL_Rect m_lightRect = insetRect(m_rect, 0, 0, 1, 1);
-  SDL_Rect m_innerBevelRect = insetRect(m_rect, 1, 1, 1, 1);
+  SDL_Rect m_shadowRect = makeInsetRect(m_rect, 1, 1, 0, 0);
+  SDL_Rect m_lightRect = makeInsetRect(m_rect, 0, 0, 1, 1);
+  SDL_Rect m_innerBevelRect = makeInsetRect(m_rect, 1, 1, 1, 1);
 
   SDL_RenderGetScale(m_game->m_SDLRenderer, &sx, &sy);
   SDL_RenderSetScale(m_game->m_SDLRenderer, sz(K_DISPLAY_SCALE),

@@ -153,7 +153,7 @@ inline uint32_t convertColorType(SDL_Color color) {
 
 /// Insets a rect by the amount specified on the left, top, right, and bottom.
 /// Asserts that it cannot inset a rect beyond a 0 dimension
-inline SDL_Rect insetRect(SDL_Rect rect, int left, int top, int right, int bottom) {
+inline SDL_Rect makeInsetRect(SDL_Rect rect, int left, int top, int right, int bottom) {
     // 
     assert(rect.w >= left + right);
     assert(rect.h >= top + bottom);
