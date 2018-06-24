@@ -21,7 +21,7 @@ file(GLOB SOURCES src/*.cpp src/*.c src/*/*.cpp src/*/*.c src/*/*/*.cpp src/*/*/
 file(GLOB HEADERS src/*.hpp src/*.h src/*/*.hpp src/*/*.h src/*/*/*.hpp src/*/*/*.h include/*/*.hpp include/*/*.h)
 
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} src/TrECS/TrSystems/TrEntitySystem.cpp src/TrECS/TrSystems/TrEntitySystem.hpp src/TrMap/TrMapDataUtils.cpp src/TrMap/TrMapDataUtils.hpp src/TrECS/TrEntityFactory.hpp src/TrECS/TrEntityTypes.hpp src/TrECS/TrEntities.hpp src/TrECS/TrComponents/TrActionComponent.hpp)
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} src/TrECS/TrSystems/TrEntitySystem.cpp src/TrECS/TrSystems/TrEntitySystem.hpp src/TrMap/TrMapDataUtils.cpp src/TrMap/TrMapDataUtils.hpp src/TrECS/TrEntityFactory.hpp src/TrECS/TrEntityTypes.hpp src/TrECS/TrEntities.hpp src/TrECS/TrComponents/TrActionComponent.hpp src/TrGUI/TrGUIEntity.cpp src/TrGUI/TrGUIEntity.hpp src/TrGUI/TrGUIComponents/TrGUIClickableComponent.hpp src/TrGUI/TrGUIComponents/TrGUIHighlightComponent.hpp src/TrGUI/TrGUIComponents/TrGUIDropdownComponent.hpp src/TrGUI/TrGUIComponents/TrGUIContainerComponent.hpp src/TrGUI/TrGUIComponents/TrGUIComponent.hpp src/TrGUI/TrGUIComponents/TrGUIGraphicsComponent.hpp)
 #add_executable(${PROJECT_NAME} "src/TrGame.cpp" ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME}
         ${SDL2_LIBRARY}
