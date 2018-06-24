@@ -36,6 +36,9 @@ Controls:
 
 Documentation
 -------------
+Requires:
+`cmake`, `sdl2`, `sdl2_image`, `sdl2_ttf`, `glm`
+
 Classes and their functions
 - `TrData` - handles importing the data for different entity types and formulas. Currently 
 doesn't handle maps and stuff (I don't have much Map or Game IO right now), but it might later.
