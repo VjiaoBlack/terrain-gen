@@ -13,9 +13,7 @@
 #include <TrECS/TrComponents/TrPhysicsComponent.hpp>
 #include <TrECS/TrComponents/TrPlanningComponent.hpp>
 #include <TrECS/TrComponents/TrFootprintComponent.hpp>
-
-
-
+#include <TrECS/TrComponents/TrActionComponent.hpp>
 
 /**
  * Sadly, CLion doesn't support constexpr.
@@ -79,12 +77,12 @@ using TrActorEntityType = TrEntityType<TrActorEntity,
                                        TrGraphicsComponent,
                                        TrPhysicsComponent,
                                        TrPlanningComponent,
-                                       TrFootprintComponent>;
+                                       TrFootprintComponent,
+                                       TrActionComponent>;
 using TrBuildingEntityType = TrEntityType<TrBuildingEntity,
                                           TrGraphicsComponent,
                                           TrFootprintComponent>;
 using TrPlantEntityType = TrEntityType<TrPlantEntity,
                                        TrGraphicsComponent,
                                        TrFootprintComponent>;
-
 

@@ -141,8 +141,11 @@ void TrData::loadData() {
         auto footprintComponent = TrFootprintComponent(
             sizePair.first, sizePair.second, move(footprintVec));
 
+        auto actionComponent = TrActionComponent();
+
         TrData::m_actorTypes[name] =
-            new TrActorEntityType(name, graphics, physics, planning, footprintComponent);
+            new TrActorEntityType(name, graphics, physics, planning, footprintComponent,
+                                  actionComponent);
       }
     }
 
