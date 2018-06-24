@@ -36,6 +36,24 @@ Controls:
 
 Documentation
 -------------
+Classes and their functions
+- `TrData` - handles importing the data for different entity types and formulas. Currently 
+doesn't handle maps and stuff (I don't have much Map or Game IO right now), but it might later.
+- `TrECS` - handles the main Entity Component System pattern for game entities. I don't really 
+use the "System" part of the ECS design pattern right now, but I probably will later.
+- `TrGUI` - handles the GUI system. Currently does not use ECS, but it probably will later.
+- `TrMap` - handles rendering and simulating the map data, such as rain, shadow mapping, ray 
+tracing, day/night cycle, erosion, and more.
+- `TrRenderLoop` - handles the updating and rendering, depending on what "state" of the game 
+you're in - different TrRenderLoop's handles the main menu, the main game, and transitions.
+- `TrUtils` - holds a bunch of generic helper functions.
+
+External includes
+- `fast-cpp-csv-parser` - currently used in parsing the data files. I think I might make my own 
+later with c++'s regex system.
+- `fft` - runs a fast fourier transform based ocean wave simulation. I use it for bump-mapping 
+water.
+
 Refer to this document for some details about how this works:
 https://docs.google.com/document/d/1xySCdTcphTbBVFzzvw51X8ISexEsv2MM4zNanQW6Hbc/edit?usp=sharing
 
