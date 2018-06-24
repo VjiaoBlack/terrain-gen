@@ -22,7 +22,7 @@ using namespace std;
 
 // TODO: figure out a way to avoid having to repeat a m_entityTypes map for each
 //       entity type
-static class TrData {
+class TrData {
  public:
   static void loadData();
   static void deleteData();
