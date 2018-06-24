@@ -8,8 +8,15 @@
  */
 
 #include "TrGUIComponent.hpp"
+#include <vector>
+
+class TrGUIEntity;
 
 class TrGUIContainerComponent : public TrGUIComponent {
+ public:
+  int m_spacing = 10;
+  std::vector<TrGUIEntity*> m_buttons;
 
+  virtual void update(TrGUIEntity* ent, TrGame* game) {};
 };
 

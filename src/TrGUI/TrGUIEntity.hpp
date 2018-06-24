@@ -11,12 +11,22 @@
  */
 
 #include "TrGUIComponents/TrGUIComponent.hpp"
-#include <tuple>
+#include <map>
 
 class TrGUIEntity {
- private:
-  // add components to this tuple later
-  std::tuple<> m_components;
+ public:
+  // add component pointers to this tuple later
+  // TODO: restrict m_components access
+  std::map<string, TrGUIComponent*> m_components;
 
+  template<class T>
+  void addComponent(T* component) {
+    m_components[typeid(T).name()] = static_cast<TrGUIComponent*>(component);
+  }
+
+  template<class T>
+  T* get() {
+    return static_cast<T*>(m_components[typeid(T).name()]);
+  }
 };
 

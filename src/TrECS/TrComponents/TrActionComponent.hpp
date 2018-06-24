@@ -5,10 +5,10 @@
  */
 
 #include <map>
+#include "TrECS/TrItems/TrItem.hpp"
 #include "../TrComponents.hpp"
 
 class TrFormula;
-class TrItem;
 
 using namespace std;
 
