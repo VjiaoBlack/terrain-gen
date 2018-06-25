@@ -1,0 +1,8 @@
+//
+// Created by vjiaoblack on 6/25/18.
+//
+
+#ifndef ATHENA_TRGUITEXTCOMPONENT_HPP
+#define ATHENA_TRGUITEXTCOMPONENT_HPP
+
+#endif //ATHENA_TRGUITEXTCOMPONENT_HPP
