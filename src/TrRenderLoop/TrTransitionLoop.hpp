@@ -7,7 +7,7 @@
 #include "TrRenderLoop.hpp"
 
 #include <memory>
-#include <utility> #include <utility>
+#include <utility>
 class TrTransitionLoop : public TrRenderLoop {
  private:
   shared_ptr<TrRenderLoop> m_target;
