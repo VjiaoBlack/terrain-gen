@@ -17,7 +17,6 @@
 #include <vector>
 #include <memory>
 
-#include "Perlin.hpp"
 #include "Utils.hpp"
 
 // https://swarminglogic.com/jotting/2015_05_smartwrappers
@@ -52,12 +51,13 @@ struct TrSDL {
 };
 
 struct TrRenderer {
-  unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)> m_renderer
-      = unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)>(nullptr, SDL_DestroyRenderer);
+  std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)> m_renderer
+      = std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)>(nullptr, SDL_DestroyRenderer);
 
   TrRenderer() = default;
   explicit TrRenderer(SDL_Renderer *renderer) {
-    m_renderer = unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)>(renderer, SDL_DestroyRenderer);
+    m_renderer = std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)>(renderer,
+        SDL_DestroyRenderer);
   }
 
   // implicit cast to SDL_Renderer
@@ -65,12 +65,12 @@ struct TrRenderer {
 };
 
 struct TrWindow {
-  unique_ptr<SDL_Window, void (*)(SDL_Window *)> m_renderer
-      = unique_ptr<SDL_Window, void (*)(SDL_Window *)>(nullptr, SDL_DestroyWindow);
+  std::unique_ptr<SDL_Window, void (*)(SDL_Window *)> m_renderer
+      = std::unique_ptr<SDL_Window, void (*)(SDL_Window *)>(nullptr, SDL_DestroyWindow);
 
   TrWindow() = default;
   explicit TrWindow(SDL_Window *window) {
-    m_renderer = unique_ptr<SDL_Window, void (*)(SDL_Window *)>(window, SDL_DestroyWindow);
+    m_renderer = std::unique_ptr<SDL_Window, void (*)(SDL_Window *)>(window, SDL_DestroyWindow);
   }
 
   // implicit cast to SDL_Window

@@ -29,7 +29,9 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   text_height = textSurface1->h;
 
   m_GUISystem = make_shared<TrGUISystem>();
-  m_ent = TrGUIEntity::makeButton(game, m_GUISystem);
+
+  SDL_Rect r = (SDL_Rect) {10, 10, 50, 50};
+  m_ent = TrGUIEntity::makeButton(game, m_GUISystem, r);
 
   vector<string> labels = {"New Game", "Load Game", "Quit"};
 

@@ -12,6 +12,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <glm/glm.hpp>
+#include "TrGraphics.hpp"
 
 // set to 2 (or more) if it's a retina screen, 1 if not.
 #define K_RETINA 1
@@ -154,9 +155,13 @@ inline uint32_t convertColorType(SDL_Color color) {
 /// Insets a rect by the amount specified on the left, top, right, and bottom.
 /// Asserts that it cannot inset a rect beyond a 0 dimension
 inline SDL_Rect makeInsetRect(SDL_Rect rect, int left, int top, int right, int bottom) {
-    // 
-    assert(rect.w >= left + right);
-    assert(rect.h >= top + bottom);
-    return {rect.x + left, rect.y + top,
-            rect.w - (left + right), rect.h - (top + bottom)};
+  //
+  assert(rect.w >= left + right);
+  assert(rect.h >= top + bottom);
+  return {rect.x + left, rect.y + top,
+          rect.w - (left + right), rect.h - (top + bottom)};
+}
+
+inline void setRenderDrawColor(SDL_Renderer* renderer, SDL_Color color) {
+  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }

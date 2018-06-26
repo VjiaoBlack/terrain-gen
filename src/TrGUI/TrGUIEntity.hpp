@@ -12,9 +12,16 @@
 
 #include <TrGUI/TrGUIComponents/TrGUIComponent.hpp>
 #include <map>
+#include <exception>
+#include <stdexcept>
 #include <TrGUI/TrGUIComponents/TrGUIGraphicsComponent.hpp>
 #include <TrGUI/TrGUIComponents/TrGUITextComponent.hpp>
 #include <TrGUI/TrGUISystems/TrGUISystem.hpp>
+
+class TrMissingComponentException : public std::runtime_error {
+ public:
+  TrMissingComponentException(const string &__arg) : runtime_error(__arg) {}
+};
 
 class TrGUIEntity {
  public:
@@ -38,20 +45,29 @@ class TrGUIEntity {
 
   template<class T>
   shared_ptr<T> get() {
+    if (!m_components.count(typeid(T).name())) {
+      string msg = "missing component: ";
+      msg += typeid(T).name();
+      throw TrMissingComponentException(msg);
+    }
     return static_pointer_cast<T>(m_components[typeid(T).name()]);
   }
 
-  static std::shared_ptr<TrGUIEntity> makeButton(TrGame *game, shared_ptr<TrGUISystem> system) {
-    auto entity = make_shared<TrGUIEntity>(system);
-    auto graphicsComp = make_shared<TrGUIGraphicsComponent>();
-    graphicsComp->m_rect.x = 10;
-    graphicsComp->m_rect.y = 10;
-    graphicsComp->m_rect.w = 100;
-    graphicsComp->m_rect.h = 100;
-    entity->addComponent(graphicsComp);
+  static std::shared_ptr<TrGUIEntity> makeButton(TrGame *game, shared_ptr<TrGUISystem> system,
+                                                 SDL_Rect rect) {
+    SDL_Rect textRect = (SDL_Rect) {rect.x + 5, rect.y + 5, rect.w - 10, rect.h - 10};
 
-    auto textComp = make_shared<TrGUITextComponent>(game, "test");
+    auto entity = make_shared<TrGUIEntity>(system);
+
+    auto graphicsComp = make_shared<TrGUIGraphicsComponent>(rect);
+    auto textComp = make_shared<TrGUITextComponent>(game, "test", textRect);
+    auto mouseComp = make_shared<TrGUIMouseComponent>();
+    auto highlightComp = make_shared<TrGUIHighlightComponent>();
+
+    entity->addComponent(graphicsComp);
     entity->addComponent(textComp);
+    entity->addComponent(mouseComp);
+    entity->addComponent(highlightComp);
 
     return entity;
   }
