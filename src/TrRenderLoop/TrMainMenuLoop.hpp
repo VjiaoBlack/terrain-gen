@@ -9,7 +9,10 @@
 
 #include "../TrGUI/TrGUIMenu.hpp"
 #include "TrRenderLoop.hpp"
+
 class TrGame;
+class TrGUIEntity;
+class TrGUISystem;
 
 class TrMainMenuLoop : public TrRenderLoop {
  public:
@@ -26,6 +29,9 @@ class TrMainMenuLoop : public TrRenderLoop {
   sdl_texture_pt text2;
 
   unique_ptr<TrGUIMenu> m_menu;
+
+  shared_ptr<TrGUIEntity> m_ent;
+  shared_ptr<TrGUISystem> m_GUISystem;
 
   explicit TrMainMenuLoop(TrGame *game);
 

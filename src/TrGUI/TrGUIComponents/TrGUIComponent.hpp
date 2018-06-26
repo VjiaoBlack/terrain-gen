@@ -7,12 +7,14 @@
  * The abstract base class
  */
 
-#include "../../TrGame.hpp"
+#include <memory>
 
 class TrGUIEntity;
+class TrGame;
 
 class TrGUIComponent {
  public:
-  virtual void update(TrGUIEntity* ent, TrGame* game);
+  TrGUIEntity* m_ent;
+  virtual void update(TrGame* game) {};
 };
 

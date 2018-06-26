@@ -17,6 +17,6 @@ class TrGUIContainerComponent : public TrGUIComponent {
   int m_spacing = 10;
   std::vector<TrGUIEntity*> m_buttons;
 
-  virtual void update(TrGUIEntity* ent, TrGame* game) {};
+  virtual void update(TrGame* game) {};
 };
 

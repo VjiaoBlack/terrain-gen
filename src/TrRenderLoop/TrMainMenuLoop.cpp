@@ -2,12 +2,16 @@
  * TrMainMenuLoop.cpp
  */
 
+#include <TrGUI/TrGUIEntity.hpp>
 #include "TrMainMenuLoop.hpp"
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
 #include "../TrECS/TrSystems/TrEntitySystem.hpp"
 
 #include "TrECS/TrEntities.hpp"
+
+#include "TrGUI/TrGUIComponents/TrGUIGraphicsComponent.hpp"
+
 TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   int score = 10;
 
@@ -23,6 +27,9 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   text2.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface2.get()));
   text_width = textSurface1->w;
   text_height = textSurface1->h;
+
+  m_GUISystem = make_shared<TrGUISystem>();
+  m_ent = TrGUIEntity::makeButton(game, m_GUISystem);
 
   vector<string> labels = {"New Game", "Load Game", "Quit"};
 
@@ -91,4 +98,6 @@ void TrMainMenuLoop::render(TrGame *game) {
   SDL_RenderCopy(game->m_SDLRenderer, text1.get(), nullptr, &renderQuad);
 
   m_menu->draw();
+
+  m_GUISystem->update(game);
 }

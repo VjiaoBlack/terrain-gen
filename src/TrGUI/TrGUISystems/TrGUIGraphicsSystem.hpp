@@ -8,10 +8,24 @@
  */
 
 #include <vector>
-#include <TrGUI/TrGUIComponents/TrGUIHighlightComponent.hpp>
+#include "../TrGUIComponents/TrGUITextComponent.hpp"
+#include "../TrGUIComponents/TrGUIGraphicsComponent.hpp"
+
+class TrGame;
 
 class TrGUIGraphicsSystem {
  public:
-  std::vector<TrGUIHighlightComponent*> m_highlightComponents;
+  std::vector<std::shared_ptr<TrGUITextComponent>> m_textComponents;
+  std::vector<std::shared_ptr<TrGUIGraphicsComponent>> m_graphicsComponents;
+
+  void update(TrGame* game) {
+    for (auto c : m_graphicsComponents) {
+      c->update(game);
+    }
+
+    for (auto c : m_textComponents) {
+      c->update(game);
+    }
+  }
 };
 

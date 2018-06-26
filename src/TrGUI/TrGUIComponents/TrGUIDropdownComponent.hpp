@@ -15,7 +15,7 @@ class TrGUIDropdownComponent : public TrGUIComponent {
  public:
   std::shared_ptr<TrGUIEntity> m_button;
 
-  virtual void update(TrGUIEntity* ent, TrGame* game) {
+  virtual void update(TrGame* game) {
     // TODO
   }
 };

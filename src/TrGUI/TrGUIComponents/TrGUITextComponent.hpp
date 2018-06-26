@@ -1,8 +1,24 @@
-//
-// Created by vjiaoblack on 6/25/18.
-//
+#pragma once
+/**
+ * TrGUITextComponent.hpp
+ *
+ * Victor Jiao
+ *
+ * Makes entities clickable
+ */
 
-#ifndef ATHENA_TRGUITEXTCOMPONENT_HPP
-#define ATHENA_TRGUITEXTCOMPONENT_HPP
+#include "TrGUIComponent.hpp"
+#include "TrGUIGraphicsComponent.hpp"
 
-#endif //ATHENA_TRGUITEXTCOMPONENT_HPP
+class TrGUITextComponent : public TrGUIComponent {
+ public:
+  std::string m_text;
+  sdl_texture_pt m_textTexture;
+  SDL_Rect m_destRect;
+  SDL_Color m_textColor;
+
+  TrGUITextComponent(TrGame* game, std::string label);
+
+  virtual void update(TrGame* game);
+};
+
