@@ -55,7 +55,7 @@ class TrGUIEntity {
 
   static std::shared_ptr<TrGUIEntity> makeButton(TrGame *game, shared_ptr<TrGUISystem> system,
                                                  SDL_Rect rect) {
-    SDL_Rect textRect = (SDL_Rect) {rect.x + 5, rect.y + 5, rect.w - 10, rect.h - 10};
+    SDL_Rect textRect = rect;
 
     auto entity = make_shared<TrGUIEntity>(system);
 
@@ -63,11 +63,13 @@ class TrGUIEntity {
     auto textComp = make_shared<TrGUITextComponent>(game, "test", textRect);
     auto mouseComp = make_shared<TrGUIMouseComponent>();
     auto highlightComp = make_shared<TrGUIHighlightComponent>();
+    auto clickComp = make_shared<TrGUIClickableComponent>();
 
     entity->addComponent(graphicsComp);
     entity->addComponent(textComp);
     entity->addComponent(mouseComp);
     entity->addComponent(highlightComp);
+    entity->addComponent(clickComp);
 
     return entity;
   }
