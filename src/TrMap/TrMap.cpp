@@ -219,7 +219,7 @@ void TrMap::update(set<int> keysDown) {
   }
 
   // draw plants into entity color buffer
-  for (auto plant : m_game->m_entSystem->m_plants) {
+  for (auto const &plant : m_game->m_entSystem->m_plants) {
     plant->update(m_game);
 
     // draw plants into entity height buffer
@@ -231,7 +231,7 @@ void TrMap::update(set<int> keysDown) {
   }
 
   // draw entities into entity color buffer
-  for (auto actor : m_game->m_entSystem->m_actors) {
+  for (auto const &actor : m_game->m_entSystem->m_actors) {
     actor->update(m_game);
 
     // draw actors into entity height buffer

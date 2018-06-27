@@ -68,8 +68,8 @@ class TrEntityType {
     tup_update<0, Child, Components...>(m_components, game, entity);
   }
 
-  shared_ptr<Child> make(TrGame* game) {
-    return make_shared<Child>(game, m_typeName);
+  unique_ptr<Child> make(TrGame* game) {
+    return make_unique<Child>(game, m_typeName);
   }
 };
 

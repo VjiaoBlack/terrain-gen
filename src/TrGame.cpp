@@ -125,7 +125,7 @@ TrGame::TrGame()
     get<TrPhysicsComponent>(actor->m_type.m_components).m_x = rect.x;
     get<TrPhysicsComponent>(actor->m_type.m_components).m_y = rect.y;
 
-    m_entSystem->m_actors.push_back(move(actor));
+    m_entSystem->m_actors.push_back(std::move(actor));
   }
 
   // create initial plant
@@ -135,7 +135,7 @@ TrGame::TrGame()
 
   auto plant = TrData::m_plantTypes["tree"]->make(this);
   plant->m_rect = rect;
-  m_entSystem->m_plants.push_back(move(plant));
+  m_entSystem->m_plants.push_back(std::move(plant));
 
   vector<int> active_list;
   active_list.push_back(0);
@@ -206,7 +206,7 @@ TrGame::TrGame()
 
   // setup game loop
   auto tempmenu = make_shared<TrMainMenuLoop>(this);
-  m_gameStateStack.push_back(move(tempmenu));
+  m_gameStateStack.push_back(std::move(tempmenu));
 }
 
 TrGame::~TrGame() {
