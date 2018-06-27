@@ -132,7 +132,7 @@ class TrEntity {
   SDL_Rect m_rect;
   Parent m_type;
 
-  TrEntity(TrGame* game, string name) : m_typeName(name) {
+  TrEntity(TrGame* game, string &&name) : m_typeName(std::move(name)) {
     _entSetParent<TrEntity<Parent>, Parent>(this);
   }
 
