@@ -7,8 +7,6 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
 class TrItem;
 
 class TrFormula {
