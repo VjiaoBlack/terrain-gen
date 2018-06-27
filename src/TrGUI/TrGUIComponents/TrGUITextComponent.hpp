@@ -17,7 +17,7 @@ class TrGUITextComponent : public TrGUIComponent {
   SDL_Rect m_destRect;
   SDL_Color m_textColor;
 
-  TrGUITextComponent(TrGame* game, std::string label, SDL_Rect r);
+  TrGUITextComponent(TrGame* game, std::string &&label, SDL_Rect r);
 
   virtual void update(TrGame* game);
 };

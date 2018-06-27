@@ -13,7 +13,7 @@
 class TrGUIDropdownComponent : public TrGUIComponent {
 // only activates when another TrGUIEntity is clicked
  public:
-  std::shared_ptr<TrGUIEntity> m_button;
+  std::unique_ptr<TrGUIEntity> m_button;
 
   virtual void update(TrGame* game) {
     // TODO

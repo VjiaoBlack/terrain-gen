@@ -12,18 +12,17 @@
 
 class TrActorEntity : public TrEntity<TrActorEntityType> {
  public:
-  TrActorEntity(TrGame *game, string &&name) : TrEntity<TrActorEntityType>(game, std::move(name)) {}
+  TrActorEntity(TrGame* game, string name) : TrEntity<TrActorEntityType>(game, name) {}
 
 };
 
 class TrBuildingEntity : public TrEntity<TrBuildingEntityType> {
  public:
-  TrBuildingEntity(TrGame *game, string &&name) : TrEntity<TrBuildingEntityType>(game,
-                                                                                 std::move(name)) {}
+  TrBuildingEntity(TrGame* game, string name) : TrEntity<TrBuildingEntityType>(game, name) {}
 
 };
 
 class TrPlantEntity : public TrEntity<TrPlantEntityType> {
  public:
-  TrPlantEntity(TrGame *game, string &&name) : TrEntity<TrPlantEntityType>(game, std::move(name)) {}
+  TrPlantEntity(TrGame* game, string name) : TrEntity<TrPlantEntityType>(game, name) {}
 };
