@@ -5,15 +5,14 @@
 /**
  * @brief Buildings have variable footprints, this keeps track of them
  */
-
 class TrFootprintComponent : public TrComponent {
  public:
   int m_w;
   int m_h;
   vector<char> m_cells;
 
-  TrFootprintComponent(int w, int h, vector<char> footprint)
-      : m_w(w), m_h(h), m_cells(move(footprint)) {};
+  TrFootprintComponent(int w, int h, std::vector<char>&& footprint)
+      : m_w(w), m_h(h), m_cells(std::move(footprint)) {};
 
   TrFootprintComponent(int w, int h)
       : m_w(w), m_h(h) {};
@@ -28,6 +27,7 @@ template<class C>
 void TrFootprintComponent::update(TrGame *game, C *entity) {
   for (int y = 0; y < m_h; y++) {
     for (int x = 0; x < m_w; x++) {
+      // TODO: use footprint
 //      if (m_cells[x + m_w * y]) {
 //        SDL_RenderDrawPoint(game->m_SDLRenderer, x + entity->m_rect.x,
 //                            y + entity->m_rect.y);
@@ -35,5 +35,3 @@ void TrFootprintComponent::update(TrGame *game, C *entity) {
     }
   }
 }
-
-//template TrFootprintComponn

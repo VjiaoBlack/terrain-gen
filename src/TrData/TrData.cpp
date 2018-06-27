@@ -146,7 +146,7 @@ void TrData::loadData() {
         }
 
         auto footprintComponent = TrFootprintComponent(
-            sizePair.first, sizePair.second, move(footprintVec));
+            sizePair.first, sizePair.second, std::move(footprintVec));
 
         auto actionComponent = TrActionComponent();
 
@@ -179,7 +179,7 @@ void TrData::loadData() {
         }
 
         auto footprintComponent = TrFootprintComponent(
-            sizePair.first, sizePair.second, move(footprintVec));
+            sizePair.first, sizePair.second, std::move(footprintVec));
 
         TrData::m_buildingTypes[name] =
             make_unique<TrBuildingEntityType>(name, graphics, footprintComponent);
