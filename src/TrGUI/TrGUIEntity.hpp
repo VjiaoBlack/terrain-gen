@@ -27,49 +27,49 @@ class TrGUIEntity {
  public:
   // add component pointers to this tuple later
   // TODO: restrict m_components access
-  std::map<string, std::shared_ptr<TrGUIComponent>> m_components;
-  std::shared_ptr<TrGUISystem> m_GUISystem;
+  std::map<string, TrGUIComponent*> m_components;
+  TrGUISystem* m_GUISystem;
 
   TrGUIEntity() = delete;
-  TrGUIEntity(std::shared_ptr<TrGUISystem> GUISystem) {
+  TrGUIEntity(TrGUISystem* GUISystem) {
     m_GUISystem = GUISystem;
   }
   template<class T>
-  void addComponent(shared_ptr<T> component) {
+  void addComponent(unique_ptr<T>&& component) {
     component->m_ent = this;
+    m_components[typeid(T).name()] = component.get();
     if (m_GUISystem) {
-      m_GUISystem->addComponent(component);
+      m_GUISystem->addComponent(std::move(component));
     }
-    m_components[typeid(T).name()] = static_pointer_cast<TrGUIComponent>(component);
   }
 
   template<class T>
-  shared_ptr<T> get() {
+  T* get() {
     if (!m_components.count(typeid(T).name())) {
       string msg = "missing component: ";
       msg += typeid(T).name();
       throw TrMissingComponentException(msg);
     }
-    return static_pointer_cast<T>(m_components[typeid(T).name()]);
+    return static_cast<T*>(m_components[typeid(T).name()]);
   }
 
-  static std::shared_ptr<TrGUIEntity> makeButton(TrGame *game, shared_ptr<TrGUISystem> system,
+  static std::unique_ptr<TrGUIEntity> makeButton(TrGame *game, TrGUISystem* system,
                                                  SDL_Rect rect) {
     SDL_Rect textRect = rect;
 
-    auto entity = make_shared<TrGUIEntity>(system);
+    auto entity = std::make_unique<TrGUIEntity>(system);
 
-    auto graphicsComp = make_shared<TrGUIGraphicsComponent>(rect);
-    auto textComp = make_shared<TrGUITextComponent>(game, "test", textRect);
-    auto mouseComp = make_shared<TrGUIMouseComponent>();
-    auto highlightComp = make_shared<TrGUIHighlightComponent>();
-    auto clickComp = make_shared<TrGUIClickableComponent>();
+    auto graphicsComp = std::make_unique<TrGUIGraphicsComponent>(rect);
+    auto textComp = std::make_unique<TrGUITextComponent>(game, "test", textRect);
+    auto mouseComp = std::make_unique<TrGUIMouseComponent>();
+    auto highlightComp = std::make_unique<TrGUIHighlightComponent>();
+    auto clickComp = std::make_unique<TrGUIClickableComponent>();
 
-    entity->addComponent(graphicsComp);
-    entity->addComponent(textComp);
-    entity->addComponent(mouseComp);
-    entity->addComponent(highlightComp);
-    entity->addComponent(clickComp);
+    entity->addComponent(std::move(graphicsComp));
+    entity->addComponent(std::move(textComp));
+    entity->addComponent(std::move(mouseComp));
+    entity->addComponent(std::move(highlightComp));
+    entity->addComponent(std::move(clickComp));
 
     return entity;
   }

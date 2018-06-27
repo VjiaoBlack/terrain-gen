@@ -45,29 +45,27 @@ class TrMap;
 
 class TrGame;
 
-using namespace std;
-
 // map
 // is this too much memory? make sure to check
 class TrMap {
  private:
-  set<shared_ptr<TrMapUpdatable>> m_toUpdate;
+  set<TrMapUpdatable*> m_toUpdate;
  public:
   int m_rows, m_cols;
 
   TrGame* m_game;
 
-  shared_ptr<TrColorMap> m_color;
-  shared_ptr<TrHeightMap> m_height;
-  shared_ptr<TrMoistureMap> m_moisture;
-  shared_ptr<TrNormalMap> m_normal;
-  shared_ptr<TrVegetationMap> m_vegetation;
-  shared_ptr<TrWaterMap> m_water;
-  shared_ptr<TrWindMap> m_wind;
+  std::unique_ptr<TrColorMap> m_color;
+  std::unique_ptr<TrHeightMap> m_height;
+  std::unique_ptr<TrMoistureMap> m_moisture;
+  std::unique_ptr<TrNormalMap> m_normal;
+  std::unique_ptr<TrVegetationMap> m_vegetation;
+  std::unique_ptr<TrWaterMap> m_water;
+  std::unique_ptr<TrWindMap> m_wind;
 
-  shared_ptr<TrMapData<double>> m_entityHeight;
-  shared_ptr<TrMapData<uint32_t>> m_entityColor;
-  shared_ptr<TrMapData<dvec3>> m_entityNormal;
+  std::unique_ptr<TrMapData<double>> m_entityHeight;
+  std::unique_ptr<TrMapData<uint32_t>> m_entityColor;
+  std::unique_ptr<TrMapData<dvec3>> m_entityNormal;
 
   int m_renderState;
   int m_erosionState;

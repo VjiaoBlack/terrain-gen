@@ -30,8 +30,8 @@ class TrMainMenuLoop : public TrRenderLoop {
 
   unique_ptr<TrGUIMenu> m_menu;
 
-  shared_ptr<TrGUIEntity> m_ent;
-  shared_ptr<TrGUISystem> m_GUISystem;
+  unique_ptr<TrGUIEntity> m_ent;
+  unique_ptr<TrGUISystem> m_GUISystem;
 
   explicit TrMainMenuLoop(TrGame *game);
 

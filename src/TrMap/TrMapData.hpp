@@ -23,8 +23,6 @@
 #include "../Utils.hpp"
 #include "TrMapDataUtils.hpp"
 
-using namespace glm;
-
 class TrMap;
 
 class TrMapUpdatable {

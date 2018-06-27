@@ -28,10 +28,10 @@ TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
   text_width = textSurface1->w;
   text_height = textSurface1->h;
 
-  m_GUISystem = make_shared<TrGUISystem>();
+  m_GUISystem = std::make_unique<TrGUISystem>();
 
   SDL_Rect r = (SDL_Rect) {10, 10, 50, 50};
-  m_ent = TrGUIEntity::makeButton(game, m_GUISystem, r);
+  m_ent = TrGUIEntity::makeButton(game, m_GUISystem.get(), r);
 
   vector<string> labels = {"New Game", "Load Game", "Quit"};
 
@@ -50,7 +50,7 @@ TrRenderLoop *TrMainMenuLoop::update(TrGame *game) {
   m_menu->update();
 
   if (m_menu->m_buttons[0]->m_activated) {
-    auto gameLoop = make_shared<TrGameLoop>(game);
+    auto gameLoop = std::make_shared<TrGameLoop>(game);
     game->m_gameStateTransition = TrTransitionLoop::makePushLoop(
         game, game->m_gameStateStack.back(), gameLoop);
 

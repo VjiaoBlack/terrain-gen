@@ -92,7 +92,7 @@ void TrMap::update(set<int> keysDown) {
                 (double) m_speed / 255.0;
           }
         }
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
 
         break;
       case SDLK_i:
@@ -102,21 +102,21 @@ void TrMap::update(set<int> keysDown) {
                 (double) m_speed / 255.0;
           }
         }
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
 
         break;
       case SDLK_b:
         for (int i = 0; i < m_speed; i++) {
           this->m_height->boxBlur();
         }
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
 
         break;
       case SDLK_r:m_water->rain(this);
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         break;
       case SDLK_d:this->m_water->set(0.0);
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         break;
       case SDLK_e:this->m_erosionState = !this->m_erosionState;
         usleep(100000);
@@ -127,20 +127,20 @@ void TrMap::update(set<int> keysDown) {
 //        for (int i = 0; i < m_speed; i++) {
 //          m_water->update(this);
 //        }
-//        m_toUpdate.insert(m_color);
+//        m_toUpdate.insert(m_color.get());
 //        break;
       case SDLK_n:
         // reclaculate normals
-        m_toUpdate.insert(m_height);
-        m_toUpdate.insert(m_normal);
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_height.get());
+        m_toUpdate.insert(m_normal.get());
+        m_toUpdate.insert(m_color.get());
         break;
       case SDLK_m:
         // update water!! omg
         for (int i = 0; i < m_speed; i++) {
           m_moisture->update(this);
         }
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         break;
       case SDLK_k:
         // toggle moisture / not
@@ -149,7 +149,7 @@ void TrMap::update(set<int> keysDown) {
           m_renderState = 0;
         }
 
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         usleep(100000);
 
         break;
@@ -169,16 +169,16 @@ void TrMap::update(set<int> keysDown) {
 //        }
 //
 //        m_color->updateLightAngle();
-//        m_toUpdate.insert(m_color);
+//        m_toUpdate.insert(m_color.get());
 //        break;
       case SDLK_y:m_color->m_raytrace = !m_color->m_raytrace;
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         break;
       case SDLK_h:m_color->m_terrace++;
         if (m_color->m_terrace > 3) {
           m_color->m_terrace = 0;
         }
-        m_toUpdate.insert(m_color);
+        m_toUpdate.insert(m_color.get());
         break;
       default:break;
     }
@@ -188,7 +188,7 @@ void TrMap::update(set<int> keysDown) {
   for (int i = 0; i < m_speed; i++) {
     m_water->update(this);
   }
-  m_toUpdate.insert(m_color);
+  m_toUpdate.insert(m_color.get());
 
   // animate time
   m_color->m_hour += 0.005;
@@ -201,7 +201,7 @@ void TrMap::update(set<int> keysDown) {
   }
 
   m_color->updateLightAngle();
-  m_toUpdate.insert(m_color);
+  m_toUpdate.insert(m_color.get());
 
   // update entities??
   // TODO: refactor entity system
