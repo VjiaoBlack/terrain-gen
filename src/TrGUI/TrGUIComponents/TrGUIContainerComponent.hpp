@@ -13,10 +13,10 @@
 class TrGUIEntity;
 
 class TrGUIContainerComponent : public TrGUIComponent {
- public:
+public:
   int m_spacing = 10;
-  std::vector<std::unique_ptr<TrGUIEntity>> m_buttons;
+  std::vector<TrGUIEntity *> m_buttons;
 
-  virtual void update(TrGame* game) {};
+  TrGUIContainerComponent() {}
+  virtual void update(TrGame *game){};
 };
-

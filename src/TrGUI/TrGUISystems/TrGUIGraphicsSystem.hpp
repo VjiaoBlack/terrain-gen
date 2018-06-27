@@ -7,25 +7,24 @@
  * Draws entities.
  */
 
-#include <vector>
-#include "../TrGUIComponents/TrGUITextComponent.hpp"
 #include "../TrGUIComponents/TrGUIGraphicsComponent.hpp"
+#include "../TrGUIComponents/TrGUITextComponent.hpp"
+#include <vector>
 
 class TrGame;
 
 class TrGUIGraphicsSystem {
- public:
-  std::vector<std::shared_ptr<TrGUITextComponent>> m_textComponents;
-  std::vector<std::shared_ptr<TrGUIGraphicsComponent>> m_graphicsComponents;
+public:
+  std::vector<std::unique_ptr<TrGUITextComponent>> m_textComponents;
+  std::vector<std::unique_ptr<TrGUIGraphicsComponent>> m_graphicsComponents;
 
-  void update(TrGame* game) {
-    for (auto c : m_graphicsComponents) {
+  void update(TrGame *game) {
+    for (auto &c : m_graphicsComponents) {
       c->update(game);
     }
 
-    for (auto c : m_textComponents) {
+    for (auto &c : m_textComponents) {
       c->update(game);
     }
   }
 };
-

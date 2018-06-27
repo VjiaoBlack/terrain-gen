@@ -2,63 +2,67 @@
  * TrMainMenuLoop.cpp
  */
 
-#include <TrGUI/TrGUIEntity.hpp>
 #include "TrMainMenuLoop.hpp"
+#include "../TrECS/TrSystems/TrEntitySystem.hpp"
 #include "TrGameLoop.hpp"
 #include "TrTransitionLoop.hpp"
-#include "../TrECS/TrSystems/TrEntitySystem.hpp"
+#include <TrGUI/TrGUIEntity.hpp>
 
 #include "TrECS/TrEntities.hpp"
 
 #include "TrGUI/TrGUIComponents/TrGUIGraphicsComponent.hpp"
 
 TrMainMenuLoop::TrMainMenuLoop(TrGame *game) {
-  int score = 10;
+  sdl_surface_pt textSurface0(TTF_RenderText_Solid(
+      game->m_font.get(), m_titleText.c_str(), textColor0));
+  sdl_surface_pt textSurface1(TTF_RenderText_Solid(
+      game->m_font.get(), m_titleText.c_str(), textColor1));
+  sdl_surface_pt textSurface2(TTF_RenderText_Solid(
+      game->m_font.get(), m_titleText.c_str(), textColor2));
 
-  sdl_surface_pt textSurface0(TTF_RenderText_Solid(game->m_font.get(), score_text.c_str(),
-                                                   textColor0));
-  sdl_surface_pt textSurface1(TTF_RenderText_Solid(game->m_font.get(), score_text.c_str(),
-                                                   textColor1));
-  sdl_surface_pt textSurface2(TTF_RenderText_Solid(game->m_font.get(), score_text.c_str(),
-                                                   textColor2));
-
-  text0.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface0.get()));
-  text1.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface1.get()));
-  text2.reset(SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface2.get()));
+  text0.reset(
+      SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface0.get()));
+  text1.reset(
+      SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface1.get()));
+  text2.reset(
+      SDL_CreateTextureFromSurface(game->m_SDLRenderer, textSurface2.get()));
   text_width = textSurface1->w;
   text_height = textSurface1->h;
 
   m_GUISystem = std::make_unique<TrGUISystem>();
 
-  SDL_Rect r = (SDL_Rect) {10, 10, 50, 50};
-  m_ent = TrGUIEntity::makeButton(game, m_GUISystem.get(), r);
+  SDL_Rect r =
+      (SDL_Rect){sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 120 / 2),
+                 sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE - text_height / 2),
+                 sz(120), sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE)};
+
+  vector<string> mylabels = {"New Game", "Load Game", "Quit"};
+  m_GUIMenu = TrGUIEntity::addVerticalMenu(game, m_GUISystem.get(), r,
+                                           std::move(mylabels));
 
   vector<string> labels = {"New Game", "Load Game", "Quit"};
-
-  m_menu = TrGUIMenu::MakeVerticalMenu(
-      game,
-      (SDL_Rect) {sz(K_DISPLAY_SIZE_X / 2 / K_DISPLAY_SCALE - 120 / 2),
-                  sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE - text_height / 2),
-                  sz(120), sz(K_DISPLAY_SIZE_Y / 2 / K_DISPLAY_SCALE)},
-      labels);
 }
 
 TrMainMenuLoop::~TrMainMenuLoop() = default;
 
 TrRenderLoop *TrMainMenuLoop::update(TrGame *game) {
   game->m_map->update(game->m_keysDown);
-  m_menu->update();
 
-  if (m_menu->m_buttons[0]->m_activated) {
+  if (m_GUIMenu->get<TrGUIContainerComponent>()
+          ->m_buttons[0]
+          ->get<TrGUIClickableComponent>()
+          ->m_activated) {
     auto gameLoop = std::make_shared<TrGameLoop>(game);
     game->m_gameStateTransition = TrTransitionLoop::makePushLoop(
         game, game->m_gameStateStack.back(), gameLoop);
 
     game->m_gameStateStack.push_back(gameLoop);
-
   }
 
-  if (m_menu->m_buttons[2]->m_activated) {
+  if (m_GUIMenu->get<TrGUIContainerComponent>()
+          ->m_buttons[2]
+          ->get<TrGUIClickableComponent>()
+          ->m_activated) {
     game->m_quit = true;
   }
 
@@ -66,8 +70,8 @@ TrRenderLoop *TrMainMenuLoop::update(TrGame *game) {
 }
 
 void TrMainMenuLoop::render(TrGame *game) {
-  renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture.get(), game->m_xOff,
-                          game->m_yOff, K_DISPLAY_SCALE);
+  renderTextureWithOffset(game->m_SDLRenderer, game->m_mapTexture.get(),
+                          game->m_xOff, game->m_yOff, K_DISPLAY_SCALE);
 
   SDL_Rect fillRect = {0, 0, sz(K_DISPLAY_SIZE_X), sz(K_DISPLAY_SIZE_Y)};
 
@@ -98,8 +102,6 @@ void TrMainMenuLoop::render(TrGame *game) {
                 text_height * sz(K_DISPLAY_SIZE_Y / K_MAP_SIZE_Y)};
 
   SDL_RenderCopy(game->m_SDLRenderer, text1.get(), nullptr, &renderQuad);
-
-  m_menu->draw();
 
   m_GUISystem->update(game);
 }

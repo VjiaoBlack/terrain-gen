@@ -15,9 +15,8 @@ class TrGUIEntity;
 class TrGUISystem;
 
 class TrMainMenuLoop : public TrRenderLoop {
- public:
-  std::string score_text = "ATHENA";
-  int score = 10;
+public:
+  std::string m_titleText = "ATHENA";
   SDL_Color textColor0 = {255, 215, 0, 255};
   SDL_Color textColor1 = {218, 165, 32, 255};
   SDL_Color textColor2 = {139, 69, 19, 255};
@@ -28,10 +27,8 @@ class TrMainMenuLoop : public TrRenderLoop {
   sdl_texture_pt text1;
   sdl_texture_pt text2;
 
-  unique_ptr<TrGUIMenu> m_menu;
-
-  unique_ptr<TrGUIEntity> m_ent;
   unique_ptr<TrGUISystem> m_GUISystem;
+  TrGUIEntity *m_GUIMenu;
 
   explicit TrMainMenuLoop(TrGame *game);
 
