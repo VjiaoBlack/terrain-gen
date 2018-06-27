@@ -219,7 +219,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = std::make_unique<TrItem>(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(std::move(name));
       }
     }
 
@@ -230,7 +230,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = std::make_unique<TrItem>(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(std::move(name));
       }
     }
 
@@ -241,7 +241,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = std::make_unique<TrItem>(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(std::move(name));
       }
     }
 
@@ -252,7 +252,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = std::make_unique<TrItem>(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(std::move(name));
       }
     }
   }
