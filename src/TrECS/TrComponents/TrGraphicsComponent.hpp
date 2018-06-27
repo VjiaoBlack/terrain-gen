@@ -13,13 +13,13 @@
  */
 class TrGraphicsComponent : public TrComponent {
  public:
-  SDL_Texture *m_texture;
+  sdl_texture_pt m_texture;
   SDL_Color m_color;
 
-  explicit TrGraphicsComponent(SDL_Texture *texture)
-      : m_texture(texture), m_color{0, 0, 0, 0} {};
+  explicit TrGraphicsComponent(sdl_texture_pt&& texture)
+      : m_texture(std::move(texture)), m_color{0, 0, 0, 0} {};
   explicit TrGraphicsComponent(SDL_Color color) : m_texture(nullptr), m_color(color) {};
-  TrGraphicsComponent() : TrGraphicsComponent(nullptr) {}
+  TrGraphicsComponent() : TrGraphicsComponent(sdl_texture_pt(nullptr)) {}
 
   ~TrGraphicsComponent() override = default;
 
