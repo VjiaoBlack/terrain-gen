@@ -10,7 +10,6 @@
 #include <iostream>
 #include <map>
 #include <string>
-//#include <TrECS/TrEntityFactory.hpp>
 
 #include "../../include/fast-cpp-csv-parser/csv.h"
 
@@ -18,7 +17,6 @@
 #include "../TrECS/TrItems/TrItem.hpp"
 
 #include "../TrECS/TrEntityTypes.hpp"
-using namespace std;
 
 // TODO: figure out a way to avoid having to repeat a m_entityTypes map for each
 //       entity type
