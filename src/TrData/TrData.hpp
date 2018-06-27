@@ -25,12 +25,12 @@ class TrData {
   static void loadData();
   static void deleteData();
 
-  static map<string, TrActorEntityType *> m_actorTypes;
-  static map<string, TrBuildingEntityType *> m_buildingTypes;
-  static map<string, TrPlantEntityType *> m_plantTypes;
+  static map<string, std::unique_ptr<TrActorEntityType>> m_actorTypes;
+  static map<string, std::unique_ptr<TrBuildingEntityType>> m_buildingTypes;
+  static map<string, std::unique_ptr<TrPlantEntityType>> m_plantTypes;
 
-  static map<string, TrFormula *> m_formulas;
-  static map<string, TrItem *> m_items;
+  static map<string, std::unique_ptr<TrFormula>> m_formulas;
+  static map<string, std::unique_ptr<TrItem>> m_items;
 };
 
 #endif

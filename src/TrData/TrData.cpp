@@ -6,15 +6,22 @@
 
 #include "TrData.hpp"
 
-#include "../TrECS/TrComponents/TrFootprintComponent.hpp"
-
 #include <regex>
 
-map<string, TrActorEntityType *> TrData::m_actorTypes = map<string, TrActorEntityType *>();
-map<string, TrBuildingEntityType *> TrData::m_buildingTypes = map<string, TrBuildingEntityType *>();
-map<string, TrPlantEntityType *> TrData::m_plantTypes = map<string, TrPlantEntityType *>();
-map<string, TrFormula *> TrData::m_formulas = map<string, TrFormula *>();
-map<string, TrItem *> TrData::m_items = map<string, TrItem *>();
+map<string, std::unique_ptr<TrActorEntityType>> TrData::m_actorTypes =
+    map<string, std::unique_ptr<TrActorEntityType>>();
+
+map<string, std::unique_ptr<TrBuildingEntityType>> TrData::m_buildingTypes =
+    map<string, std::unique_ptr<TrBuildingEntityType>>();
+
+map<string, std::unique_ptr<TrPlantEntityType>> TrData::m_plantTypes =
+    map<string, std::unique_ptr<TrPlantEntityType>>();
+
+map<string, std::unique_ptr<TrFormula>> TrData::m_formulas =
+    map<string, std::unique_ptr<TrFormula>>();
+
+map<string, std::unique_ptr<TrItem>> TrData::m_items =
+    map<string, std::unique_ptr<TrItem>>();
 
 inline static void trim(string &str) {
   int start = 0;
@@ -44,7 +51,7 @@ inline static SDL_Color parseColor(const string &color) {
   ss >> std::hex >> b;
   ss.clear();
 
-  return (SDL_Color) {(uint8_t)r, (uint8_t)g, (uint8_t)b, 0xFF};
+  return (SDL_Color) {(uint8_t) r, (uint8_t) g, (uint8_t) b, 0xFF};
 }
 
 inline static pair<int, int> parseSize(const string &size) {
@@ -144,7 +151,8 @@ void TrData::loadData() {
         auto actionComponent = TrActionComponent();
 
         TrData::m_actorTypes[name] =
-            new TrActorEntityType(name, graphics, physics, planning, footprintComponent,
+            std::make_unique<TrActorEntityType>(name, graphics, physics, planning,
+                                               footprintComponent,
                                   actionComponent);
       }
     }
@@ -158,7 +166,7 @@ void TrData::loadData() {
       while (in.read_row(name, color, size, footprint)) {
         // do stuff with the data
         TrGraphicsComponent graphics =
-             TrGraphicsComponent(parseColor(color));
+            TrGraphicsComponent(parseColor(color));
         auto sizePair = parseSize(size);
 
         vector<char> footprintVec(sizePair.first * sizePair.second);
@@ -174,7 +182,7 @@ void TrData::loadData() {
             sizePair.first, sizePair.second, move(footprintVec));
 
         TrData::m_buildingTypes[name] =
-            new TrBuildingEntityType(name, graphics, footprintComponent);
+            make_unique<TrBuildingEntityType>(name, graphics, footprintComponent);
       }
     }
 
@@ -190,11 +198,11 @@ void TrData::loadData() {
             TrGraphicsComponent(parseColor(color));
         pair<int, int> footprintSize = parseSize(size);
 
-        auto footprintComponent =  TrFootprintComponent(
+        auto footprintComponent = TrFootprintComponent(
             footprintSize.first, footprintSize.second);
 
         TrData::m_plantTypes[name] =
-            new TrPlantEntityType(name, graphics, footprintComponent);
+            std::make_unique<TrPlantEntityType>(name, graphics, footprintComponent);
       }
     }
   }
@@ -211,7 +219,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = new TrItem(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(name);
       }
     }
 
@@ -222,7 +230,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = new TrItem(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(name);
       }
     }
 
@@ -233,7 +241,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = new TrItem(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(name);
       }
     }
 
@@ -244,7 +252,7 @@ void TrData::loadData() {
 
       while (in.read_row(name, tags, attributes)) {
         // do stuff with the data
-        TrData::m_items[name] = new TrItem(name);
+        TrData::m_items[name] = std::make_unique<TrItem>(name);
       }
     }
   }
