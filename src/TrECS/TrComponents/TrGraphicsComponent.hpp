@@ -8,8 +8,6 @@
 
 #include "../TrComponents.hpp"
 
-using namespace std;
-
 /**
  * @brief interface for all graphics components
  */
