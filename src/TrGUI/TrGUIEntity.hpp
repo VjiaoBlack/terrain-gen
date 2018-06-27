@@ -74,5 +74,9 @@ class TrGUIEntity {
     return entity;
   }
 
+  static std::shared_ptr<TrGUIEntity> makeMenu(TrGame *game, shared_ptr<TrGUISystem> system,
+                                               SDL_Rect rect, int numButtons) {
+
+  }
 };
 
