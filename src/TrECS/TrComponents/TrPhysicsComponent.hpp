@@ -13,7 +13,6 @@
  */
 class TrPhysicsComponent : public TrComponent {
  public:
-
   double m_x;
   double m_y;
   double m_vx;
@@ -23,9 +22,6 @@ class TrPhysicsComponent : public TrComponent {
                                            m_vx(0), m_vy(0) {}
   TrPhysicsComponent() : TrPhysicsComponent(0, 0) {}
 
-  /**
-   * @brief calculates the physics stuffs
-   */
   template<class C>
   void update(TrGame *game, C *entity);
 };
