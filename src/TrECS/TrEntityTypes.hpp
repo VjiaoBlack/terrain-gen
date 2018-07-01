@@ -59,8 +59,8 @@ class TrEntityType {
   tuple<Components...> m_components;
 
   TrEntityType() {}
-  TrEntityType(string &&name) {}
-  TrEntityType(string &&name, Components... cs) : m_typeName(std::move(name)) {
+  TrEntityType(string name) {}
+  TrEntityType(string name, Components... cs) : m_typeName(name) {
     m_components = tuple<Components...>(cs...);
   }
 

@@ -53,14 +53,14 @@ public:
   }
 
   static TrGUIEntity *addButton(TrGame *game, TrGUISystem *system,
-                                SDL_Rect rect, std::string &&label) {
+                                SDL_Rect rect, std::string label) {
     SDL_Rect textRect = rect;
 
     auto entity = std::make_unique<TrGUIEntity>(system);
 
     auto graphicsComp = std::make_unique<TrGUIGraphicsComponent>(rect);
     auto textComp =
-        std::make_unique<TrGUITextComponent>(game, std::move(label), textRect);
+        std::make_unique<TrGUITextComponent>(game, label, textRect);
     auto mouseComp = std::make_unique<TrGUIMouseComponent>();
     auto highlightComp = std::make_unique<TrGUIHighlightComponent>();
     auto clickComp = std::make_unique<TrGUIClickableComponent>();

@@ -9,7 +9,7 @@
 #include <TrGUI/TrGUIComponents/TrGUITextComponent.hpp>
 #include <TrGame.hpp>
 
-TrGUITextComponent::TrGUITextComponent(TrGame *game, std::string &&label,
+TrGUITextComponent::TrGUITextComponent(TrGame *game, std::string label,
                                        SDL_Rect r)
     : m_text(label), m_destRect(r) {
   m_textColor.a = 0xFF;
