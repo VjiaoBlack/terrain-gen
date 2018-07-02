@@ -17,11 +17,11 @@ include_directories(${SDL2_INCLUDE_DIR}
 # Athena
 include_directories(src/)
 include_directories(include/)
-file(GLOB SOURCES src/*.cpp src/*.c src/*/*.cpp src/*/*.c src/*/*/*.cpp src/*/*/*.c include/*/*.cpp include/*/*.c)
-file(GLOB HEADERS src/*.hpp src/*.h src/*/*.hpp src/*/*.h src/*/*/*.hpp src/*/*/*.h include/*/*.hpp include/*/*.h)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.c include/*.cpp include/*.c)
+file(GLOB_RECURSE HEADERS src/*.hpp src/*.h src/*.hpp include/*.hpp include/*.h)
 
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} src/TrECS/TrSystems/TrEntitySystem.cpp src/TrECS/TrSystems/TrEntitySystem.hpp src/TrMap/TrMapDataUtils.cpp src/TrMap/TrMapDataUtils.hpp src/TrECS/TrEntityFactory.hpp src/TrECS/TrEntityTypes.hpp src/TrECS/TrEntities.hpp src/TrECS/TrComponents/TrActionComponent.hpp src/TrGUI/TrGUIEntity.hpp src/TrGUI/TrGUIComponents/TrGUIClickableComponent.hpp src/TrGUI/TrGUIComponents/TrGUIHighlightComponent.hpp src/TrGUI/TrGUIComponents/TrGUIDropdownComponent.hpp src/TrGUI/TrGUIComponents/TrGUIContainerComponent.hpp src/TrGUI/TrGUIComponents/TrGUIComponent.hpp src/TrGUI/TrGUIComponents/TrGUIGraphicsComponent.hpp src/TrGUI/TrGUIComponents/TrGUIMouseComponent.hpp src/TrGUI/TrGUISystems/TrGUIResponsiveSystem.hpp src/TrGUI/TrGUISystems/TrGUIGraphicsSystem.hpp src/TrGUI/TrGUISystems/TrGUIMouseInputSystem.hpp src/TrGUI/TrGUIComponents/TrGUITextComponent.hpp src/TrGUI/TrGUISystems/TrGUISystem.hpp)
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 #add_executable(${PROJECT_NAME} "src/TrGame.cpp" ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME}
         ${SDL2_LIBRARY}
